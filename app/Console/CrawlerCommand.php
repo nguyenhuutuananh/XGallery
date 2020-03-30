@@ -33,4 +33,10 @@ class CrawlerCommand extends AbstractCommand
 
         return $this->crawler;
     }
+
+    protected function handle()
+    {
+        $this->output->writeln('<info>Running </info>'. $this->argument('task'));
+        $this->output->newLine();
+    }
 }

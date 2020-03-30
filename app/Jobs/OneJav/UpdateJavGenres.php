@@ -51,6 +51,7 @@ class UpdateJavGenres implements ShouldQueue
 
         foreach ($this->itemDetail['tags'] as $tag) {
             $model = app(JavGenres::class);
+            // Genre already exists then get data for xref
             if ($item = $model->where(['name' => $tag])->first()) {
                 $genres[] = ['xref_id' => $item->id, 'xref_type' => 'genre', 'movie_id' => $this->movie->id];
                 continue;
@@ -63,6 +64,7 @@ class UpdateJavGenres implements ShouldQueue
             unset($model);
         }
 
+        // Update Xref
         foreach ($genres as $genre) {
             $model = app(JavMoviesXref::class);
             if ($model->where($genre)->first()) {

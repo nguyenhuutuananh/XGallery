@@ -49,18 +49,47 @@ class UpdateJavIdols implements ShouldQueue
     public function handle()
     {
         $crawler = app(XCityProfile::class);
+
+        // Process all actresses in this movie
         foreach ($this->itemDetail['actresses'] as $actress) {
-            $actresses = $crawler->search(['genre' => 'idol', 'q' => $actress, 'sg' => 'idol']);
-            // Collection of actresses grouped by page
-            $actresses->each(function ($actresses) {
-                // Collection of actresses in one page
-                $actresses->each(function ($actress) {
-                    $actressDetail = app(XCityProfile::class)
-                        ->getItemDetail('https://xxx.xcity.jp/idol/'.$actress['url']);
+            /**
+             * Collection of actresses grouped by page
+             * Convert to array because we will need use $actress variable
+             */
+            $results = $crawler->search(['genre' => 'idol', 'q' => $actress, 'sg' => 'idol'])->toArray();
+
+            foreach ($results as $actresses) {
+                // This idol is not exists on XCity
+                if (empty($actresses)) {
+                    $model = app(JavIdols::class);
+                    /**
+                     * Because we can't determine idol profile than only way to use reference_url as unique
+                     */
+                    if ($item = $model->where(['reference_url' => $this->itemDetail['url']])->first()) {
+                        $this->insertXRef($item);
+                        continue;
+                    }
+
+                    // Save to idol with OneJAV reference_url
+                    $model->name          = $actress;
+                    $model->reference_url = $this->itemDetail['url'];
+                    $model->save();
+                    $this->insertXRef($model);
+                    unset($model);
+                    continue;
+                }
+
+                // Found actresses on XCity
+                foreach ($actresses as $actress) {
+                    // Actress detail not found
+                    if (!$actressDetail = app(XCityProfile::class)->getItemDetail('https://xxx.xcity.jp/idol/'.$actress['url'])) {
+                        continue;
+                    }
 
                     $model = app(JavIdols::class);
                     if ($item = $model->where(['reference_url' => $actressDetail->url])->first()) {
                         $this->insertXRef($item);
+                        unset($model);
                         return;
                     }
 
@@ -79,8 +108,8 @@ class UpdateJavIdols implements ShouldQueue
                     $model->save();
                     $this->insertXRef($model);
                     unset($model);
-                });
-            });
+                }
+            }
         }
     }
 

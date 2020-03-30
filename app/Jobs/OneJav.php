@@ -57,8 +57,9 @@ class OneJav implements ShouldQueue
         $item->description     = isset($this->itemDetail['description']) ? $this->itemDetail['description'] : null;
         $item->save();
 
-        // Trigger job to process idols & related data
+        // Trigger job to update genres and xref
         UpdateJavGenres::dispatch($item, $this->itemDetail)->onConnection('database');
+        // Trigger job to update idols and xref
         UpdateJavIdols::dispatch($item, $this->itemDetail)->onConnection('database');
     }
 }

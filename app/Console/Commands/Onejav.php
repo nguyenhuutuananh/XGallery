@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\CrawlerCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\UTCDateTime;
@@ -38,9 +39,11 @@ class Onejav extends CrawlerCommand
      * Execute the console command.
      *
      * @return mixed
+     * @throws FileNotFoundException
      */
     public function handle()
     {
+        parent::handle();
         switch ($this->argument('task')) {
             case 'daily':
                 $this->process('https://onejav.com/'.date('Y/m/d'));
@@ -87,10 +90,12 @@ class Onejav extends CrawlerCommand
                     $tmpData[1] = 0;
                 }
 
-                $this->progressBar = $this->createProgressBar();
-                $this->progressBar->setMessage('', 'status');
-                $this->progressBar->setMaxSteps($results->count());
-                $this->itemsProcess($results);
+                if ($results) {
+                    $this->progressBar = $this->createProgressBar();
+                    $this->progressBar->setMessage('', 'status');
+                    $this->progressBar->setMaxSteps($results->count());
+                    $this->itemsProcess($results);
+                }
 
                 Storage::disk('local')->put($tmpFile, $tmpData[0]++.':'.$tmpData[1]++);
                 break;
@@ -129,13 +134,21 @@ class Onejav extends CrawlerCommand
             $this->itemsProcess($items);
             $this->progressBar->advance();
         });
+        /**
+         * @TODO Show number of items / processed / failed
+         */
     }
 
     /**
+     * Process a collection of items
      * @param  Collection  $items
      */
     private function itemsProcess(Collection $items)
     {
+        if ($items->isEmpty()) {
+            return;
+        }
+
         $items->each(function ($item, $key) {
             $this->progressBar->setMessage($item['title'], 'info');
             // Item process
@@ -152,7 +165,7 @@ class Onejav extends CrawlerCommand
 
             $model->insert($item);
 
-            // Process to JavMovies
+            // Process to OneJAV to JavMovies with: Idols & Genres
             \App\Jobs\OneJav::dispatch($originalItem)->onConnection('database');
             $this->progressBar->setMessage($key + 1, 'step');
         });

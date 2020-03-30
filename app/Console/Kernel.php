@@ -31,8 +31,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('onejav --daily')->daily();
-        $schedule->command('onejav --fully')->everyFiveMinutes();
+        $schedule->command('onejav daily')->daily();
+        $schedule->command('onejav fully')->everyMinute();
     }
 
     /**
