@@ -30,11 +30,8 @@ final class Onejav extends AbstractCrawler
     private function convertStringToDateTime(string $date): ?DateTime
     {
         try {
-            if (!$dateTime = DateTime::createFromFormat('M. j, Y', $date)) {
-                $dateTime = DateTime::createFromFormat('M j, Y', $date);
-            }
-
-            if (!$dateTime) {
+            $date = trim($date, '/');
+            if (!$dateTime = DateTime::createFromFormat('Y/m/j', $date)) {
                 return null;
             }
 
@@ -74,8 +71,7 @@ final class Onejav extends AbstractCrawler
             }
         }
 
-        // Date
-        $item->date = $this->convertStringToDateTime(trim($crawler->filter('.subtitle.is-6')->text(null, false)));
+        $item->date = $this->convertStringToDateTime(trim($crawler->filter('.subtitle.is-6 a')->attr('href')));
         $item->tags = collect($crawler->filter('.tags .tag')->each(
             function ($tag) {
                 return trim($tag->text(null, false));
@@ -136,7 +132,7 @@ final class Onejav extends AbstractCrawler
             }
 
             // Date
-            $data['date'] = $this->convertStringToDateTime(trim($el->filter('.subtitle.is-6')->text(null, false)));
+            $data['date'] = $this->convertStringToDateTime(trim($el->filter('.subtitle.is-6 a')->attr('href')));
 
             $data['tags'] = collect($el->filter('.tags .tag')->each(
                 function ($tag) {
