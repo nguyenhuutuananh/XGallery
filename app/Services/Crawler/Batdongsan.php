@@ -12,6 +12,7 @@ namespace App\Services\Crawler;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Url\Url;
 use stdClass;
 
@@ -45,21 +46,31 @@ final class Batdongsan extends AbstractCrawler
             $item->price   = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
             $item->size    = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
             $item->content = trim($crawler->filter('.pm-content .pm-desc')->html());
-            $item->detail  = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
-                return [
-                    trim($node->filter('div.left')->text()),
-                    trim($node->filter('div.right')->text()),
-                ];
-            }));
+            $fields        = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
+                return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
+            }))->reject(function ($value) {
+                return null == $value;
+            })->toArray();
 
-            $item->info = collect($crawler->filter('#project div.row')->each(function ($node) {
-                return [
-                    trim($node->filter('div.left')->text()),
-                    trim($node->filter('div.right')->text()),
-                ];
-            }));
+            foreach ($fields as $field) {
+                foreach ($field as $key => $value) {
+                    $item->{$key} = empty($value) ? null : $value;
+                }
+            }
 
-            $item->contact = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
+            $fields = collect($crawler->filter('#project div.row')->each(function ($node) {
+                return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
+            }))->reject(function ($value) {
+                return null == $value;
+            })->toArray();
+
+            foreach ($fields as $field) {
+                foreach ($field as $key => $value) {
+                    $item->{$key} = empty($value) ? null : $value;
+                }
+            }
+
+            $fields = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
                 $key   = trim($node->filter('div.left')->text());
                 $value = trim($node->filter('div.right')->text());
 
@@ -69,11 +80,16 @@ final class Batdongsan extends AbstractCrawler
                     preg_match_all($regex, $value, $matches);
                     $value = array_unique($matches[0])[0];
                 }
-                return [
-                    $key,
-                    $value,
-                ];
-            }));
+                return [Str::slug($key)=>$value];
+            }))->reject(function ($value) {
+                return null == $value;
+            })->toArray();
+
+            foreach ($fields as $field) {
+                foreach ($field as $key => $value) {
+                    $item->{$key} = empty($value) ? null : $value;
+                }
+            }
 
             return $item;
         } catch (Exception $exception) {

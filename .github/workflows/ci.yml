@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  php-security-check:
+    name: PHP Security Checker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: composer install
+      - uses: StephaneBour/actions-php-security-checker@1.0
+  build-test:
+    name: PHPUnit Checker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: composer install
+      - run: php vendor/bin/phpunit tests/Feature

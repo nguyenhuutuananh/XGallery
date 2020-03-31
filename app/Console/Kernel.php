@@ -33,6 +33,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('onejav daily')->daily();
         $schedule->command('onejav fully')->everyMinute();
+        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')->everyTenMinutes();
     }
 
     /**

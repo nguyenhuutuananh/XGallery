@@ -108,6 +108,8 @@ class Onejav extends CrawlerCommand
                 }
                 break;
         }
+
+        return;
     }
 
     /**
@@ -124,10 +126,10 @@ class Onejav extends CrawlerCommand
         $this->output->writeln('URL '.$url);
         $this->progressBar = $this->createProgressBar();
         $this->progressBar->setMaxSteps($results->count());
+        $this->progressBar->setMessage('Pages', 'message');
 
         $results->each(function ($items) {
             // Pages process
-            $this->progressBar->setMessage('Pages', 'message');
             $this->progressBar->setMessage($items->count(), 'steps');
             $this->progressBar->setMessage(0, 'step');
             $this->progressBar->setMessage('', 'status');
