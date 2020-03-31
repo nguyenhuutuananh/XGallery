@@ -49,6 +49,7 @@ class OneJav implements ShouldQueue
 
         // To store in JavMovies we use item_number as unique
         if (!$item = $model->where(['item_number' => $itemNumber])->first()) {
+            // Not found than create new model
             $item = app(JavMovies::class);
         }
 

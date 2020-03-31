@@ -163,7 +163,9 @@ class Onejav extends CrawlerCommand
 
             // Convert to Mongo DateTime
             $originalItem = $item;
-            $item['date'] = new UTCDateTime($item['date']->getTimestamp() * 1000);
+            if (isset($item['date']) && null !== $item['date']) {
+                $item['date'] = new UTCDateTime($item['date']->getTimestamp() * 1000);
+            }
 
             $model->insert($item);
 
