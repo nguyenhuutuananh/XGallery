@@ -9,7 +9,8 @@
 
 namespace App\Console\Commands;
 
-use App\Console\CrawlerCommand;
+use App\Console\AbstractCommand;
+use App\Console\Traits\HasCrawler;
 use App\Jobs\DownloadNhacCuaTui;
 use Illuminate\Notifications\Notifiable;
 
@@ -17,9 +18,10 @@ use Illuminate\Notifications\Notifiable;
  * Class Nhaccuatui
  * @package App\Console\Commands
  */
-class Nhaccuatui extends CrawlerCommand
+class Nhaccuatui extends AbstractCommand
 {
     use Notifiable;
+    use HasCrawler;
 
     /**
      * The name and signature of the console command.
@@ -36,58 +38,64 @@ class Nhaccuatui extends CrawlerCommand
     protected $description = 'Fetching data from Nhaccuatui';
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @return bool
      */
-    public function handle()
+    protected function search(): bool
     {
-        switch ($this->argument('task')) {
-            case 'fetch':
-                $this->progressBar = $this->createProgressBar();
-                /**
-                 * @TODO Get singleton crawler
-                 */
-                $results = $this->getCrawler(\App\Services\Crawler\Nhaccuatui::class)->search([
-                    'title' => $this->option('title'),
-                    'singer' => $this->option('singer')
-                ]);
+        // We will get all data of result. It would take time
+        $pages = $this->getCrawler()->search([
+            'title' => $this->option('title'),
+            'singer' => $this->option('singer')
+        ]);
 
-                $this->progressBar->setMaxSteps($results->count());
-                $results->each(function ($items, $key) {
-                    // Pages process
-                    $this->progressBar->setMessage('Pages', 'message');
-                    $this->progressBar->setMessage($items->count(), 'steps');
-                    $this->progressBar->setMessage(0, 'step');
-                    $this->progressBar->setMessage('', 'status');
-                    $items->each(function ($item, $key) {
-                        $this->progressBar->setMessage($item['name'], 'info');
-
-                        if ($this->argument('download') == 1) {
-                            // Use jobs to download files
-                            DownloadNhacCuaTui::dispatch($item['url'])->onConnection('database');
-
-                            $this->progressBar->setMessage('Downloaded', 'status');
-                        }
-
-                        // Item process
-                        $model = app(\App\Nhaccuatui::class);
-                        if ($model->where(['url' => $item['url']])->first()) {
-                            $this->progressBar->setMessage($key + 1, 'step');
-                            return;
-                        }
-
-                        $model->insert($item);
-                        $this->progressBar->setMessage($key + 1, 'step');
-                    });
-
-                    $this->progressBar->advance();
-                });
-                break;
-            case 'guide':
-            default:
-                $this->ask('What do you want to do');
-                break;
+        if (!$pages) {
+            return false;
         }
+
+        $this->progressBar = $this->createProgressBar();
+        $this->progressBar->setMaxSteps($pages->count());
+
+        $pages->each(function ($items, $key) {
+            $this->progressBar->setMessage($items->count(), 'steps');
+            $this->progressBar->setMessage(0, 'step');
+            $items->each(function ($item, $key) {
+                $this->progressBar->setMessage($item['name'], 'info');
+                $this->progressBar->setMessage('', 'status');
+
+                if ($this->argument('download') == 1) {
+                    DownloadNhacCuaTui::dispatch($item['url'])->onConnection('database');
+                    $this->progressBar->setMessage('Added to download queues', 'status');
+                }
+
+                // Item process
+                $this->insertItem($item);
+                $this->progressBar->setMessage($key + 1, 'step');
+                $this->progressBar->setMessage('COMPLETED', 'status');
+            });
+
+            $this->progressBar->advance();
+        });
+
+        return true;
+    }
+
+    protected function daily(): bool
+    {
+        // TODO: Implement daily() method.
+    }
+
+    protected function fully(): bool
+    {
+        // TODO: Implement fully() method.
+    }
+
+    protected function index()
+    {
+        // TODO: Implement index() method.
+    }
+
+    protected function item()
+    {
+        // TODO: Implement item() method.
     }
 }

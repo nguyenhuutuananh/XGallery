@@ -24,24 +24,6 @@ final class Onejav extends AbstractCrawler
     protected string $name = 'onejav';
 
     /**
-     * @param  string  $date
-     * @return DateTime|null
-     */
-    private function convertStringToDateTime(string $date): ?DateTime
-    {
-        try {
-            $date = trim($date, '/');
-            if (!$dateTime = DateTime::createFromFormat('Y/m/j', $date)) {
-                return null;
-            }
-
-            return $dateTime;
-        } catch (Exception $exception) {
-            return null;
-        }
-    }
-
-    /**
      * @param  string  $itemUri
      * @return object|null
      */
@@ -49,7 +31,10 @@ final class Onejav extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
-        $item      = new stdClass();
+        $item = new stdClass();
+        /**
+         * @TODO Url property should not be there. If itemUri is NULL will cause trouble
+         */
         $item->url = trim($itemUri);
 
         if ($crawler->filter('.columns img.image')->count()) {
@@ -97,6 +82,24 @@ final class Onejav extends AbstractCrawler
     }
 
     /**
+     * @param  string  $date
+     * @return DateTime|null
+     */
+    private function convertStringToDateTime(string $date): ?DateTime
+    {
+        try {
+            $date = trim($date, '/');
+            if (!$dateTime = DateTime::createFromFormat('Y/m/j', $date)) {
+                return null;
+            }
+
+            return $dateTime;
+        } catch (Exception $exception) {
+            return null;
+        }
+    }
+
+    /**
      * @param  string|null  $indexUri
      * @return Collection
      */
@@ -114,7 +117,7 @@ final class Onejav extends AbstractCrawler
                 $data['cover'] = trim($el->filter('.columns img.image')->attr('src'));
             }
 
-            $data['url'] = trim($el->filter('h5.title a')->attr('href'));
+            $data['url'] = 'https://onejav.com'.trim($el->filter('h5.title a')->attr('href'));
 
             if ($el->filter('h5 a')->count()) {
                 $data['title'] = (trim($el->filter('h5 a')->text(null, false)));

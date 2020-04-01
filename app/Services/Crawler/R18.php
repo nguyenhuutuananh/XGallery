@@ -9,6 +9,7 @@
 
 namespace App\Services\Crawler;
 
+use DateTime;
 use Exception;
 use Illuminate\Support\Collection;
 use stdClass;
@@ -40,16 +41,37 @@ final class R18 extends AbstractCrawler
                 }
             ))->reject(function ($value) {
                 return null === $value || empty($value);
-            });
+            })->toArray();
 
-            $item->detail = collect($crawler->filter('.product-onload .product-details dt')->each(
+            $fields = collect($crawler->filter('.product-onload .product-details dt')->each(
                 function ($dt) {
                     $text  = trim($dt->text(null, false));
                     $value = str_replace(['-'], [''], $dt->nextAll()->text(null, false));
 
                     return [strtolower(str_replace(' ', '_', str_replace([':'], [''], $text))) => trim($value)];
                 }
-            ));
+            ))->reject(function ($value) {
+                return null === $value || empty($value);
+            })->toArray();
+
+            foreach ($fields as $field) {
+                foreach ($field as $key => $value) {
+                    $item->{$key} = empty($value) ? null : $value;
+                }
+            }
+
+            if (isset($item->release_date)) {
+                try {
+                    $date = trim($item->release_date, '/');
+                    if (!$dateTime = DateTime::createFromFormat('M. d, Y', $date)) {
+                        $item->release_date = null;
+                    }
+
+                    $item->release_date = $dateTime;
+                } catch (Exception $exception) {
+                    $item->release_date = null;
+                }
+            }
 
             $item->actress = collect($crawler->filter('.product-actress-list a span')->each(
                 function ($span) {
@@ -57,7 +79,7 @@ final class R18 extends AbstractCrawler
                 }
             ))->reject(function ($value) {
                 return null === $value || empty($value);
-            });
+            })->toArray();
 
             if ($crawler->filter('a.js-view-sample')->count()) {
                 $item->sample = $crawler->filter('a.js-view-sample')->attr('data-video-high');
@@ -65,7 +87,7 @@ final class R18 extends AbstractCrawler
 
             $item->gallery = collect($crawler->filter('.product-gallery a img.lazy')->each(function ($img) {
                 return $img->attr('data-original');
-            }));
+            }))->toArray();
 
             return $item;
         } catch (Exception $exception) {
@@ -89,7 +111,8 @@ final class R18 extends AbstractCrawler
 
                 $data = [];
 
-                $data['url'] = $el->attr('href');
+                $url         = explode('?', $el->attr('href'));
+                $data['url'] = $url[0];
 
                 if ($el->filter('img.lazy')->count()) {
                     $data['cover'] = $el->filter('img.lazy')->attr('data-original');

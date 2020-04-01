@@ -33,9 +33,15 @@ class AbstractCommand extends Command
      */
     protected function createProgressBar($max = 0): ProgressBar
     {
+        $this->output->newLine();
         $this->progressBar = $this->output->createProgressBar($max);
         $this->progressBar->start();
         $this->progressBar->setFormat(self::PROGRESSBAR_FORMAT);
+        $this->progressBar->setMessage('Pages', 'message');
+        $this->progressBar->setMessage('', 'steps');
+        $this->progressBar->setMessage('', 'step');
+        $this->progressBar->setMessage('', 'info');
+        $this->progressBar->setMessage('', 'status');
 
         return $this->progressBar;
     }
@@ -56,7 +62,7 @@ class AbstractCommand extends Command
      */
     protected function completed($status)
     {
-        if (null !== $this->progressBar) {
+        if (isset($this->progressBar)) {
             $this->progressBar->finish();
         }
 

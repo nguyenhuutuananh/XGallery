@@ -9,18 +9,18 @@
 
 namespace App\Console\Commands;
 
-use App\Console\CrawlerCommand;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use App\Console\AbstractCommand;
+use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Batdongsan extends CrawlerCommand
+class Batdongsan extends AbstractCommand
 {
     use Notifiable;
+    use HasCrawler;
 
     /**
      * The name and signature of the console command.
@@ -37,96 +37,73 @@ class Batdongsan extends CrawlerCommand
     protected $description = 'Fetching data from Batdongsan.com.vn';
 
     /**
-     * @throws FileNotFoundException
+     * @return bool
      */
-    public function handle()
+    protected function fully(): bool
     {
-        parent::handle();
-        switch ($this->argument('task')) {
-            case 'fully':
-                if (!$url = $this->option('url')) {
-                    $url = $this->ask('Enter detail URL');
-                }
-
-                if (empty($url)) {
-                    return;
-                }
-
-                $tmpFile = 'batdongsan.tmp';
-                $tmpData = 1;
-
-                if (Storage::disk('local')->exists($tmpFile)) {
-                    $tmpData = (int) Storage::disk('local')->get($tmpFile);
-                }
-
-                // Init with page 1
-                if ($tmpData === 0) {
-                    $tmpData = 1;
-                }
-
-                $items             = app(\App\Services\Crawler\Batdongsan::class)->getIndexLinks(
-                    $url,
-                    $tmpData,
-                    $tmpData + 10
-                );
-                $this->progressBar = $this->createProgressBar();
-                $this->progressBar->setMessage('', 'status');
-                $this->progressBar->setMaxSteps($items->count());
-                $this->progressBar->setMessage('Pages', 'message');
-
-                $items->each(function ($page) {
-                    $this->progressBar->setMessage($page->count(), 'steps');
-                    $this->progressBar->setMessage(0, 'step');
-                    $this->progressBar->setMessage('', 'status');
-                    $page->each(function ($item, $index) {
-                        $url = 'https://batdongsan.com.vn'.$item['url'];
-                        $this->progressBar->setMessage($item['url'], 'info');
-                        /**
-                         * @TODO Use Job instead directly
-                         */
-                        if (!$itemDetail = app(\App\Services\Crawler\Batdongsan::class)->getItemDetail($url)) {
-                            $this->progressBar->setMessage($index + 1, 'step');
-                            return;
-                        }
-
-                        $this->insertItem($itemDetail, $url);
-                        $this->progressBar->setMessage($index + 1, 'step');
-                    });
-                    $this->progressBar->advance();
-                });
-
-                Storage::disk('local')->put($tmpFile, $tmpData + 11);
-
-                break;
-            case 'add':
-                if (!$url = $this->option('url')) {
-                    $url = $this->ask('Enter detail URL');
-                }
-
-                if (empty($url)) {
-                    return;
-                }
-
-                if (!$itemDetail = app(\App\Services\Crawler\Batdongsan::class)->getItemDetail($url)) {
-                    return;
-                }
-
-                $this->insertItem($itemDetail, $url);
-                break;
+        if (!$url = $this->getOptionUrl()) {
+            return false;
         }
+
+        if (!$pages = $this->getCrawler()->getIndexLinks($url, $this->initData[0], $this->initData[0])) {
+            return false;
+        }
+
+        $this->progressBar = $this->createProgressBar();
+        $this->progressBar->setMaxSteps($pages->count());
+
+        // Process all pages
+        $pages->each(function ($page) {
+            $this->progressBar->setMessage($page->count(), 'steps');
+            $this->progressBar->setMessage(0, 'step');
+            // Process items on page
+            $page->each(function ($item, $index) {
+                $this->progressBar->setMessage($item['url'], 'info');
+                $this->progressBar->setMessage('FETCHING', 'status');
+                /**
+                 * @TODO Use Job instead directly
+                 */
+                if (!$itemDetail = $this->getCrawler()->getItemDetail($item['url'])) {
+                    $this->progressBar->setMessage($index + 1, 'step');
+                    $this->progressBar->setMessage('FAILED', 'status');
+                    return;
+                }
+
+                $data        = get_object_vars($itemDetail);
+                $data['url'] = $item['url'];
+
+                $this->insertItem($data);
+                $this->progressBar->setMessage($index + 1, 'step');
+                $this->progressBar->setMessage('COMPLETED', 'status');
+            });
+            $this->progressBar->advance();
+        });
+
+        return true;
     }
 
-    /**
-     * @param $itemDetail
-     * @param  string  $url
-     */
-    private function insertItem($itemDetail, string $url)
+    protected function daily(): bool
     {
-        $model = app(\App\Batdongsan::class);
-        if ($model->where(['reference_url' => $url])->first()) {
-            return;
+        // TODO: Implement daily() method.
+    }
+
+    protected function index(): bool
+    {
+        // TODO: Implement index() method.
+    }
+
+    protected function item(): bool
+    {
+        if (!$url = $this->getOptionUrl()) {
+            return false;
         }
 
-        $model->insert(array_merge(get_object_vars($itemDetail), ['reference_url' => $url]));
+        if (!$itemDetail = $this->getCrawler()->getItemDetail($url)) {
+            return false;
+        }
+
+        $this->insertItem($itemDetail, $url);
+
+        return true;
     }
 }

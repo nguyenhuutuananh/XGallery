@@ -80,7 +80,7 @@ final class Batdongsan extends AbstractCrawler
                     preg_match_all($regex, $value, $matches);
                     $value = array_unique($matches[0])[0];
                 }
-                return [Str::slug($key)=>$value];
+                return [Str::slug($key) => $value];
             }))->reject(function ($value) {
                 return null == $value;
             })->toArray();
@@ -108,7 +108,7 @@ final class Batdongsan extends AbstractCrawler
         try {
             $links = $crawler->filter('.search-productItem')->each(function ($node) {
                 return [
-                    'url' => $node->filter('h3 a')->attr('href'),
+                    'url' => 'https://batdongsan.com.vn'.$node->filter('h3 a')->attr('href'),
                     'title' => $node->filter('h3 a')->attr('title'),
                     'cover' => $node->filter('.p-main-image-crop img.product-avatar-img')->attr('src'),
                 ];
