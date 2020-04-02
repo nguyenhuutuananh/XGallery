@@ -31,9 +31,41 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('onejav daily')->daily();
-        $schedule->command('onejav fully')->everyMinute();
-        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')->everyMinute();
+        $schedule->command('onejav daily')
+            ->daily()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputTo('soulevilx@gmail.com');
+        $schedule->command('onejav fully')
+            ->everyMinute()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputTo('soulevilx@gmail.com');
+        $schedule->command('r18 fully --url=https://www.r18.com/videos/vod/movies/list/pagesize=30/price=all/sort=new/type=all')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputTo('soulevilx@gmail.com');
+
+        $xcityProfiles = [
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%82',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%8B',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%95',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%9F',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%AA',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%AF',
+            'https://xxx.xcity.jp/idol/?kana=%E3%81%BE',
+            'https://xxx.xcity.jp/idol/?kana=%E3%82%84',
+            'https://xxx.xcity.jp/idol/?kana=%E3%82%89',
+            'https://xxx.xcity.jp/idol/?kana=%E3%82%8F'
+        ];
+
+        foreach ($xcityProfiles as $xcityProfile) {
+            $schedule->command('xcity:profile fully --url="'.$xcityProfile.'"')->everyMinute()
+                ->withoutOverlapping()->runInBackground()
+                ->emailOutputTo('soulevilx@gmail.com');
+        }
+
+        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')->everyMinute()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputTo('soulevilx@gmail.com');
     }
 
     /**

@@ -12,6 +12,7 @@ namespace App\Services\Crawler;
 use DateTime;
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\Url\Url;
 use stdClass;
 
 /**
@@ -149,5 +150,19 @@ final class R18 extends AbstractCrawler
     public function search(array $conditions = []): ?Collection
     {
         return $this->getIndexLinks($this->buildUrl('common/search/', $conditions));
+    }
+
+    /**
+     * @param  Url  $url
+     * @param  int  $page
+     * @return string
+     */
+    protected function buildUrlWithPage(Url $url, int $page): string
+    {
+        return $this->buildUrl(
+            $url->getPath().'/page='.$page,
+            $url->getAllQueryParameters(),
+            false
+        );
     }
 }

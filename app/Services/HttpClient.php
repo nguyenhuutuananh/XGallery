@@ -57,7 +57,7 @@ class HttpClient extends Client
     public function request($method, $uri = '', array $options = []): ?string
     {
         $key = $this->getKey([$method, $uri]);
-        Log::info('Request URI: '.urldecode($uri).' with key: '.$key);
+        Log::stack(['http'])->info('Request URI: '.urldecode($uri).' with key: '.$key);
 
         if (Cache::has($key)) {
             return Cache::get($key);
@@ -81,7 +81,7 @@ class HttpClient extends Client
             );
             event(new OnHttpRequested($this->response));
         } catch (Exception $exception) {
-            Log::error($exception->getMessage());
+            Log::stack(['http'])->error($exception->getMessage());
             return null;
         }
 

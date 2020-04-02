@@ -10,8 +10,8 @@
 namespace App\Jobs;
 
 use App\JavMovies;
-use App\Jobs\OneJav\UpdateJavGenres;
-use App\Jobs\OneJav\UpdateJavIdols;
+use App\Jobs\Jav\UpdateGenres;
+use App\Jobs\Jav\UpdateIdols;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,6 +26,9 @@ class OneJav implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var array Item information by array format because we won't use getItemDetail
+     */
     private array $itemDetail;
 
     /**
@@ -48,20 +51,20 @@ class OneJav implements ShouldQueue
         $itemNumber = $this->itemDetail['title'];
 
         // To store in JavMovies we use item_number as unique
-        if (!$item = $model->where(['item_number' => $itemNumber])->first()) {
+        if (!$movie = $model->where(['item_number' => $itemNumber])->first()) {
             // Not found than create new model
-            $item = app(JavMovies::class);
+            $movie = app(JavMovies::class);
         }
 
-        $item->item_number     = $itemNumber;
-        $item->release_date    = $this->itemDetail['date'];
-        $item->is_downloadable = true;
-        $item->description     = isset($this->itemDetail['description']) ? $this->itemDetail['description'] : null;
-        $item->save();
+        $movie->item_number     = $itemNumber;
+        $movie->release_date    = $this->itemDetail['date'];
+        $movie->is_downloadable = true;
+        $movie->description     = isset($this->itemDetail['description']) ? $this->itemDetail['description'] : null;
+        $movie->save();
 
         // Trigger job to update genres and xref
-        UpdateJavGenres::dispatch($item, $this->itemDetail)->onConnection('database');
+        UpdateGenres::dispatch($movie, $this->itemDetail['tags'])->onConnection('database');
         // Trigger job to update idols and xref
-        UpdateJavIdols::dispatch($item, $this->itemDetail)->onConnection('database');
+        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onConnection('database');
     }
 }

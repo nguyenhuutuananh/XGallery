@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Jobs\OneJav;
+namespace App\Jobs\Jav;
 
 use App\JavIdols;
 use App\JavMovies;
@@ -20,25 +20,25 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class UpdateJavIdols
+ * Class UpdateIdols
  * @package App\Jobs\OneJav
  */
-class UpdateJavIdols implements ShouldQueue
+class UpdateIdols implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private JavMovies $movie;
-    private array     $itemDetail;
+    private array     $idols;
 
     /**
      * UpdateJavIdols constructor.
      * @param  JavMovies  $movie
-     * @param  array  $itemDetail
+     * @param  array  $idols
      */
-    public function __construct(JavMovies $movie, array $itemDetail)
+    public function __construct(JavMovies $movie, array $idols)
     {
-        $this->movie      = $movie;
-        $this->itemDetail = $itemDetail;
+        $this->movie = $movie;
+        $this->idols = $idols;
     }
 
     /**
@@ -51,7 +51,7 @@ class UpdateJavIdols implements ShouldQueue
         $crawler = app(XCityProfile::class);
 
         // Process all actresses in this movie
-        foreach ($this->itemDetail['actresses'] as $actress) {
+        foreach ($this->idols as $actress) {
             /**
              * Collection of actresses grouped by page
              * Convert to array because we will need use $actress variable
@@ -59,30 +59,36 @@ class UpdateJavIdols implements ShouldQueue
             $results = $crawler->search(['genre' => 'idol', 'q' => $actress, 'sg' => 'idol'])->toArray();
 
             foreach ($results as $actresses) {
-                // This idol is not exists on XCity
+                /**
+                 * This idol is not exists on XCity
+                 * We can not determine who is she. The only way is assumed she's unique and belong this movie
+                 */
                 if (empty($actresses)) {
                     $model = app(JavIdols::class);
                     /**
                      * Because we can't determine idol profile than only way to use reference_url as unique
                      */
-                    if ($item = $model->where(['reference_url' => $this->itemDetail['url']])->first()) {
+                    if ($item = $model->where(['reference_url' => $this->movie->id])->first()) {
                         $this->insertXRef($item);
                         continue;
                     }
 
                     // Save to idol with OneJAV reference_url
                     $model->name          = $actress;
-                    $model->reference_url = $this->itemDetail['url'];
+                    $model->reference_url = $this->movie->id;
                     $model->save();
                     $this->insertXRef($model);
                     unset($model);
                     continue;
                 }
 
-                // Found actresses on XCity
+                /**
+                 * Found this idol on XCity
+                 * We'll use XCity as her unique reference
+                 */
                 foreach ($actresses as $actress) {
                     // Actress detail not found
-                    if (!$actressDetail = app(XCityProfile::class)->getItemDetail('https://xxx.xcity.jp/idol/'.$actress['url'])) {
+                    if (!$actressDetail = app(XCityProfile::class)->getItemDetail($actress['url'])) {
                         continue;
                     }
 

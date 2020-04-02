@@ -10,7 +10,6 @@
 namespace App\Console\Commands;
 
 use App\Console\AbstractCommand;
-use App\Console\CrawlerCommand;
 use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;

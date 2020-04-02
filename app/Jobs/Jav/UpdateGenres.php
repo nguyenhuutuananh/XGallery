@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Jobs\OneJav;
+namespace App\Jobs\Jav;
 
 use App\JavGenres;
 use App\JavMovies;
@@ -19,25 +19,25 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class UpdateJavGenres
- * @package App\Jobs
+ * Class UpdateGenres
+ * @package App\Jobs\Jav
  */
-class UpdateJavGenres implements ShouldQueue
+class UpdateGenres implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private JavMovies $movie;
-    private array     $itemDetail;
+    private array     $genres;
 
     /**
      * UpdateJavGenres constructor.
      * @param  JavMovies  $movie
-     * @param  array  $itemDetail
+     * @param  array  $genres
      */
-    public function __construct(JavMovies $movie, array $itemDetail)
+    public function __construct(JavMovies $movie, array $genres)
     {
-        $this->movie      = $movie;
-        $this->itemDetail = $itemDetail;
+        $this->movie  = $movie;
+        $this->genres = $genres;
     }
 
     /**
@@ -49,7 +49,7 @@ class UpdateJavGenres implements ShouldQueue
     {
         $genres = [];
 
-        foreach ($this->itemDetail['tags'] as $tag) {
+        foreach ($this->genres as $tag) {
             $model = app(JavGenres::class);
             // Genre already exists then get data for xref
             if ($item = $model->where(['name' => $tag])->first()) {

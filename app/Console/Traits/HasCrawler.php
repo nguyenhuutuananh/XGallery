@@ -13,6 +13,7 @@ use App\Services\Crawler\CrawlerInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Trait HasCrawler
@@ -29,7 +30,6 @@ trait HasCrawler
     public function handle()
     {
         $task = $this->argument('task');
-
         $this->output->writeln('<info>Running </info>'.$task);
 
         if (!method_exists($this, $task)) {
@@ -64,6 +64,10 @@ trait HasCrawler
         Storage::disk('local')->put($tmpFile, $this->initData[0].':'.$this->initData[1]);
     }
 
+    /**
+     * @return string|null
+     * @throws ReflectionException
+     */
     private function getShortClassname(): ?string
     {
         return (new ReflectionClass($this))->getShortName();
@@ -71,6 +75,7 @@ trait HasCrawler
 
     /**
      * @return CrawlerInterface
+     * @throws ReflectionException
      */
     protected function getCrawler(): CrawlerInterface
     {
@@ -101,6 +106,7 @@ trait HasCrawler
 
     /**
      * @param $data
+     * @throws ReflectionException
      */
     protected function insertItem($data)
     {
@@ -115,6 +121,7 @@ trait HasCrawler
 
     /**
      * @return Model
+     * @throws ReflectionException
      */
     protected function getModel(): Model
     {
@@ -127,6 +134,9 @@ trait HasCrawler
         return $this->model;
     }
 
+    /**
+     * @return string|null
+     */
     protected function getOptionUrl(): ?string
     {
         if (!$url = $this->option('url')) {

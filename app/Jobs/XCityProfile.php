@@ -3,14 +3,21 @@
 namespace App\Jobs;
 
 use App\JavIdols;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
 /**
  * Class XCityProfile
  * @package App\Jobs
  */
-class XCityProfile extends BaseJob
+class XCityProfile implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     protected array $item;
 
     /**

@@ -157,7 +157,7 @@ final class XCityProfile extends AbstractCrawler
         if ($crawler->filter('.itemBox p.tn')->count() !== 0) {
             $links = $crawler->filter('.itemBox p.tn')->each(function ($el) {
                 return [
-                    'url' => 'https://xxx.xcity.jp/idol/' . $el->filter('a')->attr('href'),
+                    'url' => 'https://xxx.xcity.jp/idol/'.$el->filter('a')->attr('href'),
                     'name' => $el->filter('a')->attr('title'),
                     'cover' => $el->filter('a img')->attr('src')
                 ];
@@ -168,7 +168,7 @@ final class XCityProfile extends AbstractCrawler
 
         $links = $crawler->filter('.itemBox p.name a')->each(function ($el) {
             return [
-                'url' => 'https://xxx.xcity.jp/idol/' . $el->filter('a')->attr('href'),
+                'url' => 'https://xxx.xcity.jp/idol/'.$el->filter('a')->attr('href'),
                 'name' => $el->filter('a')->attr('title'),
             ];
         });
