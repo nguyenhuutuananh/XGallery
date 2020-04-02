@@ -30,6 +30,10 @@ final class XCityProfile extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         try {
             $item        = new stdClass();
             $item->name  = $crawler->filter('.itemBox h1')->text(null, false);
@@ -153,7 +157,7 @@ final class XCityProfile extends AbstractCrawler
         if ($crawler->filter('.itemBox p.tn')->count() !== 0) {
             $links = $crawler->filter('.itemBox p.tn')->each(function ($el) {
                 return [
-                    'url' => $el->filter('a')->attr('href'),
+                    'url' => 'https://xxx.xcity.jp/idol/' . $el->filter('a')->attr('href'),
                     'name' => $el->filter('a')->attr('title'),
                     'cover' => $el->filter('a img')->attr('src')
                 ];
@@ -164,7 +168,7 @@ final class XCityProfile extends AbstractCrawler
 
         $links = $crawler->filter('.itemBox p.name a')->each(function ($el) {
             return [
-                'url' => $el->filter('a')->attr('href'),
+                'url' => 'https://xxx.xcity.jp/idol/' . $el->filter('a')->attr('href'),
                 'name' => $el->filter('a')->attr('title'),
             ];
         });
@@ -182,6 +186,10 @@ final class XCityProfile extends AbstractCrawler
          * @TODO Actually we can't get last page. Recursive is required
          */
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
+
+        if (!$crawler) {
+            return 1;
+        }
 
         $nodes = $crawler->filter('ul.pageScrl li.next');
 
