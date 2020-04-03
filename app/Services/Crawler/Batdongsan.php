@@ -9,9 +9,7 @@
 
 namespace App\Services\Crawler;
 
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\Url\Url;
 use stdClass;
@@ -32,69 +30,79 @@ final class Batdongsan extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
-        try {
-            $item     = new stdClass();
-            $nameNode = $crawler->filter('.pm-title h1');
-
-            if ($nameNode->count() === 0) {
-                Log::warning('Can not get title');
-
-                return null;
-            }
-
-            $item->name    = trim($crawler->filter('.pm-title h1')->text(null, false));
-            $item->price   = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
-            $item->size    = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
-            $item->content = trim($crawler->filter('.pm-content .pm-desc')->html());
-            $fields        = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
-                return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
-            }))->reject(function ($value) {
-                return null == $value;
-            })->toArray();
-
-            foreach ($fields as $field) {
-                foreach ($field as $key => $value) {
-                    $item->{$key} = empty($value) ? null : $value;
-                }
-            }
-
-            $fields = collect($crawler->filter('#project div.row')->each(function ($node) {
-                return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
-            }))->reject(function ($value) {
-                return null == $value;
-            })->toArray();
-
-            foreach ($fields as $field) {
-                foreach ($field as $key => $value) {
-                    $item->{$key} = empty($value) ? null : $value;
-                }
-            }
-
-            $fields = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
-                $key   = trim($node->filter('div.left')->text());
-                $value = trim($node->filter('div.right')->text());
-
-                if ($key === 'Email') {
-                    $value = html_entity_decode($value);
-                    $regex = '`([_a-z0-9-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})`';
-                    preg_match_all($regex, $value, $matches);
-                    $value = array_unique($matches[0])[0];
-                }
-                return [Str::slug($key) => $value];
-            }))->reject(function ($value) {
-                return null == $value;
-            })->toArray();
-
-            foreach ($fields as $field) {
-                foreach ($field as $key => $value) {
-                    $item->{$key} = empty($value) ? null : $value;
-                }
-            }
-
-            return $item;
-        } catch (Exception $exception) {
+        if (!$crawler) {
+            $this->getLogger()->warning('Can not get crawler on URI '.$itemUri);
             return null;
         }
+
+        $item     = new stdClass();
+        $nameNode = $crawler->filter('.pm-title h1');
+
+        if ($nameNode->count() === 0) {
+            $this->getLogger()->warning('Can not get title');
+
+            return null;
+        }
+
+        $item->url     = $itemUri;
+        $item->name    = trim($crawler->filter('.pm-title h1')->text(null, false));
+        $item->price   = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
+        $item->size    = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
+        $item->content = trim($crawler->filter('.pm-content .pm-desc')->html());
+        $fields        = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
+            return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
+        }))->reject(function ($value) {
+            return null == $value;
+        })->toArray();
+
+        foreach ($fields as $field) {
+            foreach ($field as $key => $value) {
+                $item->{$key} = empty($value) ? null : $value;
+            }
+        }
+
+        $fields = collect($crawler->filter('#project div.row')->each(function ($node) {
+            return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
+        }))->reject(function ($value) {
+            return null == $value;
+        })->toArray();
+
+        foreach ($fields as $field) {
+            foreach ($field as $key => $value) {
+                $item->{$key} = empty($value) ? null : $value;
+            }
+        }
+
+        $fields = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
+            $key   = trim($node->filter('div.left')->text());
+            $value = trim($node->filter('div.right')->text());
+
+            if ($key === 'Email') {
+                $value = $this->extractEmail($value);
+            }
+            return [Str::slug($key) => $value];
+        }))->reject(function ($value) {
+            return null == $value;
+        })->toArray();
+
+        foreach ($fields as $field) {
+            foreach ($field as $key => $value) {
+                $item->{$key} = empty($value) ? null : $value;
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * @param  string  $text
+     * @return string
+     */
+    private function extractEmail(string $text): string
+    {
+        $regex = '`([_a-z0-9-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})`';
+        preg_match_all($regex, html_entity_decode($text), $matches);
+        return array_unique($matches[0])[0];
     }
 
     /**
@@ -105,19 +113,20 @@ final class Batdongsan extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
-        try {
-            $links = $crawler->filter('.search-productItem')->each(function ($node) {
-                return [
-                    'url' => 'https://batdongsan.com.vn'.$node->filter('h3 a')->attr('href'),
-                    'title' => $node->filter('h3 a')->attr('title'),
-                    'cover' => $node->filter('.p-main-image-crop img.product-avatar-img')->attr('src'),
-                ];
-            });
-
-            return collect($links);
-        } catch (Exception $exception) {
+        if (!$crawler) {
+            $this->getLogger()->warning('Can not get crawler on URI '.$indexUri);
             return null;
         }
+
+        $links = $crawler->filter('.search-productItem')->each(function ($node) {
+            return [
+                'url' => 'https://batdongsan.com.vn'.$node->filter('h3 a')->attr('href'),
+                'title' => $node->filter('h3 a')->attr('title'),
+                'cover' => $node->filter('.p-main-image-crop img.product-avatar-img')->attr('src'),
+            ];
+        });
+
+        return collect($links);
     }
 
     /**
@@ -128,13 +137,14 @@ final class Batdongsan extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
-        try {
-            $lastPath = explode('/', Url::fromString($crawler->selectLink('>')->attr('href'))->getPath());
-
-            return (int) str_replace('p', '', end($lastPath));
-        } catch (Exception $exception) {
+        if (!$crawler) {
+            $this->getLogger()->warning('Can not get crawler on URI '.$indexUri);
             return 1;
         }
+
+        $lastPath = explode('/', Url::fromString($crawler->selectLink('>')->attr('href'))->getPath());
+
+        return (int) str_replace('p', '', end($lastPath));
     }
 
     /**

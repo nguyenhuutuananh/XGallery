@@ -12,7 +12,6 @@ namespace App\Console\Commands;
 use App\Console\AbstractCommand;
 use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
-use ReflectionException;
 
 /**
  * Class Batdongsan
@@ -39,7 +38,6 @@ class Batdongsan extends AbstractCommand
 
     /**
      * @return bool
-     * @throws ReflectionException
      */
     protected function fully(): bool
     {
@@ -71,10 +69,7 @@ class Batdongsan extends AbstractCommand
                     return;
                 }
 
-                $data        = get_object_vars($itemDetail);
-                $data['url'] = $item['url'];
-
-                $this->insertItem($data);
+                $this->insertItem(get_object_vars($itemDetail));
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('COMPLETED', 'status');
             });
@@ -94,6 +89,9 @@ class Batdongsan extends AbstractCommand
         // TODO: Implement index() method.
     }
 
+    /**
+     * @return bool
+     */
     protected function item(): bool
     {
         if (!$url = $this->getOptionUrl()) {
@@ -104,7 +102,7 @@ class Batdongsan extends AbstractCommand
             return false;
         }
 
-        $this->insertItem($itemDetail, $url);
+        $this->insertItem(get_object_vars($itemDetail));
 
         return true;
     }

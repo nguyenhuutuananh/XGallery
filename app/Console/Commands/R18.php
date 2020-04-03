@@ -12,10 +12,9 @@ namespace App\Console\Commands;
 use App\Console\AbstractCommand;
 use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
-use ReflectionException;
 
 /**
- * Class R18
+ * R18 only used to get videos. There are no idol information
  * @package App\Console\Commands
  */
 class R18 extends AbstractCommand
@@ -39,7 +38,6 @@ class R18 extends AbstractCommand
 
     /**
      * @return bool
-     * @throws ReflectionException
      */
     public function fully(): bool
     {

@@ -12,7 +12,6 @@ namespace App\Console\Commands;
 use App\Console\AbstractCommand;
 use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
-use ReflectionException;
 
 /**
  * Class XCity
@@ -47,7 +46,6 @@ class XCityProfile extends AbstractCommand
 
     /**
      * @return bool
-     * @throws ReflectionException
      */
     protected function fully(): bool
     {

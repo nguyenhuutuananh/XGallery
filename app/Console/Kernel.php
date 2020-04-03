@@ -12,6 +12,10 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+/**
+ * Class Kernel
+ * @package App\Console
+ */
 class Kernel extends ConsoleKernel
 {
     /**
@@ -35,10 +39,12 @@ class Kernel extends ConsoleKernel
             ->daily()
             ->withoutOverlapping()->runInBackground()
             ->emailOutputTo('soulevilx@gmail.com');
+
         $schedule->command('onejav fully')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground()
             ->emailOutputTo('soulevilx@gmail.com');
+
         $schedule->command('r18 fully --url=https://www.r18.com/videos/vod/movies/list/pagesize=30/price=all/sort=new/type=all')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground()
