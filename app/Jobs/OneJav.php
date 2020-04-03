@@ -17,6 +17,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * This job handle process OneJAV to JavMovies and update related data: idols / genres
@@ -54,6 +55,7 @@ class OneJav implements ShouldQueue
         if (!$movie = $model->where(['item_number' => $itemNumber])->first()) {
             // Not found than create new model
             $movie = app(JavMovies::class);
+            Log::stack(['jav'])->info('Saving new video', $this->itemDetail);
         }
 
         $movie->item_number     = $itemNumber;

@@ -17,6 +17,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class R18
@@ -50,6 +51,7 @@ class R18 implements ShouldQueue
 
         $model = app(JavMovies::class);
         if (!$movie = $model->where(['item_number' => $itemDetail->dvd_id])->first()) {
+            Log::stack(['jav'])->info('Saving new video', get_object_vars($itemDetail));
             $movie = app(JavMovies::class);
         }
 

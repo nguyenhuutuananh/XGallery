@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class UpdateIdols
@@ -64,6 +65,7 @@ class UpdateIdols implements ShouldQueue
                  * We can not determine who is she. The only way is assumed she's unique and belong this movie
                  */
                 if (empty($actresses)) {
+                    Log::stack(['jav'])->info('Can not found '.$actress.' on XCity');
                     $model = app(JavIdols::class);
                     /**
                      * Because we can't determine idol profile than only way to use reference_url as unique
