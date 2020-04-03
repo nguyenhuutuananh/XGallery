@@ -85,6 +85,9 @@ class HttpClient extends Client
             case Response::HTTP_OK:
                 Cache::put($key, $this->response->getBody()->getContents());
                 break;
+            default:
+                Log::stack(['http'])->error($this->response->getStatusCode());
+                break;
         }
 
         return Cache::get($key);
