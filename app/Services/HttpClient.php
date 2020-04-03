@@ -40,15 +40,6 @@ class HttpClient extends Client
     }
 
     /**
-     * @param  array  $args
-     * @return string
-     */
-    protected function getKey(array $args): string
-    {
-        return md5(serialize($args));
-    }
-
-    /**
      * @param  string  $method
      * @param  string  $uri
      * @param  array  $options
@@ -57,7 +48,12 @@ class HttpClient extends Client
     public function request($method, $uri = '', array $options = []): ?string
     {
         $key = $this->getKey([$method, $uri]);
-        Log::stack(['http'])->info('Request URI: '.urldecode($uri).' with key: '.$key);
+        Log::stack(['http'])
+            ->info(
+                Cache::has($key)
+                    ? 'Request URI: '.urldecode($uri).' with CACHED key '.$key
+                    : 'Request URI: '.urldecode($uri)
+            );
 
         if (Cache::has($key)) {
             return Cache::get($key);
@@ -92,6 +88,15 @@ class HttpClient extends Client
         }
 
         return Cache::get($key);
+    }
+
+    /**
+     * @param  array  $args
+     * @return string
+     */
+    protected function getKey(array $args): string
+    {
+        return md5(serialize($args));
     }
 
     /**

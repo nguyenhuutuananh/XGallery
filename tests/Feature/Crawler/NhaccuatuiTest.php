@@ -45,9 +45,17 @@ class NhaccuatuiTest extends TestCase
         $items = $this->crawler->getItemsInPlaylist('https://www.nhaccuatui.com/playlist/beautiful-girl-remix-va.oRXDi0WrydLc.html');
         $this->assertIsObject($items, 'Is not collection');
         $this->assertGreaterThan(1, $items->count(), 'Collect count is not larger than 1');
+    }
+
+    public function testGetDashboard()
+    {
         $items = $this->crawler->getDashboard();
         $this->assertIsObject($items, 'Is not collection');
         $this->assertGreaterThan(1, $items->count(), 'Collect count is not larger than 1');
+    }
+
+    public function testGetTop100()
+    {
         $items = $this->crawler->getTop100('top100/top-100-nhac-tre.m3liaiy6vVsF.html');
         $this->assertIsObject($items, 'Is not collection');
         $this->assertGreaterThan(1, $items->count(), 'Collect count is not larger than 1');

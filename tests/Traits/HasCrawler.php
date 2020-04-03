@@ -40,6 +40,11 @@ trait HasCrawler
             $item = $this->crawler->getItemDetail($url);
 
             $this->assertIsObject($item, 'Item detail is not object');
+            $this->assertObjectHasAttribute(
+                'url',
+                $item,
+                __('Attribute URL not found')
+            );
             foreach ($requiredProperties as $requiredProperty) {
                 $this->assertObjectHasAttribute(
                     $requiredProperty,

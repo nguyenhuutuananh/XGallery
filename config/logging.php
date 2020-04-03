@@ -110,6 +110,18 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/crawl.log'),
             'level' => 'debug',
+        ],
+
+        'queue' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/queue.log'),
+            'level' => 'debug',
+        ],
+
+        'jav' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/jav.log'),
+            'level' => 'debug',
         ]
     ],
 
