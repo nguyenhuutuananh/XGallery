@@ -66,16 +66,22 @@ trait HasCrawler
 
     /**
      * @return string|null
-     * @throws ReflectionException
      */
     private function getShortClassname(): ?string
     {
-        return (new ReflectionClass($this))->getShortName();
+        try {
+            return (new ReflectionClass($this))->getShortName();
+        } catch (ReflectionException $exception) {
+            $classname = get_class($this);
+            if ($pos = strrpos($classname, '\\')) {
+                return substr($classname, $pos + 1);
+            }
+            return $classname;
+        }
     }
 
     /**
      * @return CrawlerInterface
-     * @throws ReflectionException
      */
     protected function getCrawler(): CrawlerInterface
     {
@@ -106,7 +112,6 @@ trait HasCrawler
 
     /**
      * @param $data
-     * @throws ReflectionException
      */
     protected function insertItem($data)
     {
@@ -121,7 +126,6 @@ trait HasCrawler
 
     /**
      * @return Model
-     * @throws ReflectionException
      */
     protected function getModel(): Model
     {
