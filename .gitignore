@@ -28,3 +28,4 @@ Homestead.json
 /composer.lock
 /vendor/
 /.env.testing
+/yarn.lock

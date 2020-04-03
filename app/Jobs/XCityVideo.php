@@ -85,7 +85,7 @@ class XCityVideo implements ShouldQueue
                     continue;
                 }
                 // Create new model
-                $model->name          = $actress;
+                $model->name          = $actress[1];
                 $model->reference_url = $movie->id;
                 $model->save();
                 $this->insertXRef($model, $movie);

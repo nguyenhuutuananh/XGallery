@@ -36,4 +36,11 @@ Artisan::command('clear:all', function () {
         $this->comment('Table ' . $name . ' is truncated');
     }
     Schema::enableForeignKeyConstraints();
+
+    Artisan::call('config:clear');
+    Artisan::call('event:clear');
+    Artisan::call('optimize:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    $this->comment('Cleared all Laravel cache types. Except cache type');
 })->describe('Clear log files & truncate tables');

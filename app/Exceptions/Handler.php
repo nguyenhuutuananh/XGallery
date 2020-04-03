@@ -12,6 +12,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -47,6 +48,14 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         parent::report($exception);
+
+        Mail::send(
+            $exception->getMessage()
+            [],
+            function ($message) {
+                $message->to('soulevilx@gmail.com')->from('me@soulevil.com')->subject('Exception');
+            }
+        );
     }
 
     /**

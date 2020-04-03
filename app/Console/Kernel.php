@@ -35,20 +35,37 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        /**
+         * Schedule with daily
+         */
+
         $schedule->command('onejav daily')
             ->daily()
             ->withoutOverlapping()->runInBackground()
-            ->emailOutputTo('soulevilx@gmail.com');
+            ->emailOutputOnFailure('soulevilx@gmail.com');
+
+        /**
+         * Schedule everyMinute
+         */
 
         $schedule->command('onejav fully')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground()
-            ->emailOutputTo('soulevilx@gmail.com');
+            ->emailOutputOnFailure('soulevilx@gmail.com');
+
+        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')
+            ->everyMinute()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputOnFailure('soulevilx@gmail.com');
+
+        /**
+         * Schedule everyFiveMinutes
+         */
 
         $schedule->command('r18 fully --url=https://www.r18.com/videos/vod/movies/list/pagesize=30/price=all/sort=new/type=all')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground()
-            ->emailOutputTo('soulevilx@gmail.com');
+            ->emailOutputOnFailure('soulevilx@gmail.com');
 
         $xcityProfiles = [
             'https://xxx.xcity.jp/idol/?kana=%E3%81%82',
@@ -64,16 +81,16 @@ class Kernel extends ConsoleKernel
         ];
 
         foreach ($xcityProfiles as $xcityProfile) {
-            $schedule->command('xcity:profile fully --url="'.$xcityProfile.'"')->everyMinute()
+            $schedule->command('xcity:profile fully --url="'.$xcityProfile.'"')
+                ->everyFiveMinutes()
                 ->withoutOverlapping()->runInBackground()
-                ->emailOutputTo('soulevilx@gmail.com');
+                ->emailOutputOnFailure('soulevilx@gmail.com');
         }
 
-        $schedule->command('xcity:video');
-
-        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')->everyMinute()
+        $schedule->command('xcity:video')
+            ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground()
-            ->emailOutputTo('soulevilx@gmail.com');
+            ->emailOutputOnFailure('soulevilx@gmail.com');
     }
 
     /**
