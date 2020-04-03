@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,21 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('clear:all', function () {
+    array_map('unlink', array_filter((array) glob(storage_path('logs/*.log'))));
+    $this->comment('Logs have been cleared!');
+    array_map('unlink', array_filter((array) glob(storage_path('app/*.tmp'))));
+    $this->comment('Tmp files have been cleared!');
+    $tableNames = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+    Schema::disableForeignKeyConstraints();
+    foreach ($tableNames as $name) {
+        //if you don't want to truncate migrations
+        if ($name == 'migrations') {
+            continue;
+        }
+        DB::table($name)->truncate();
+        $this->comment('Table ' . $name . ' is truncated');
+    }
+    Schema::enableForeignKeyConstraints();
+})->describe('Clear log files & truncate tables');
