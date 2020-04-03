@@ -69,6 +69,8 @@ class Kernel extends ConsoleKernel
                 ->emailOutputTo('soulevilx@gmail.com');
         }
 
+        $schedule->command('xcity:video');
+
         $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')->everyMinute()
             ->withoutOverlapping()->runInBackground()
             ->emailOutputTo('soulevilx@gmail.com');
