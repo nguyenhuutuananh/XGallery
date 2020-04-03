@@ -12,6 +12,7 @@ namespace App\Services\Crawler;
 use App\Services\HttpClient;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 use Spatie\Url\Url;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +54,7 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     public function crawl(string $uri): ?Crawler
     {
         if (!$response = $this->request(Request::METHOD_GET, $uri)) {
-            Log::stack(['crawl'])->warning('Can not crawl ' . $uri);
+            $this->getLogger()->warning('Can not crawl ' . $uri);
             return null;
         }
 
@@ -115,5 +116,13 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
             array_merge($url->getAllQueryParameters(), ['page' => $page]),
             false
         );
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    protected function getLogger(): LoggerInterface
+    {
+        return Log::stack(['crawl']);
     }
 }

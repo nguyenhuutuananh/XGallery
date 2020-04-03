@@ -38,8 +38,12 @@ final class XCityVideo extends AbstractCrawler
                 return $el->attr('src');
             });
 
+            $item->actresses = $crawler->filter('.bodyCol ul li.credit-links a')->each(function ($el) {
+                return ['https://xxx.xcity.jp'.$el->attr('href'), trim($el->text())];
+            });
+
             // Get all fields
-            $fields       = $crawler->filter('.bodyCol ul li')->each(
+            $fields = collect($crawler->filter('.bodyCol ul li')->each(
                 function ($li) {
                     if (strpos($li->text(null, false), '★Favorite') !== false) {
                         return ['favorite' => (int) str_replace('★Favorite', '', $li->text(null, false))];
@@ -95,10 +99,15 @@ final class XCityVideo extends AbstractCrawler
                         return ['description' => trim(str_replace('Description', '', $li->text(null, false)))];
                     }
                 }
-            );
-            $item->detail = collect($fields)->reject(function ($value) {
+            ))->reject(function ($value) {
                 return null === $value;
-            });
+            })->toArray();
+
+            foreach ($fields as $field) {
+                foreach ($field as $key => $value) {
+                    $item->{$key} = empty($value) ? null : $value;
+                }
+            }
 
             return $item;
         } catch (Exception $exception) {
@@ -116,7 +125,7 @@ final class XCityVideo extends AbstractCrawler
 
         $links = $crawler->filter('.x-itemBox')->each(function ($el) {
             return [
-                'url' => $el->filter('.x-itemBox-package a')->attr('href'),
+                'url' => 'https://xxx.xcity.jp'.$el->filter('.x-itemBox-package a')->attr('href'),
                 'title' => $el->filter('.x-itemBox-title a')->attr('title'),
                 'cover' => $el->filter('.x-itemBox-package img')->attr('src')
             ];
