@@ -87,7 +87,7 @@ class HttpClient extends Client
                 break;
             default:
                 Log::stack(['http'])->error($this->response->getStatusCode());
-                break;
+                return null;
         }
 
         return Cache::get($key);
