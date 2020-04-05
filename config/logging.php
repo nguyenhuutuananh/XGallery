@@ -106,6 +106,7 @@ return [
             'level' => 'debug',
         ],
 
+        // Used for crawling
         'crawl' => [
             'driver' => 'daily',
             'path' => storage_path('logs/crawl.log'),
@@ -118,11 +119,7 @@ return [
             'level' => 'debug',
         ],
 
-        'jav' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/jav.log'),
-            'level' => 'debug',
-        ]
+
     ],
 
 ];

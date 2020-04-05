@@ -30,6 +30,8 @@ class HttpClient extends Client
 
     protected ResponseInterface $response;
 
+    private array $errors;
+
     /**
      * HttpClient constructor.
      * @param  array  $config
@@ -78,6 +80,7 @@ class HttpClient extends Client
             event(new OnHttpRequested($this->response));
         } catch (Exception $exception) {
             Log::stack(['http'])->error($exception->getMessage());
+            $this->errors[$uri] = $exception->getMessage();
             return null;
         }
 
@@ -128,5 +131,13 @@ class HttpClient extends Client
         }
 
         return $this->downloadRemoteFile($url, $saveToFile);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getErrors(): array
+    {
+        return $this->errors;
     }
 }

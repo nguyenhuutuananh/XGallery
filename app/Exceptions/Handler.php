@@ -12,6 +12,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -46,6 +47,13 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        if ($exception instanceof Exception) {
+            // emails.exception is the template of your email
+            // it will have access to the $error that we are passing below
+            Mail::send('emails.exception', ['error' => $exception->getMessage()], function ($m) {
+                $m->to(config('mail.to'))->subject(config('app.name'));
+            });
+        }
         parent::report($exception);
     }
 

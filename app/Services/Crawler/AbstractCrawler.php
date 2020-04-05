@@ -21,6 +21,7 @@ use function GuzzleHttp\Psr7\build_query;
 /**
  * Class AbstractCrawler
  * @package App\Services\Crawler
+ * @TODO Do not extend from HttpClient
  */
 abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
 {
@@ -54,7 +55,7 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     public function crawl(string $uri): ?Crawler
     {
         if (!$response = $this->request(Request::METHOD_GET, $uri)) {
-            $this->getLogger()->warning('Can not crawl ' . $uri);
+            $this->getLogger()->warning('Can not crawl ' . $uri, $this->getErrors());
             return null;
         }
 
