@@ -20,6 +20,7 @@ class BatdongsanTest extends TestCase
             'price',
             'size',
             'content',
+            'url'
         ]
     ];
 

@@ -18,7 +18,6 @@ class XCityVideoTest extends TestCase
         'https://xxx.xcity.jp/avod/detail/?id=142426' => [
             'url',
             'title',
-            'detail',
             'gallery'
         ]
     ];
