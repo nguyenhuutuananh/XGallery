@@ -9,18 +9,16 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Console\BaseCommand;
 use App\Console\Traits\HasCrawler;
 use App\Jobs\DownloadNhacCuaTui;
-use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Nhaccuatui
  * @package App\Console\Commands
  */
-class Nhaccuatui extends AbstractCommand
+class Nhaccuatui extends BaseCommand
 {
-    use Notifiable;
     use HasCrawler;
 
     /**

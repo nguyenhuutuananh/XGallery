@@ -9,17 +9,15 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Console\BaseCommand;
 use App\Console\Traits\HasCrawler;
-use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Batdongsan extends AbstractCommand
+class Batdongsan extends BaseCommand
 {
-    use Notifiable;
     use HasCrawler;
 
     /**

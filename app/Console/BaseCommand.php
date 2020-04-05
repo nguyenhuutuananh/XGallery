@@ -10,6 +10,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Notifications\Notifiable;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,8 +19,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class AbstractCommand
  * @package App\Console
  */
-class AbstractCommand extends Command
+class BaseCommand extends Command
 {
+    use Notifiable;
+
     const PROGRESSBAR_FORMAT = " %current%/%max% %message%"
     .PHP_EOL
     ." %step%/%steps% URLs [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%"
@@ -33,9 +36,7 @@ class AbstractCommand extends Command
      */
     protected function createProgressBar($max = 0): ProgressBar
     {
-        $this->output->newLine();
         $this->progressBar = $this->output->createProgressBar($max);
-        $this->progressBar->start();
         $this->progressBar->setFormat(self::PROGRESSBAR_FORMAT);
         $this->progressBar->setMessage('Pages', 'message');
         $this->progressBar->setMessage('', 'steps');

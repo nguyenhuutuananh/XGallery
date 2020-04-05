@@ -9,7 +9,7 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Console\BaseCommand;
 use App\Console\Traits\HasCrawler;
 use Illuminate\Notifications\Notifiable;
 
@@ -17,7 +17,7 @@ use Illuminate\Notifications\Notifiable;
  * R18 only used to get videos. There are no idol information
  * @package App\Console\Commands
  */
-class R18 extends AbstractCommand
+class R18 extends BaseCommand
 {
     use Notifiable;
     use HasCrawler;

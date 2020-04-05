@@ -9,9 +9,8 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Console\BaseCommand;
 use App\Console\Traits\HasCrawler;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
@@ -19,9 +18,8 @@ use MongoDB\BSON\UTCDateTime;
  * Class Onejav
  * @package App\Console\Commands
  */
-class Onejav extends AbstractCommand
+class Onejav extends BaseCommand
 {
-    use Notifiable;
     use HasCrawler;
 
     /**
@@ -59,6 +57,33 @@ class Onejav extends AbstractCommand
             $this->progressBar->advance();
         });
         return true;
+    }
+
+    /**
+     * Process a collection of items
+     * @param  Collection  $items
+     */
+    private function itemsProcess(Collection $items)
+    {
+        if ($items->isEmpty()) {
+            return;
+        }
+
+        $items->each(function ($item, $index) {
+            $this->progressBar->setMessage($item['title'], 'info');
+
+            // Convert to Mongo DateTime
+            $originalItem = $item;
+            if (isset($item['date']) && null !== $item['date']) {
+                $item['date'] = new UTCDateTime($item['date']->getTimestamp() * 1000);
+            }
+
+            $this->insertItem($item);
+
+            // Process to OneJAV to JavMovies with: Idols & Genres
+            \App\Jobs\OneJav::dispatch($originalItem)->onConnection('database');
+            $this->progressBar->setMessage($index + 1, 'step');
+        });
     }
 
     /**
@@ -105,32 +130,5 @@ class Onejav extends AbstractCommand
     protected function item()
     {
         // TODO: Implement item() method.
-    }
-
-    /**
-     * Process a collection of items
-     * @param  Collection  $items
-     */
-    private function itemsProcess(Collection $items)
-    {
-        if ($items->isEmpty()) {
-            return;
-        }
-
-        $items->each(function ($item, $index) {
-            $this->progressBar->setMessage($item['title'], 'info');
-
-            // Convert to Mongo DateTime
-            $originalItem = $item;
-            if (isset($item['date']) && null !== $item['date']) {
-                $item['date'] = new UTCDateTime($item['date']->getTimestamp() * 1000);
-            }
-
-            $this->insertItem($item);
-
-            // Process to OneJAV to JavMovies with: Idols & Genres
-            \App\Jobs\OneJav::dispatch($originalItem)->onConnection('database');
-            $this->progressBar->setMessage($index + 1, 'step');
-        });
     }
 }

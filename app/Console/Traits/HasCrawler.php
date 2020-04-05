@@ -100,15 +100,15 @@ trait HasCrawler
      */
     abstract protected function daily(): bool;
 
+    abstract protected function index(): bool;
+
+    abstract protected function item(): bool;
+
     /**
      * Process WHOLE site by specific URL
      * @return bool
      */
     abstract protected function fully(): bool;
-
-    abstract protected function index(): bool;
-
-    abstract protected function item(): bool;
 
     /**
      * @param $data

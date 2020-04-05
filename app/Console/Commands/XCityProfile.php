@@ -9,17 +9,15 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Console\BaseCommand;
 use App\Console\Traits\HasCrawler;
-use Illuminate\Notifications\Notifiable;
 
 /**
  * Class XCity
  * @package App\Console\Commands
  */
-class XCityProfile extends AbstractCommand
+class XCityProfile extends BaseCommand
 {
-    use Notifiable;
     use HasCrawler;
 
     /**

@@ -49,6 +49,11 @@ class R18 implements ShouldQueue
             return;
         }
 
+        // This movie is not released yet. Then just skip it
+        if (empty($itemDetail->dvd_id)) {
+            return;
+        }
+
         $model = app(JavMovies::class);
         if (!$movie = $model->where(['item_number' => $itemDetail->dvd_id])->first()) {
             Log::stack(['jav'])->info('Saving new video', get_object_vars($itemDetail));
