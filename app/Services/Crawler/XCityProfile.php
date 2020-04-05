@@ -154,6 +154,10 @@ final class XCityProfile extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         if ($crawler->filter('.itemBox p.tn')->count() !== 0) {
             $links = $crawler->filter('.itemBox p.tn')->each(function ($el) {
                 return [
