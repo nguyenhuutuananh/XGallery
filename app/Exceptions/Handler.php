@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof Exception) {
             // emails.exception is the template of your email
             // it will have access to the $error that we are passing below
-            Mail::send('emails.exception', ['error' => $exception->getMessage()], function ($m) {
+            Mail::send('emails.exception', ['exception' => $exception,], function ($m) {
                 $m->to(config('mail.to'))->subject(config('app.name'));
             });
         }
