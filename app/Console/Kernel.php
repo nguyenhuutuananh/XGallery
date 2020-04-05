@@ -81,7 +81,7 @@ class Kernel extends ConsoleKernel
         ];
 
         foreach ($xcityProfiles as $xcityProfile) {
-            $schedule->command('xcity:profile fully --url="'.$xcityProfile.'"')
+            $schedule->command('xcity:profile fully --url="'.urldecode($xcityProfile).'"')
                 ->everyFiveMinutes()
                 ->withoutOverlapping()->runInBackground()
                 ->emailOutputOnFailure('soulevilx@gmail.com');

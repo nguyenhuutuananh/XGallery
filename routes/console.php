@@ -42,5 +42,6 @@ Artisan::command('clear:all', function () {
     Artisan::call('optimize:clear');
     Artisan::call('route:clear');
     Artisan::call('view:clear');
+    Artisan::call('clear-compiled');
     $this->comment('Cleared all Laravel cache types. Except cache type');
 })->describe('Clear log files & truncate tables');
