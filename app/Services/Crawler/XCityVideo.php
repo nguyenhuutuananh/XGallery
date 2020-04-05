@@ -30,6 +30,10 @@ final class XCityVideo extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         try {
             $item          = new stdClass();
             $item->title   = $crawler->filter('#program_detail_title')->text(null, false);
@@ -123,6 +127,10 @@ final class XCityVideo extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         $links = $crawler->filter('.x-itemBox')->each(function ($el) {
             return [
                 'url' => 'https://xxx.xcity.jp'.$el->filter('.x-itemBox-package a')->attr('href'),
@@ -144,6 +152,10 @@ final class XCityVideo extends AbstractCrawler
          * @TODO Actually we can't get last page. Recursive is required
          */
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
+
+        if (!$crawler) {
+            return 1;
+        }
 
         $nodes = $crawler->filter('ul.pageScrl li.next');
 
