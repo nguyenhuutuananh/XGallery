@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: composer install
-      - run: php vendor/bin/phpunit tests/Feature
+      - run: php vendor/bin/phpunit app/Crawlers/Tests/Feature
