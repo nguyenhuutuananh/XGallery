@@ -9,7 +9,7 @@
 
 namespace App\Jobs;
 
-use App\Services\Crawler\Nhaccuatui;
+use App\Crawlers\Crawler\Nhaccuatui;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

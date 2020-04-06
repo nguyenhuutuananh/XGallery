@@ -9,10 +9,10 @@
 
 namespace App\Jobs\Jav;
 
+use App\Crawlers\Crawler\XCityProfile;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
-use App\Services\Crawler\XCityProfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

@@ -1,5 +1,7 @@
 <?php
 
+use SocialiteProviders\Manager\ServiceProvider;
+
 return [
 
     /*
@@ -176,7 +178,12 @@ return [
         App\Providers\RouteServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
-        \SocialiteProviders\Manager\ServiceProvider::class
+        ServiceProvider::class,
+
+        /**
+         * Crawler
+         */
+        App\Crawlers\Providers\CrawlerProvider::class,
     ],
 
     /*

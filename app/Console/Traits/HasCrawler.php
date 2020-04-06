@@ -9,7 +9,7 @@
 
 namespace App\Console\Traits;
 
-use App\Services\Crawler\CrawlerInterface;
+use App\Crawlers\Crawler\CrawlerInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use ReflectionClass;
@@ -89,7 +89,7 @@ trait HasCrawler
             return $this->crawler;
         }
 
-        $this->crawler = app('\App\Services\Crawler\\'.$this->getShortClassname());
+        $this->crawler = app('\App\Crawlers\Crawler\\'.$this->getShortClassname());
 
         return $this->crawler;
     }

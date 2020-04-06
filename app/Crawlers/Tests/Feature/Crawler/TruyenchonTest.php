@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Crawler;
+namespace App\Crawlers\Tests\Feature\Crawler;
 
-use App\Services\Crawler\Truyenchon;
-use Tests\TestCase;
-use Tests\Traits\HasCrawler;
+use App\Crawlers\Crawler\Truyenchon;
+use App\Crawlers\Tests\TestCase;
+use App\Crawlers\Tests\Traits\HasCrawler;
 
 /**
  * Class TruyenchonTest

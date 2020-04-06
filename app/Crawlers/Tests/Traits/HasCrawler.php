@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Traits;
+namespace App\Crawlers\Tests\Traits;
 
-use App\Services\Crawler\CrawlerInterface;
-use Illuminate\Support\Facades\Artisan;
+use App\Crawlers\Crawler\CrawlerInterface;
 
 /**
  * Trait HasCrawler
@@ -18,12 +17,6 @@ trait HasCrawler
         parent::setUp();
 
         $this->crawler = $this->getCrawler();
-        Artisan::call('cache:clear');
-    }
-
-    public function tearDown(): void
-    {
-        Artisan::call('cache:clear');
     }
 
     /**
@@ -85,14 +78,6 @@ trait HasCrawler
             );
         }
     }
-
-//    public function testGetIndexLinks()
-//    {
-//        foreach ($this->indexLinks as $indexLink => $detail) {
-//            $links = $this->crawler->getIndexLinks($indexLink);
-//            $this->assertEquals($detail['pageCount'], count($links), 'Invalid pageCount on URL: '. $indexLink);
-//        }
-//    }
 
     public function testGetIndexLinksWithFromTo()
     {

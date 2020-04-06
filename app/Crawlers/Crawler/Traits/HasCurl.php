@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Services\Crawler\Traits;
+namespace App\Crawlers\Crawler\Traits;
 
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;

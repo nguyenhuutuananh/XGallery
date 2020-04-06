@@ -45,7 +45,7 @@ class R18 implements ShouldQueue
      */
     public function handle()
     {
-        if (!$itemDetail = app(\App\Services\Crawler\R18::class)->getItemDetail($this->item['url'])) {
+        if (!$itemDetail = app(\App\Crawlers\Crawler\R18::class)->getItemDetail($this->item['url'])) {
             return;
         }
 

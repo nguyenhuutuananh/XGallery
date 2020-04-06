@@ -7,10 +7,10 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Services;
+namespace App\Crawlers;
 
+use App\Crawlers\Crawler\Traits\HasCurl;
 use App\Events\OnHttpRequested;
-use App\Services\Crawler\Traits\HasCurl;
 use Campo\UserAgent;
 use Exception;
 use GuzzleHttp\Client;

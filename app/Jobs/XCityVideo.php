@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Crawlers\Crawler\XCityProfile;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\Jav\UpdateGenres;
-use App\Services\Crawler\XCityProfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -41,7 +41,7 @@ class XCityVideo implements ShouldQueue
      */
     public function handle()
     {
-        if (!$itemDetail = app(\App\Services\Crawler\XCityVideo::class)->getItemDetail($this->item['url'])) {
+        if (!$itemDetail = app(\App\Crawlers\Crawler\XCityVideo::class)->getItemDetail($this->item['url'])) {
             $this->release(900); // 15 minutes
             return;
         }

@@ -7,9 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Services\Crawler;
+namespace App\Crawlers\Crawler;
 
-use App\Services\HttpClient;
+use App\Crawlers\HttpClient;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Log\LoggerInterface;

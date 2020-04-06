@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Services\Crawler;
+namespace App\Crawlers\Crawler;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

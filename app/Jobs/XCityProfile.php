@@ -37,7 +37,7 @@ class XCityProfile implements ShouldQueue
      */
     public function handle()
     {
-        if (!$itemDetail = app(\App\Services\Crawler\XCityProfile::class)->getItemDetail($this->item['url'])) {
+        if (!$itemDetail = app(\App\Crawlers\Crawler\XCityProfile::class)->getItemDetail($this->item['url'])) {
             $this->release(900); // 15 minutes
             return;
         }

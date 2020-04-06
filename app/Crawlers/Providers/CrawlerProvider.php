@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Providers;
+namespace App\Crawlers\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -34,6 +34,8 @@ class CrawlerProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/../Config/httpclient.php' => config_path('httpclient.php'),
+        ]);
     }
 }
