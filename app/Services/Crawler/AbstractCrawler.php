@@ -26,9 +26,7 @@ use function GuzzleHttp\Psr7\build_query;
 abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
 {
     protected Crawler        $crawler;
-
     protected array $config;
-
     protected string $name;
 
     /**

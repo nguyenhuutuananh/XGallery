@@ -47,6 +47,9 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        if (app()->bound('sentry') && $this->shouldReport($exception)) {
+            app('sentry')->captureException($exception);
+        }
         if ($exception instanceof Exception) {
             // emails.exception is the template of your email
             // it will have access to the $error that we are passing below
