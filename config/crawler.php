@@ -35,5 +35,10 @@ return [
         'http_client' => [
             'base_uri' => 'https://xxx.xcity.jp/',
         ]
+    ],
+    'xiuren'=>[
+        'http_client' => [
+            'base_uri' => 'http://www.xiuren.org/',
+        ]
     ]
 ];

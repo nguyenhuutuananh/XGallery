@@ -123,7 +123,7 @@ class HttpClient extends Client
         $fileName   = basename($url);
         $saveToFile = $saveTo.DIRECTORY_SEPARATOR.$fileName;
 
-        if (file_exists($saveToFile)) {
+        if (Storage::exists($saveToFile)) {
             /**
              * @TODO Verify local file
              */

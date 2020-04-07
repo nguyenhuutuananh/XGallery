@@ -11,6 +11,7 @@ namespace App\Crawlers\Crawler;
 
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\Url\Url;
 use stdClass;
 
 /**
@@ -31,12 +32,13 @@ final class Xiuren extends AbstractCrawler
 
         $item         = new stdClass;
         $item->url    = $itemUri;
-        $item->images = $crawler->filter('#main .post .photoThum a')->each(
+        $item->images = collect($crawler->filter('#main .post .photoThum a')->each(
             function ($a) {
                 return $a->attr('href');
             }
-        );
-        $item->images = collect($item->images);
+        ))->reject(function ($value) {
+            return null === $value;
+        })->toArray();
 
         return $item;
     }
@@ -85,5 +87,15 @@ final class Xiuren extends AbstractCrawler
     public function search(array $conditions = []): ?Collection
     {
         return null;
+    }
+
+    /**
+     * @param  Url  $url
+     * @param  int  $page
+     * @return string
+     */
+    protected function buildUrlWithPage(Url $url, int $page): string
+    {
+        return $this->buildUrl($url->getPath().'page-'.$page .'.html');
     }
 }

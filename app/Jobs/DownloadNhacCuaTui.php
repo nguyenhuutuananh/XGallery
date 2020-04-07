@@ -48,6 +48,6 @@ class DownloadNhacCuaTui implements ShouldQueue
             throw new Exception('URL not found');
         }
 
-        $crawler->download($itemDetail->download, storage_path().DIRECTORY_SEPARATOR.'nhaccuatui');
+        $crawler->download($itemDetail->download, 'nhaccuatui');
     }
 }

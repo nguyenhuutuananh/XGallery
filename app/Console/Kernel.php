@@ -91,6 +91,11 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground()
             ->emailOutputOnFailure(config('mail.to'));
+
+        $schedule->command('xiuren fully --url=http://www.xiuren.org/')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputOnFailure(config('mail.to'));
     }
 
     /**

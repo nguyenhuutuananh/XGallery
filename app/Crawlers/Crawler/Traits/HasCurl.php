@@ -10,6 +10,7 @@
 namespace App\Crawlers\Crawler\Traits;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 trait HasCurl
@@ -44,16 +45,16 @@ trait HasCurl
             return false;
         }
 
-        if (!file_put_contents($saveToFile, $data)) {
+        if (!Storage::put($saveToFile, $data)) {
             Log::error('Can not save to file', func_get_args());
             return false;
         }
 
-        if ($status['download_content_length'] < 0 || $status['download_content_length'] == filesize($saveToFile)) {
+        if ($status['download_content_length'] < 0 || $status['download_content_length'] == Storage::size($saveToFile)) {
             return $saveToFile;
         }
 
-        unlink($saveToFile);
+        Storage::delete($saveToFile);
 
         return false;
     }
