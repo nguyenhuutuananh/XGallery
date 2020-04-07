@@ -30,7 +30,7 @@ class HttpClient extends Client
 
     protected ResponseInterface $response;
 
-    private array $errors;
+    private array $errors = [];
 
     /**
      * HttpClient constructor.

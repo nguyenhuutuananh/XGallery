@@ -102,7 +102,10 @@ final class Batdongsan extends AbstractCrawler
     {
         $regex = '`([_a-z0-9-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})`';
         preg_match_all($regex, html_entity_decode($text), $matches);
-        return array_unique($matches[0])[0];
+
+        $matches = array_unique($matches[0]);
+
+        return reset($matches);
     }
 
     /**

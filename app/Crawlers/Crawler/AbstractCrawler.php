@@ -79,6 +79,7 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
 
         for ($page = $from; $page <= $pages; $page++) {
             $indexUrl = $this->buildUrlWithPage($url, $page);
+
             /**
              * @TODO Page 1 is crawled no need for re-crawl
              */
