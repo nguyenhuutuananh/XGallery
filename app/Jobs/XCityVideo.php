@@ -57,7 +57,7 @@ class XCityVideo implements ShouldQueue
         $movie->name          = $itemDetail->title;
         $movie->reference_url = $itemDetail->url;
         $movie->gallery       = json_encode($itemDetail->gallery);
-        $movie->sales_date    = $itemDetail->sales_date;
+        $movie->sales_date    = isset($itemDetail->sales_date) ? $itemDetail->sales_date : null;
         $movie->label         = $itemDetail->label;
         // @TODO Maker
         $movie->series       = $itemDetail->series;
