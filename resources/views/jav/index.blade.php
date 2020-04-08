@@ -37,14 +37,14 @@
                         <li class="list-group-item tag">
                             <i class="fas fa-tags"></i>
                             @foreach ($item->genres() as $genre)
-                                    <span class="badge badge-pill badge-dark">{{$genre->name}}</span>
+                                    <a href="{{route('genre.view',$genre->id)}}"><span class="badge badge-pill badge-dark">{{$genre->name}}</span></a>
                                 @endforeach
                         </li>
                         @if($item->idols()->count() > 0)
                             <li class="list-group-item actress">
                                 <i class="fas fa-female"></i>
                                 @foreach ($item->idols() as $idol)
-                                    <span class="badge-pill badge-info">{{$idol->name}}</span>
+                                    <a href="{{route('idol.view',$idol->id)}}"><span class="badge-pill badge-info">{{$idol->name}}</span></a>
                                @endforeach
                             </li>
                         @endif
@@ -66,8 +66,6 @@
                 </div>
             </div>
         @endforeach
-
-
     </div>
     {{ $items->links() }}
 @stop
