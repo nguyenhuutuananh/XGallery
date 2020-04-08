@@ -13,4 +13,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class JavMoviesXref extends Model
 {
+
 }

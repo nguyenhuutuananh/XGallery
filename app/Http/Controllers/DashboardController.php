@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MenuItems;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,12 +18,19 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
  * Class Controller
  * @package App\Http\Controllers
  */
-class Controller extends BaseController
+class DashboardController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function index()
     {
-        return view('welcome');
+        return view(
+            'dashboard.index',
+            [
+                'sidebar' => MenuItems::all(),
+                'title' => 'Dashboard',
+                'description' => ''
+            ]
+        );
     }
 }

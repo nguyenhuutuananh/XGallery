@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'Controller@index');
+Route::get('/', ['App\Http\Controllers\DashboardController', 'index']);
+Route::prefix('jav')
+    ->group(function () {
+        Route::get('/', ['App\Http\Controllers\JavController', 'index']);
+        Route::get('/movie/{id}', ['App\Http\Controllers\JavController', 'index'])->name('movie.view');
+    });
+
 Route::get('login/flickr', 'Auth\FlickrController@redirectToProvider');
 Route::get('login/flickr/callback', 'Auth\FlickrController@handleProviderCallback');
 Route::get('/debug-sentry', function () {
