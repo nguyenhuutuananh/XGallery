@@ -27,7 +27,7 @@ class XCityVideo implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  array  $item
      */
     public function __construct(array $item)
     {

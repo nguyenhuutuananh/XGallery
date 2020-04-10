@@ -12,10 +12,14 @@ namespace App\Http\Controllers;
 use App\JavGenres;
 use App\JavMovies;
 use App\JavMoviesXref;
+use App\Jobs\JavDownload;
 use App\MenuItems;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -39,6 +43,25 @@ class JavController extends BaseController
         );
     }
 
+    /**
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function movie(int $id)
+    {
+        $movie = JavMovies::find($id);
+
+        return view(
+            'jav.movie',
+            [
+                'item' => $movie,
+                'sidebar' => MenuItems::all(),
+                'title' => 'JAV movie - '.$movie->name,
+                'description' => ''
+            ]
+        );
+    }
+
     public function genre(int $id)
     {
         $movieIds = JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'genre'])->select('movie_id')->get();
@@ -48,7 +71,7 @@ class JavController extends BaseController
             [
                 'items' => JavMovies::whereIn('id', $movieIds->toArray())->paginate(15),
                 'sidebar' => MenuItems::all(),
-                'title' => 'JAV genre - ' . JavGenres::find($id)->first()->name ,
+                'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
                 'description' => ''
             ]
         );
@@ -63,7 +86,7 @@ class JavController extends BaseController
             [
                 'items' => JavMovies::whereIn('id', $movieIds->toArray())->paginate(15),
                 'sidebar' => MenuItems::all(),
-                'title' => 'JAV genre - ' . JavGenres::find($id) ,
+                'title' => 'JAV genre - '.JavGenres::find($id),
                 'description' => ''
             ]
         );
@@ -88,5 +111,10 @@ class JavController extends BaseController
                 'description' => ''
             ]
         );
+    }
+
+    public function download(string $itemNumber)
+    {
+        JavDownload::dispatch($itemNumber)->onConnection('database');
     }
 }

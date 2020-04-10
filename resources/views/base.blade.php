@@ -9,6 +9,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <link href="{{ asset('storage/vendor/AdminLTE/dist/css/adminlte.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('storage/css/xgallery.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"/>
     <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -83,7 +84,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 messages mt-2">
-                @yield('content')
             </div>
         </div>
         <div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 9999;">
@@ -93,10 +93,40 @@
                 <!-- Then put toasts within -->
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-12">
+                @yield('content')
+            </div>
+        </div>
     </div>
 </div>
-
+<div id="overlay">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
 @include('includes.footer')
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script src="{{ asset('storage/vendor/AdminLTE/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('storage/vendor/AdminLTE/dist/js/demo.js') }}"></script>
+<!--<script src="{{ asset('storage/vendor/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>-->
+
+<script src="{{ asset('storage/js/xgallery.js') }}"></script>
+<script>
+    jQuery(document).ready(function () {
+        xgallery.ajax.init();
+    })
+</script>
 </body>
 </html>

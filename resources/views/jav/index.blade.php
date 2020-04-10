@@ -2,7 +2,7 @@
 @section('content')
     <div class="card-columns">
         @foreach ($items as $item)
-            <div class="card">
+            @include('jav.includes.movie');<div class="card">
                 @if(!empty($item->cover))
                     <a href="{{route('movie.view',$item->id)}}"><img class="bd-placeholder-img card-img-top"
                                                                      width="100%" src="{{$item->cover}}"/></a>

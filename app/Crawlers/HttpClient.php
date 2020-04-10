@@ -112,12 +112,11 @@ class HttpClient extends Client
      */
     public function download(string $url, string $saveTo)
     {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            return false;
-        }
-
         if (!Storage::exists($saveTo)) {
             Storage::makeDirectory($saveTo);
+        }
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            return false;
         }
 
         $fileName   = basename($url);

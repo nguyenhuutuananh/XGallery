@@ -76,7 +76,7 @@ final class Onejav extends AbstractCrawler
             return null === $value || empty($value);
         });
 
-        $item->torrent = trim($crawler->filter('.control.is-expanded a')->attr('href'));
+        $item->torrent = 'https://onejav.com'.trim($crawler->filter('.control.is-expanded a')->attr('href'));
 
         return $item;
     }
@@ -156,7 +156,7 @@ final class Onejav extends AbstractCrawler
                 return null === $value || empty($value);
             })->toArray();
 
-            $data['torrent'] = trim($el->filter('.control.is-expanded a')->attr('href'));
+            $data['torrent'] = 'https://onejav.com'.trim($el->filter('.control.is-expanded a')->attr('href'));
 
             return $data;
         });
