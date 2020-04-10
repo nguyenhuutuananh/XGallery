@@ -44,6 +44,11 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground()
             ->emailOutputOnFailure(config('mail.to'));
 
+        $schedule->command('r18 daily')
+            ->daily()
+            ->withoutOverlapping()->runInBackground()
+            ->emailOutputOnFailure(config('mail.to'));
+
         /**
          * Schedule everyMinute
          */

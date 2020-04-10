@@ -20,8 +20,7 @@
             @endif
             @if(!empty($item->studio))
                 <li class="list-group-item studio">
-                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Studio</strong><a
-                        href="">{{$item->studio}}</a>
+                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Studio</strong><a href="">{{$item->studio}}</a>
                 </li>
             @endif
             @if(!empty($item->label))

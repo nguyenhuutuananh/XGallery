@@ -21,6 +21,11 @@ class XCityProfile implements ShouldQueue
     protected array $item;
 
     /**
+     * @var int Execute timeout
+     */
+    public int $timeout = 300;
+
+    /**
      * Create a new job instance.
      *
      * @param  array  $item

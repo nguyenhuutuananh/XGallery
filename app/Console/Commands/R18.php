@@ -74,7 +74,6 @@ class R18 extends BaseCommand
 
     public function item(): bool
     {
-        // TODO: Implement item() method.
     }
 
     public function index(): bool
@@ -82,8 +81,28 @@ class R18 extends BaseCommand
         // TODO: Implement index() method.
     }
 
+    /**
+     * Keep update R18 daily beside fully
+     * @return bool
+     */
     public function daily(): bool
     {
-        // TODO: Implement daily() method.
+        $uri = 'https://www.r18.com/videos/vod/movies/list/pagesize=60/price=all/sort=new/type=all/page=1';
+        if (!$items = $this->getCrawler()->getItemLinks($uri)) {
+            return false;
+        }
+
+        $this->progressBar = $this->createProgressBar();
+        $this->progressBar->setMaxSteps($items->count());
+
+        $items->each(function ($item) {
+            $this->progressBar->setMessage($item['url'], 'info');
+            $this->progressBar->setMessage('FETCHING', 'status');
+            \App\Jobs\R18::dispatch($item)->onConnection('database');
+            $this->progressBar->setMessage('QUEUED', 'status');
+            $this->progressBar->advance();
+        });
+
+        return true;
     }
 }

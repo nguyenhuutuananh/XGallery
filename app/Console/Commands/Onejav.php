@@ -113,6 +113,10 @@ class Onejav extends BaseCommand
         return true;
     }
 
+    /**
+     * Process to get all OneJav data
+     * @return bool
+     */
     protected function fully(): bool
     {
         if (!$results = $this->getCrawler()->getItemLinks('https://onejav.com/new?page='.$this->initData[0])) {
