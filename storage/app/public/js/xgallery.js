@@ -33,8 +33,12 @@
             delete data.ajaxUrl;
 
             jQuery.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
                 url: ajaxUrl,
                 data: data,
+                method: "POST",
                 beforeSend: function()
                 {
                     jQuery('#overlay').show();

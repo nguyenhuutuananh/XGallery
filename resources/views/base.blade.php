@@ -73,6 +73,7 @@
         }
     </style>
     @include('includes.head.metadata')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
 </head>
 <body class="app-{{App::environment()}} sidebar-mini layout-fixed sidebar-open">

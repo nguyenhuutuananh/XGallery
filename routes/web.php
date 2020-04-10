@@ -16,13 +16,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', ['App\Http\Controllers\DashboardController', 'index']);
 Route::prefix('jav')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\JavController', 'dashboard']);
+        Route::get('/', ['App\Http\Controllers\JavController', 'dashboard'])->name('jav.view');
         Route::get('/movie/{id}', ['App\Http\Controllers\JavController', 'movie'])->name('movie.view');
         Route::get('/genre/{id}', ['App\Http\Controllers\JavController', 'genre'])->name('genre.view');
         Route::get('/idol/{id}', ['App\Http\Controllers\JavController', 'idol'])->name('idol.view');
         Route::get('/search', ['App\Http\Controllers\JavController', 'search'])->name('search.view');
-        Route::get('/download/{itemNumber}', ['App\Http\Controllers\JavController', 'download'])->name('download.request');
+        Route::post('/download/{itemNumber}', ['App\Http\Controllers\JavController', 'download'])->name('download.request');
     });
+Route::prefix('xiuren')
+    ->group(function () {
+        Route::get('/', ['App\Http\Controllers\XiurenController', 'dashboard']);
+        Route::post('/download/{id}', ['App\Http\Controllers\XiurenController', 'download'])->name('xiuren.download.request');
+    });
+
 
 Route::get('login/flickr', 'Auth\FlickrController@redirectToProvider');
 Route::get('login/flickr/callback', 'Auth\FlickrController@handleProviderCallback');
