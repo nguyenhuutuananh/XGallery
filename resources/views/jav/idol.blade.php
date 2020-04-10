@@ -5,14 +5,15 @@
             {{ $items->links() }}
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-4">
-            <div class="card">
+    <div class="card mb-3">
+        <div class="row no-gutters">
+            <div class="col-4">
                 @if(!empty($idol->cover))
-                    <a href=""><img class="bd-placeholder-img card-img-top"
+                    <a href=""><img class="bd-placeholder-img card-img"
                                     width="100%" src="{{$idol->cover}}"/></a>
                 @endif
+            </div>
+            <div class="col-8">
                 <div class="card-body">
                     <h5 class="card-title mr-1"><strong>{{$idol->name}}</strong></h5>
                     <span class="badge badge-pill badge-primary">{{$items->total()}}</span>
@@ -55,14 +56,15 @@
                 </ul>
             </div>
         </div>
-        <div class="col-8">
+    </div>
+    <div class="row ">
+        <div class="col-12">
             <div class="card-columns">
                 @foreach ($items as $item)
-                    @include('jav.includes.movie');
+                    @include('jav.includes.movie')
                 @endforeach
             </div>
         </div>
     </div>
-
     {{ $items->links() }}
 @stop
