@@ -64,7 +64,7 @@ class Xiuren extends BaseCommand
                     return;
                 }
 
-                $this->insertItem(get_object_vars($itemDetail));
+                $this->insertItem(array_merge(get_object_vars($itemDetail), ['cover' => $item['cover']]));
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('COMPLETED', 'status');
             });
