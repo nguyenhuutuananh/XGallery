@@ -119,6 +119,11 @@ return [
             'level' => 'debug',
         ],
 
+        'download' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/download.log'),
+            'level' => 'debug',
+        ]
 
     ],
 

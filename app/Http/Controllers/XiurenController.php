@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\XiurenDownload;
 use App\MenuItems;
 use App\Xiuren;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -32,7 +33,8 @@ class XiurenController extends BaseController
         );
     }
 
-    public function download()
+    public function download(string $id)
     {
+        XiurenDownload::dispatch($id)->onConnection('database');
     }
 }

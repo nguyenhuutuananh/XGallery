@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class XCityVideo
+ * Process to get XCity video detail
  * @package App\Jobs
  */
 class XCityVideo implements ShouldQueue
@@ -23,6 +23,11 @@ class XCityVideo implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected array $item;
+
+    /**
+     * @var int Execute timeout
+     */
+    public int $timeout = 300;
 
     /**
      * Create a new job instance.

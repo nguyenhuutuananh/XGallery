@@ -4,8 +4,7 @@
         @foreach ($items as $item)
             <div class="card">
                 @if(!empty($item->cover))
-                    <a href=""><img class="bd-placeholder-img card-img-top"
-                                    width="100%" src="{{$item->cover}}"/></a>
+                    <img class="bd-placeholder-img card-img-top" src="{{$item->cover}}"/>
                 @endif
                 <div class="card-body">
 
