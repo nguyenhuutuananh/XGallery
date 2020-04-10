@@ -65,7 +65,9 @@ final class R18 extends AbstractCrawler
                 try {
                     $date = trim($item->release_date, '/');
                     if (!$dateTime = DateTime::createFromFormat('M. d, Y', $date)) {
-                        $item->release_date = null;
+                        if (!$dateTime = DateTime::createFromFormat('M d, Y', $date)) {
+                            $dateTime = null;
+                        }
                     }
 
                     $item->release_date = $dateTime;
