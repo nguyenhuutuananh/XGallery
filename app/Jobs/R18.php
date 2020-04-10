@@ -20,7 +20,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class R18
+ * Process movie in R18
  * @package App\Jobs
  */
 class R18 implements ShouldQueue

@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use App\JavGenres;
+use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\JavDownload;
@@ -82,9 +83,10 @@ class JavController extends BaseController
         $movieIds = JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'idol'])->select('movie_id')->get();
 
         return view(
-            'jav.index',
+            'jav.idol',
             [
                 'items' => JavMovies::whereIn('id', $movieIds->toArray())->paginate(15),
+                'idol' => JavIdols::find($id),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV genre - '.JavGenres::find($id),
                 'description' => ''
