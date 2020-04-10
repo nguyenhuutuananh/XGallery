@@ -7,7 +7,6 @@ yarn-error.log
 bootstrap/compiled.php
 
 # Laravel 5 & Lumen specific
-public/storage
 public/hot
 
 # Laravel 5 & Lumen specific with changed public path
@@ -27,3 +26,4 @@ Homestead.json
 /composer.lock
 /.env.testing
 /yarn.lock
+/vendor/
