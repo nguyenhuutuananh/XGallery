@@ -20,7 +20,7 @@ Route::prefix('jav')
         Route::get('/movie/{id}', ['App\Http\Controllers\JavController', 'movie'])->name('movie.view');
         Route::get('/genre/{id}', ['App\Http\Controllers\JavController', 'genre'])->name('genre.view');
         Route::get('/idol/{id}', ['App\Http\Controllers\JavController', 'idol'])->name('idol.view');
-        Route::get('/search', ['App\Http\Controllers\JavController', 'search'])->name('search.view');
+        Route::post('/search', ['App\Http\Controllers\JavController', 'search'])->name('jav.search.view');
         Route::post('/download/{itemNumber}', ['App\Http\Controllers\JavController', 'download'])->name('download.request');
     });
 Route::prefix('xiuren')

@@ -1,14 +1,9 @@
 @extends('base')
 @section('content')
-    <div class="row">
-        <div class="col-4">
-            {{ $items->links() }}
-        </div>
-    </div>
-
+    @include('jav.includes.navbar')
     <div class="card-columns">
         @foreach ($items as $item)
-            @include('jav.includes.movie');
+            @include('jav.includes.movie')
         @endforeach
     </div>
     {{ $items->links() }}

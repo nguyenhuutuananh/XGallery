@@ -10,8 +10,11 @@
 
                 </div>
                 <div class="card-footer">
+
                     <small class="text-muted">
-                         <span class="float-right">
+                        <span class="badge badge-primary">{{count($item->images)}}</span>
+                    </small>
+                    <span class="float-right">
                          <button type="button" class="btn btn-primary btn-sm ajax-pool"
                                  data-ajax-url="{{route('xiuren.download.request', $item->id)}}"
                                  data-ajax-command="download"
@@ -19,7 +22,6 @@
                         <i class="fas fa-download mr-1"></i>Download
                         </button>
                     </span>
-                    </small>
                 </div>
             </div>
         @endforeach

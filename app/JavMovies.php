@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\DB;
 
 class JavMovies extends Model
 {
+    public function search(array $fields, string $keyword)
+    {
+        $this->where(function ($query) use ($fields, $keyword) {
+            foreach ($fields as $field) {
+                $query->orWhere($field, 'LIKE', '%'.$keyword.'%');
+            }
+        });
+
+        return $this;
+    }
+
     public function idols()
     {
         $query = DB::table('jav_idols AS idol');

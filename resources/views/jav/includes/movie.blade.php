@@ -4,13 +4,15 @@
                                                          width="100%" src="{{$item->cover}}"/></a>
     @endif
     <div class="card-body">
-        <a href="{{route('movie.view',$item->id)}}">
-            @if(!empty($item->name))<h5 class="card-title mr-1"><strong>{{$item->name}}</strong></h5>@endif
-            <span class="badge badge-primary">{{$item->item_number}}</span>
-        </a>
-        @if(!empty($item->description))
-            <p class="card-text">{{$item->description}}</p>
-        @endif
+        <div class="col-12">
+            <a href="{{route('movie.view',$item->id)}}">
+                @if(!empty($item->name))<h5 class="card-title mr-1"><strong>{{$item->name}}</strong></h5>@endif
+                <span class="badge badge-primary">{{$item->item_number}}</span>
+            </a>
+            @if(!empty($item->description))
+                <p class="card-text">{{$item->description}}</p>
+            @endif
+        </div>
         <ul class="list-group list-group-flush">
             @if(!empty($item->directory))
                 <li class="list-group-item director">

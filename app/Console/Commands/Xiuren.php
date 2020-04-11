@@ -25,7 +25,7 @@ class Xiuren extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'xiuren {task=fully} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xiuren {task=fully} {--url=http://www.xiuren.org/} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.
