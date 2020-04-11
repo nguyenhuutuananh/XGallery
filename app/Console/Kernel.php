@@ -61,6 +61,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
+
+        $schedule->command('truyenchon fully')
+            ->everyMinute()
+            ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
         /**

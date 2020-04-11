@@ -9,13 +9,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BaseController
  * @package App\Http\Controllers
  */
-class BaseController extends \Illuminate\Routing\Controller
+class BaseController extends Controller
 {
     /**
      * @param  Response  $response

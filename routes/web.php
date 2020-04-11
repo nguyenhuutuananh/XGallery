@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', ['App\Http\Controllers\DashboardController', 'index']);
+
 Route::prefix('jav')
     ->group(function () {
         Route::get('/', ['App\Http\Controllers\JavController', 'dashboard'])->name('jav.view');
@@ -23,12 +24,18 @@ Route::prefix('jav')
         Route::post('/search', ['App\Http\Controllers\JavController', 'search'])->name('jav.search.view');
         Route::post('/download/{itemNumber}', ['App\Http\Controllers\JavController', 'download'])->name('download.request');
     });
+
 Route::prefix('xiuren')
     ->group(function () {
         Route::get('/', ['App\Http\Controllers\XiurenController', 'dashboard']);
         Route::post('/download/{id}', ['App\Http\Controllers\XiurenController', 'download'])->name('xiuren.download.request');
     });
 
+Route::prefix('truyenchon')
+    ->group(function () {
+        Route::get('/', ['App\Http\Controllers\TruyenchonController', 'dashboard'])->name('truyenchon.index.view');
+        Route::post('/download/{id}', ['App\Http\Controllers\TruyenchonController', 'download'])->name('truyenchon.download.request');
+    });
 
 Route::get('login/flickr', 'Auth\FlickrController@redirectToProvider');
 Route::get('login/flickr/callback', 'Auth\FlickrController@handleProviderCallback');

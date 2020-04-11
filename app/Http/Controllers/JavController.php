@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\HasJavMovies;
 use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
@@ -30,13 +31,18 @@ use Symfony\Component\HttpFoundation\Request;
 class JavController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use HasJavMovies;
 
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
     public function dashboard(Request $request)
     {
         return view(
             'jav.index',
             [
-                'items' => JavMovies::orderBy('release_date', 'desc')->paginate($request->get('per-page', 15)),
+                'items' => $this->getMovies($request),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV movies',
                 'description' => ''
@@ -58,7 +64,7 @@ class JavController extends BaseController
                 'item' => $movie,
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV movie - '.$movie->name,
-                'description' => ''
+                'description' => $movie->description
             ]
         );
     }
@@ -70,8 +76,7 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => JavMovies::whereIn('id', $movieIds->toArray())
-                    ->orderBy('release_date', 'desc')->paginate($request->get('per-page', 15)),
+                'items' => $this->getMovies($request, ['ids' => $movieIds->toArray()]),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
                 'description' => ''
@@ -81,15 +86,16 @@ class JavController extends BaseController
 
     public function idol(int $id, Request $request)
     {
-        $movieIds = JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'idol'])->select('movie_id')->get();
-
         return view(
             'jav.idol',
             [
-                'items' => JavMovies::whereIn('id', $movieIds->toArray())->orderBy(
-                    'release_date',
-                    'desc'
-                )->paginate($request->get('per-page', 15)),
+                'items' => $this->getMovies(
+                    $request,
+                    [
+                        'ids' => JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'idol'])
+                            ->select('movie_id')->get()->toArray()
+                    ]
+                ),
                 'idol' => JavIdols::find($id),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV genre - '.JavGenres::find($id),
@@ -104,24 +110,12 @@ class JavController extends BaseController
      */
     public function search(Request $request)
     {
-        $keyword = $request->get('keyword');
-        $model = app(JavMovies::class);
-        $model   = $model->where(function ($query) use ($keyword) {
-            $query->orWhere('description', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('item_number', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('director', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('studio', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('label', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('channel', 'LIKE', '%'.$keyword.'%')
-                ->orWhere('series', 'LIKE', '%'.$keyword.'%');
-        });
-
         return view(
             'jav.index',
             [
-                'items' => $model->orderBy('release_date', 'desc')->paginate($request->get('per-page', 15)),
+                'items' => $this->getMovies($request),
                 'sidebar' => MenuItems::all(),
-                'title' => 'JAV movies - Searching by keyword - '.$keyword,
+                'title' => 'JAV movies - Searching by keyword - '.$request->get('keyword'),
                 'description' => ''
             ]
         );
