@@ -36,7 +36,7 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => JavMovies::orderBy('id', 'desc')->paginate(15),
+                'items' => JavMovies::orderBy('release_date', 'desc')->paginate(15),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV movies',
                 'description' => ''
@@ -70,7 +70,7 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => JavMovies::whereIn('id', $movieIds->toArray())->paginate(15),
+                'items' => JavMovies::whereIn('id', $movieIds->toArray())->orderBy('release_date', 'desc')->paginate(15),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
                 'description' => ''
@@ -85,7 +85,7 @@ class JavController extends BaseController
         return view(
             'jav.idol',
             [
-                'items' => JavMovies::whereIn('id', $movieIds->toArray())->orderBy('id', 'desc')->paginate(15),
+                'items' => JavMovies::whereIn('id', $movieIds->toArray())->orderBy('release_date', 'desc')->paginate(15),
                 'idol' => JavIdols::find($id),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV genre - '.JavGenres::find($id),
@@ -107,7 +107,7 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => $model->orderBy('id', 'desc')->paginate(15),
+                'items' => $model->orderBy('release_date', 'desc')->paginate(15),
                 'sidebar' => MenuItems::all(),
                 'title' => 'JAV movies',
                 'description' => ''
