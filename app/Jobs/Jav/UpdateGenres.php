@@ -30,6 +30,11 @@ class UpdateGenres implements ShouldQueue
     private array     $genres;
 
     /**
+     * @var int Execute timeout
+     */
+    public int $timeout = 300;
+
+    /**
      * UpdateJavGenres constructor.
      * @param  JavMovies  $movie
      * @param  array  $genres

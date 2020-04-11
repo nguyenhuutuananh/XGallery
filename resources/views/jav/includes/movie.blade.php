@@ -29,13 +29,15 @@
                         href="">{{$item->label}}</a>
                 </li>
             @endif
-            <li class="list-group-item tag">
-                <i class="fas fa-tags"></i>
-                @foreach ($item->genres() as $genre)
-                    <a href="{{route('genre.view',$genre->id)}}"><span
-                            class="badge badge-pill badge-dark">{{$genre->name}}</span></a>
-                @endforeach
-            </li>
+            @if($item->genres()->count() > 0)
+                <li class="list-group-item tag">
+                    <i class="fas fa-tags"></i>
+                    @foreach ($item->genres() as $genre)
+                        <a href="{{route('genre.view',$genre->id)}}"><span
+                                class="badge badge-pill badge-dark">{{$genre->name}}</span></a>
+                    @endforeach
+                </li>
+            @endif
             @if($item->idols()->count() > 0)
                 <li class="list-group-item actress">
                     <i class="fas fa-female"></i>

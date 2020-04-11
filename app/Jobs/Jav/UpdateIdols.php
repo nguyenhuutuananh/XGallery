@@ -32,6 +32,11 @@ class UpdateIdols implements ShouldQueue
     private array     $idols;
 
     /**
+     * @var int Execute timeout
+     */
+    public int $timeout = 300;
+
+    /**
      * UpdateJavIdols constructor.
      * @param  JavMovies  $movie
      * @param  array  $idols
