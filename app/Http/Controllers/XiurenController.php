@@ -9,8 +9,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\HasMenu;
 use App\Jobs\XiurenDownload;
-use App\MenuItems;
 use App\Xiuren;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -23,6 +23,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 class XiurenController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use HasMenu;
 
     public function dashboard()
     {
@@ -30,7 +31,7 @@ class XiurenController extends BaseController
             'xiuren.index',
             [
                 'items' => Xiuren::paginate(15),
-                'sidebar' => MenuItems::all(),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'Xiuren',
                 'description' => ''
             ]

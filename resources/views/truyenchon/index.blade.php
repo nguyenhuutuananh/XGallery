@@ -1,5 +1,6 @@
 @extends('base')
 @section('content')
+    @include('truyenchon.includes.navbar')
     <div class="card-columns">
         @foreach ($items as $item)
             <div class="card">
@@ -14,7 +15,7 @@
                 <div class="card-footer">
                     <span class="float-right">
                          <button type="button" class="btn btn-primary btn-sm ajax-pool"
-                                 data-ajax-url="{{route('xiuren.download.request', $item->id)}}"
+                                 data-ajax-url="{{route('truyenchon.download.request', $item->id)}}"
                                  data-ajax-command="download"
                          >
                         <i class="fas fa-download mr-1"></i>Download

@@ -9,13 +9,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Traits\HasJavMovies;
+use App\Http\Controllers\Traits\HasMenu;
+use App\Http\Controllers\Traits\HasModel;
 use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\JavDownload;
-use App\MenuItems;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -31,7 +31,14 @@ use Symfony\Component\HttpFoundation\Request;
 class JavController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasJavMovies;
+    use HasModel;
+    use HasMenu;
+
+    protected string $modelClass   = JavMovies::class;
+    protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];
+    protected array  $filterFields = [
+        'name', 'item_number', 'content_id', 'dvd_id', 'director', 'studio', 'label', 'channel', 'series'
+    ];
 
     /**
      * @param  Request  $request
@@ -42,8 +49,8 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => $this->getMovies($request),
-                'sidebar' => MenuItems::all(),
+                'items' => $this->getItems($request),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV movies',
                 'description' => ''
             ]
@@ -62,7 +69,7 @@ class JavController extends BaseController
             'jav.movie',
             [
                 'item' => $movie,
-                'sidebar' => MenuItems::all(),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV movie - '.$movie->name,
                 'description' => $movie->description
             ]
@@ -71,13 +78,14 @@ class JavController extends BaseController
 
     public function genre(int $id, Request $request)
     {
-        $movieIds = JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'genre'])->select('movie_id')->get();
-
         return view(
             'jav.index',
             [
-                'items' => $this->getMovies($request, ['ids' => $movieIds->toArray()]),
-                'sidebar' => MenuItems::all(),
+                'items' => $this->getItems($request, [
+                    'ids' => JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'genre'])
+                        ->select('movie_id')->get()->toArray()
+                ]),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
                 'description' => ''
             ]
@@ -89,7 +97,7 @@ class JavController extends BaseController
         return view(
             'jav.idol',
             [
-                'items' => $this->getMovies(
+                'items' => $this->getItems(
                     $request,
                     [
                         'ids' => JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'idol'])
@@ -97,7 +105,7 @@ class JavController extends BaseController
                     ]
                 ),
                 'idol' => JavIdols::find($id),
-                'sidebar' => MenuItems::all(),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV genre - '.JavGenres::find($id),
                 'description' => ''
             ]
@@ -113,8 +121,8 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => $this->getMovies($request),
-                'sidebar' => MenuItems::all(),
+                'items' => $this->getItems($request),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV movies - Searching by keyword - '.$request->get('keyword'),
                 'description' => ''
             ]

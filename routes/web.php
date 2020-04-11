@@ -34,6 +34,7 @@ Route::prefix('xiuren')
 Route::prefix('truyenchon')
     ->group(function () {
         Route::get('/', ['App\Http\Controllers\TruyenchonController', 'dashboard'])->name('truyenchon.index.view');
+        Route::post('/search', ['App\Http\Controllers\TruyenchonController', 'search'])->name('truyenchon.search.view');
         Route::post('/download/{id}', ['App\Http\Controllers\TruyenchonController', 'download'])->name('truyenchon.download.request');
     });
 

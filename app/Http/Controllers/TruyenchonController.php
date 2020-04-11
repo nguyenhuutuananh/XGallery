@@ -9,11 +9,17 @@
 
 namespace App\Http\Controllers;
 
-use App\MenuItems;
+use App\Http\Controllers\Traits\HasMenu;
+use App\Http\Controllers\Traits\HasModel;
+use App\Jobs\TruyenchonDownload;
 use App\Truyenchon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class TruyenchonController
@@ -22,22 +28,50 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 class TruyenchonController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use HasModel;
+    use HasMenu;
 
-    public function dashboard()
+    protected string $modelClass   = Truyenchon::class;
+    protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];
+    protected array  $filterFields = [
+        'title'
+    ];
+
+    public function dashboard(Request $request)
     {
         return view(
             'truyenchon.index',
             [
-                'items' => Truyenchon::paginate(15),
-                'sidebar' => MenuItems::all(),
+                'items' => $this->getItems($request),
+                'sidebar' => $this->getMenuItems(),
                 'title' => 'Truyenchon',
                 'description' => ''
             ]
         );
     }
 
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
+    public function search(Request $request)
+    {
+        return view(
+            'truyenchon.index',
+            [
+                'items' => $this->getItems($request),
+                'sidebar' => $this->getMenuItems(),
+                'title' => 'Truyenchon - Searching by keyword - '.$request->get('keyword'),
+                'description' => ''
+            ]
+        );
+    }
+
+    /**
+     * @param  string  $id
+     */
     public function download(string $id)
     {
-        //XiurenDownload::dispatch($id)->onConnection('database');
+        TruyenchonDownload::dispatch($id)->onConnection('database');
     }
 }
