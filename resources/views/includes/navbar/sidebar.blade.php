@@ -5,7 +5,8 @@
         <span class="brand-text font-weight-light">Gallery</span>
     </a>
     <!-- Sidebar -->
-    <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
+    <div
+        class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
         <div class="os-resize-observer-host">
             <div class="os-resize-observer observed" style="left: 0px; right: auto;"></div>
         </div>
@@ -25,10 +26,16 @@
                                  with font-awesome or any other icon font library -->
                             @foreach ($sidebar as $item)
                                 <li class="nav-{{$item->type}}">
-                                    <a href="{{$item->link ?? '#'}}" class="nav-link {{ Request::is($item->link) ? 'active' : '' }}">
+                                    @if($item->type == 'header')
                                         @if(!empty($item->icon))<i class="{{$item->icon}}"></i>@endif
-                                        {{$item->name}}
-                                    </a>
+                                        <span style="text-transform: uppercase">{{$item->name}}</span>
+                                    @else
+                                        <a href="{{$item->link ?? '#'}}"
+                                           class="nav-link {{ Request::is($item->link) ? 'active' : '' }}">
+                                            @if(!empty($item->icon))<i class="{{$item->icon}}"></i>@endif
+                                            {{$item->name}}
+                                        </a>
+                                    @endif
                                 </li>
                             @endforeach
                         </ul>
