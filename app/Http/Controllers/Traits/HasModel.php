@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +24,10 @@ trait HasModel
     protected function getItems(Request $request, array $options = [])
     {
         $model = $this->getModel();
-        $model = $model->orderBy($request->get('sort-by', $this->sortBy['by']), $this->sortBy['dir']);
+        $model = $model->orderBy(
+            $request->get('sort-by', $this->sortBy['by']),
+            $request->get('sort-dir', $this->sortBy['dir'])
+        );
 
         if (isset($options['ids'])) {
             $model = $model->whereIn('id', $options['ids']);
@@ -37,11 +41,19 @@ trait HasModel
             });
         }
 
-        return $model->paginate((int)$request->get('per-page', $this->itemsPerPage));
+        return $this->advanceSearch($model, $request, $options)->paginate((int) $request->get(
+            'per-page',
+            $this->itemsPerPage
+        ));
     }
 
     protected function getModel(): Model
     {
         return app($this->modelClass);
+    }
+
+    protected function advanceSearch(Builder $model, Request $request, array $options = [])
+    {
+        return $model;
     }
 }

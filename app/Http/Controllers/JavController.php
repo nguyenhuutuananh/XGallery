@@ -18,6 +18,7 @@ use App\JavMoviesXref;
 use App\Jobs\JavDownload;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -132,5 +133,22 @@ class JavController extends BaseController
     public function download(string $itemNumber)
     {
         JavDownload::dispatch($itemNumber)->onConnection('database');
+    }
+
+    protected function advanceSearch(Builder $model, Request $request, array $options = [])
+    {
+        if ($keyword = $request->get('director')) {
+            $model = $model->where('director', 'LIKE', '%'.$keyword.'%');
+        }
+
+        if ($keyword = $request->get('studio')) {
+            $model = $model->where('studio', 'LIKE', '%'.$keyword.'%');
+        }
+
+        if ($keyword = $request->get('label')) {
+            $model = $model->where('label', 'LIKE', '%'.$keyword.'%');
+        }
+
+        return $model;
     }
 }

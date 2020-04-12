@@ -1,7 +1,8 @@
 <div class="card">
     @if(!empty($item->cover))
-        <a href="{{route('movie.view',$item->id)}}"><img class="bd-placeholder-img card-img-top"
-                                                         width="100%" src="{{$item->cover}}"/></a>
+        <a href="{{route('movie.view',$item->id)}}">
+            <img class="bd-placeholder-img card-img-top" width="100%" src="{{$item->cover}}"/>
+        </a>
     @endif
     <div class="card-body">
         <div class="col-12">
@@ -14,21 +15,22 @@
             @endif
         </div>
         <ul class="list-group list-group-flush">
-            @if(!empty($item->directory))
+            @if(!empty($item->director))
                 <li class="list-group-item director">
-                    <i class="fas fa-user mr-2"></i><strong class="mr-1">Directory</strong><a
-                        href="">{{$item->directory}}</a>
+                    <i class="fas fa-user mr-2"></i><strong class="mr-1">Director</strong>
+                    <a href="{{route('jav.index.view')}}?directory={{$item->director}}">{{$item->director}}</a>
                 </li>
             @endif
             @if(!empty($item->studio))
                 <li class="list-group-item studio">
-                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Studio</strong><a href="">{{$item->studio}}</a>
+                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Studio</strong>
+                    <a href="{{route('jav.index.view')}}?studio={{$item->studio}}">{{$item->studio}}</a>
                 </li>
             @endif
             @if(!empty($item->label))
                 <li class="list-group-item label">
-                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Label</strong><a
-                        href="">{{$item->label}}</a>
+                    <i class="fas fa-tag mr-2"></i><strong class="mr-1">Label</strong>
+                    <a href="{{route('jav.index.view')}}?label={{$item->label}}">{{$item->label}}</a>
                 </li>
             @endif
             @if($item->genres()->count() > 0)
