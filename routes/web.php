@@ -40,6 +40,3 @@ Route::prefix('truyenchon')
 
 Route::get('login/flickr', 'Auth\FlickrController@redirectToProvider');
 Route::get('login/flickr/callback', 'Auth\FlickrController@handleProviderCallback');
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
-});

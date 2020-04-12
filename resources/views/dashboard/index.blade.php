@@ -60,4 +60,19 @@
         </div>
         <!-- /.col -->
     </div>
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Info Boxes Style 2 -->
+            <div class="info-box mb-3 bg-warning">
+                <span class="info-box-icon"><i class="fas fa-list-ol"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Onejav - R18 - XCity</span>
+                    <span class="info-box-number">{{join(', ' , $currentCrawling)}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
 @stop
