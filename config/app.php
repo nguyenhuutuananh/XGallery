@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/xgallery-laravel'),
+    'url' => env('APP_URL', 'https://xgallery.local'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
+        // SocialiteProviders
         ServiceProvider::class,
 
         /**

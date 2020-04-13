@@ -113,6 +113,12 @@ return [
             'level' => 'debug',
         ],
 
+        'oauth' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/oauth.log'),
+            'level' => 'debug',
+        ],
+
         'queue' => [
             'driver' => 'daily',
             'path' => storage_path('logs/queue.log'),

@@ -10,6 +10,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
+use App\OAuth\Flickr;
 use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,9 +22,9 @@ class FlickrController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function redirectToProvider()
+    public function login()
     {
-        return Socialite::with('flickr')->stateless()->redirect();
+        return Socialite::driver('flickr')->with(['perms'=>'read, write, or delete'])->redirect();
     }
 
     /**
@@ -31,10 +32,17 @@ class FlickrController extends BaseController
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function callback()
     {
-        $user = Socialite::with('flickr')->user();
-
+        $user = Socialite::driver('flickr')->user();
         dd($user);
+    }
+
+    public function user()
+    {
+        $flickr = new Flickr();
+        $res    = $flickr->get(['method' => 'flickr.contacts.getList']);
+
+        dd($res);
     }
 }
