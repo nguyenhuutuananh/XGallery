@@ -56,15 +56,6 @@ class FlickrContacts implements ShouldQueue
             }
 
             $model->save();
-
-            if (!$photos = $flickr->get('people.getPhotos', ['user_id'=>$contact->nsid])) {
-                return;
-            }
-
-            // Trigger job to fetch photos of users
-            for ($page = 1; $page <= $photos->photos->pages; $page++) {
-                FlickrPhotos::dispatch($contact, $page)->onConnection('database');
-            }
         }
     }
 }

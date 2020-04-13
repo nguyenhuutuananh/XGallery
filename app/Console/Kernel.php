@@ -105,6 +105,10 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
+
+        $schedule->command('flickr:photos')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
     }
 
     /**

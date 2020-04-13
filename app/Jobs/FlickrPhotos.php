@@ -9,6 +9,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class FlickrPhotos
+ * @package App\Jobs
+ */
 class FlickrPhotos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -19,6 +23,7 @@ class FlickrPhotos implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param $contact
      * @param  int  $page
      */
     public function __construct($contact, int $page)
@@ -36,9 +41,10 @@ class FlickrPhotos implements ShouldQueue
     {
         $flickr = new Flickr();
 
-        if (!$photos = $flickr->get([
-            'method' => 'flickr.people.getPhotos', 'user_id' => $this->contact->nsid, 'page' => $this->page
-        ])) {
+        if (!$photos = $flickr->get(
+            'people.getPhotos',
+            ['user_id' => $this->contact->nsid, 'page' => $this->page]
+        )) {
             return;
         }
 
