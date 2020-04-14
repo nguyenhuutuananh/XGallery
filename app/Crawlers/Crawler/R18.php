@@ -31,6 +31,10 @@ final class R18 extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         try {
             $item             = new stdClass;
             $item->url        = $itemUri;
