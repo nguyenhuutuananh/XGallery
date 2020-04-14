@@ -9,14 +9,33 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
 
 /**
  * Class FlickrPhotos
  * @package App
  */
-class FlickrPhotos extends Eloquent
+class FlickrPhotos extends Mongodb
 {
-    protected $connection = 'mongodb';
     protected $collection = 'flickr_photos';
+
+    /**
+     * @var mixed
+     */
+    private $sizes;
+
+    /**
+     * @return string
+     */
+    public function getCover(): string
+    {
+        if (!$this->sizes) {
+            return '';
+        }
+
+        $size = array_slice($this->sizes['size'], 1, 1, true);
+        $size = reset($size);
+
+        return $size['source'];
+    }
 }

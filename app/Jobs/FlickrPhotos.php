@@ -18,7 +18,7 @@ class FlickrPhotos implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private int $page;
-    private $contact;
+    private object $contact;
 
     /**
      * Create a new job instance.
@@ -26,7 +26,7 @@ class FlickrPhotos implements ShouldQueue
      * @param $contact
      * @param  int  $page
      */
-    public function __construct($contact, int $page)
+    public function __construct(object $contact, int $page)
     {
         $this->contact = $contact;
         $this->page    = $page;

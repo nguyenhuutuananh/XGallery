@@ -9,14 +9,23 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class FlickrContacts
  * @package App
  */
-class FlickrContacts extends Eloquent
+class FlickrContacts extends Mongodb
 {
-    protected $connection = 'mongodb';
     protected $collection = 'flickr_contacts';
+
+    /**
+     * Return photos collection of this contact
+     * @return HasMany|\Jenssegers\Mongodb\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(FlickrPhotos::class, 'owner', 'nsid');
+    }
 }

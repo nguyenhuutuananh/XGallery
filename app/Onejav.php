@@ -9,18 +9,12 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
 
 /**
  * Class Onejav
  * @package App
  */
-class Onejav extends Eloquent
+class Onejav extends Mongodb
 {
-    protected $connection = 'mongodb';
-    protected $collection = 'onejav';
-
-    protected $fillable = [
-        'url', 'cover', 'title', 'date', 'size', 'tags', 'actresses', 'description', 'torrent', 'favorite'
-    ];
 }

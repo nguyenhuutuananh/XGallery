@@ -7,14 +7,15 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Database;
 
-use App\Database\Mongodb;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 /**
- * Class R18
- * @package App
+ * Class Mongodb
+ * @package App\Database
  */
-class R18 extends Mongodb
+class Mongodb extends Eloquent
 {
+    protected $connection = 'mongodb';
 }

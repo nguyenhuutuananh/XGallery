@@ -9,18 +9,12 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
 
 /**
  * Class Nhaccuatui
  * @package App
  */
-class Nhaccuatui extends Eloquent
+class Nhaccuatui extends Mongodb
 {
-    protected $connection = 'mongodb';
-    protected $collection = 'nhaccuatui';
-
-    protected $fillable = [
-        'url', 'name', 'singers'
-    ];
 }

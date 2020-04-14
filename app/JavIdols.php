@@ -11,9 +11,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class JavIdols
+ * @package App
+ */
 class JavIdols extends Model
 {
-    public function getMovies()
-    {
-    }
 }

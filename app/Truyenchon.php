@@ -2,18 +2,12 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
 
 /**
  * Class Truyenchon
  * @package App
  */
-class Truyenchon extends Eloquent
+class Truyenchon extends Mongodb
 {
-    protected $connection = 'mongodb';
-    protected $collection = 'truyenchon';
-
-    protected $fillable = [
-        'url', 'cover', 'title'
-    ];
 }

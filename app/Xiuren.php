@@ -9,14 +9,12 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\Database\Mongodb;
 
 /**
  * Class Xiuren
  * @package App
  */
-class Xiuren extends Eloquent
+class Xiuren extends Mongodb
 {
-    protected $connection = 'mongodb';
-    protected $collection = 'xiuren';
 }

@@ -11,7 +11,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class JavMoviesXref
+ * @package App
+ */
 class JavMoviesXref extends Model
 {
-
 }

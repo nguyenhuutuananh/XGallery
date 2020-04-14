@@ -12,6 +12,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class JavMovies
+ * @package App
+ */
 class JavMovies extends Model
 {
     public function search(array $fields, string $keyword)

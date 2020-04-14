@@ -47,6 +47,11 @@ Route::prefix('truyenchon')
         )->name('truyenchon.download.request');
     });
 
+Route::prefix('flickr')
+    ->group(function () {
+        Route::get('/', ['App\Http\Controllers\Flickr\FlickrController', 'dashboard'])->name('flickr.index.view');
+        Route::get('/contact/{nsid}', ['App\Http\Controllers\Flickr\FlickrController', 'contact'])->name('flickr.contact.view');
+    });
 Route::prefix('oauth')
     ->group(function () {
         Route::get('flickr', ['App\Http\Controllers\Auth\FlickrController', 'login']);
