@@ -11,8 +11,6 @@ namespace App\Http\Controllers\Flickr;
 
 use App\FlickrContacts;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Traits\HasMenu;
-use App\Http\Controllers\Traits\HasModel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -28,13 +26,10 @@ use Symfony\Component\HttpFoundation\Request;
 class FlickrController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasModel;
-    use HasMenu;
 
     protected string $modelClass   = FlickrContacts::class;
     protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];
     protected array  $filterFields = [
-
     ];
 
     /**

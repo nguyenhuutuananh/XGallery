@@ -7,10 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Truyenchon;
 
-use App\Http\Controllers\Traits\HasMenu;
-use App\Http\Controllers\Traits\HasModel;
+use App\Http\Controllers\BaseController;
 use App\Jobs\TruyenchonDownload;
 use App\Truyenchon;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,8 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 class TruyenchonController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasModel;
-    use HasMenu;
 
     protected string $modelClass   = Truyenchon::class;
     protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];

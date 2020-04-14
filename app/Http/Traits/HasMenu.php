@@ -7,10 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Http\Controllers\Traits;
+namespace App\Http\Traits;
 
 use App\MenuItems;
 
+/**
+ * Trait HasMenu
+ * @package App\Http\Traits
+ */
 trait HasMenu
 {
     /**

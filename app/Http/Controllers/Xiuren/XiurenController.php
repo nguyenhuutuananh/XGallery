@@ -7,9 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Xiuren;
 
-use App\Http\Controllers\Traits\HasMenu;
+use App\Http\Controllers\BaseController;
 use App\Jobs\XiurenDownload;
 use App\Xiuren;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -23,7 +23,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 class XiurenController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasMenu;
 
     public function dashboard()
     {

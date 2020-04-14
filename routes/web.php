@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Flickr\FlickrController;
+use App\Http\Controllers\Jav\JavController;
+use App\Http\Controllers\Truyenchon\TruyenchonController;
+use App\Http\Controllers\Xiuren\XiurenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,48 +18,57 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', ['App\Http\Controllers\DashboardController', 'index']);
-
-Route::prefix('jav')
+Route::namespace('App\Http\Controllers\Dashboard')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\JavController', 'dashboard'])->name('jav.index.view');
-        Route::get('/movie/{id}', ['App\Http\Controllers\JavController', 'movie'])->name('movie.view');
-        Route::get('/genre/{id}', ['App\Http\Controllers\JavController', 'genre'])->name('genre.view');
-        Route::get('/idol/{id}', ['App\Http\Controllers\JavController', 'idol'])->name('idol.view');
-        Route::post('/search', ['App\Http\Controllers\JavController', 'search'])->name('jav.search.view');
-        Route::post(
-            '/download/{itemNumber}',
-            ['App\Http\Controllers\JavController', 'download']
-        )->name('download.request');
+        Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard.dashboard.view');
     });
 
-Route::prefix('xiuren')
+Route::namespace('App\Http\Controllers\Jav')
+    ->prefix('jav')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\XiurenController', 'dashboard']);
+        Route::get('/', [JavController::class, 'dashboard'])->name('jav.dashboard.view');
+        Route::get('/movie/{id}', [JavController::class, 'movie'])->name('jav.movie.view');
+        Route::get('/genre/{id}', [JavController::class, 'genre'])->name('jav.genre.view');
+        Route::get('/idol/{id}', [JavController::class, 'idol'])->name('jav.idol.view');
+        Route::post('/search', [JavController::class, 'search'])->name('jav.search.view');
+        Route::post(
+            '/download/{itemNumber}',
+            [JavController::class, 'download']
+        )->name('jav.download.request');
+    });
+
+Route::namespace('App\Http\Controllers\Xiuren')
+    ->prefix('xiuren')
+    ->group(function () {
+        Route::get('/', [XiurenController::class, 'dashboard'])->name('xiuren.dashboard.view');
         Route::post(
             '/download/{id}',
-            ['App\Http\Controllers\XiurenController', 'download']
+            [XiurenController::class, 'download']
         )->name('xiuren.download.request');
     });
 
-Route::prefix('truyenchon')
+Route::namespace('App\Http\Controllers\Truyenchon')
+    ->prefix('truyenchon')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\TruyenchonController', 'dashboard'])->name('truyenchon.index.view');
-        Route::post('/search', ['App\Http\Controllers\TruyenchonController', 'search'])->name('truyenchon.search.view');
+        Route::get('/', [TruyenchonController::class, 'dashboard'])->name('truyenchon.dashboard.view');
+        Route::post('/search', [TruyenchonController::class, 'search'])->name('truyenchon.search.view');
         Route::post(
             '/download/{id}',
-            ['App\Http\Controllers\TruyenchonController', 'download']
+            [TruyenchonController::class, 'download']
         )->name('truyenchon.download.request');
     });
 
-Route::prefix('flickr')
+Route::namespace('App\Http\Controllers\Flickr')
+    ->prefix('flickr')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\Flickr\FlickrController', 'dashboard'])->name('flickr.index.view');
-        Route::get('/contact/{nsid}', ['App\Http\Controllers\Flickr\FlickrController', 'contact'])->name('flickr.contact.view');
+        Route::get('/', [FlickrController::class, 'dashboard'])->name('flickr.dashboard.view');
+        Route::get('/contact/{nsid}', [FlickrController::class, 'contact'])->name('flickr.contact.view');
     });
-Route::prefix('oauth')
+
+Route::namespace('App\Http\Controllers\Auth')
+    ->prefix('oauth')
     ->group(function () {
-        Route::get('flickr', ['App\Http\Controllers\Auth\FlickrController', 'login']);
-        Route::get('flickr/callback', ['App\Http\Controllers\Auth\FlickrController', 'callback']);
-        Route::get('flickr/user', ['App\Http\Controllers\Auth\FlickrController', 'user']);
+        Route::get('flickr', [\App\Http\Controllers\Auth\FlickrController::class, 'login']);
+        Route::get('flickr/callback', [\App\Http\Controllers\Auth\FlickrController::class, 'callback']);
+        Route::get('flickr/user', [\App\Http\Controllers\Auth\FlickrController::class, 'user']);
     });

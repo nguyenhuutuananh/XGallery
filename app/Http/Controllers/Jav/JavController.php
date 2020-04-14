@@ -7,10 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Jav;
 
-use App\Http\Controllers\Traits\HasMenu;
-use App\Http\Controllers\Traits\HasModel;
+use App\Http\Controllers\BaseController;
 use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
@@ -32,8 +31,6 @@ use Symfony\Component\HttpFoundation\Request;
 class JavController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasModel;
-    use HasMenu;
 
     protected string $modelClass   = JavMovies::class;
     protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];

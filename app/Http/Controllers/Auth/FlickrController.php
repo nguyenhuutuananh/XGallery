@@ -11,10 +11,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
 use App\OAuth\Flickr;
-use Illuminate\Http\Response;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * Class FlickrController
+ * @package App\Http\Controllers\Auth
+ */
 class FlickrController extends BaseController
 {
     /**
@@ -30,7 +33,7 @@ class FlickrController extends BaseController
     /**
      * Obtain the user information from GitHub.
      *
-     * @return Response
+     * @return void
      */
     public function callback()
     {

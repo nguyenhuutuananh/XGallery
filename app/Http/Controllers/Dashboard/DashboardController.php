@@ -7,9 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Traits\HasMenu;
+use App\Http\Controllers\BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -22,9 +22,8 @@ use Illuminate\Support\Facades\Storage;
 class DashboardController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use HasMenu;
 
-    public function index()
+    public function dashboard()
     {
         $currentCrawling = [
             'onejav' => $this->getCount('onejav'),
