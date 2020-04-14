@@ -109,6 +109,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('flickr:photos')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
+        $schedule->command('flickr:photossizes')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
     }
 
     /**
