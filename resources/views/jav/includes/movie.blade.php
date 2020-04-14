@@ -58,7 +58,7 @@
         @if($item->is_downloadable == 1)
             <span class="float-right">
                          <button type="button" class="btn btn-primary btn-sm ajax-pool"
-                                 data-ajax-url="{{route('download.request', $item->item_number)}}"
+                                 data-ajax-url="{{route('jav.download.request', $item->item_number)}}"
                                  data-ajax-command="download"
                          >
                         <i class="fas fa-download mr-1"></i>Download
