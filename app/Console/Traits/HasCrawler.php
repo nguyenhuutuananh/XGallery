@@ -11,6 +11,7 @@ namespace App\Console\Traits;
 
 use App\Crawlers\Crawler\CrawlerInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use ReflectionClass;
 use ReflectionException;
@@ -111,17 +112,31 @@ trait HasCrawler
     abstract protected function fully(): bool;
 
     /**
-     * @param $data
+     * @param array $data
      */
-    protected function insertItem($data)
+    protected function insertItem(array $data)
     {
         $model = $this->getModel();
 
-        if ($model->where(['url' => $data['url']])->first()) {
+        /**
+         * @var Model $item
+         */
+        if ($item = $model->where(['url' => $data['url']])->first()) {
+            if (!isset($item->created_at)) {
+                $item->created_at = Date::now();
+                $item->updated_at = Date::now();
+                $item->save();
+            }
+            $item->touch();
             return;
         }
 
-        $model->insert($data);
+        // Can not use fill() because it will be required fillable properties
+        foreach ($data as $key => $value) {
+            $model->{$key} = $value;
+        }
+
+        $model->save();
     }
 
     /**
