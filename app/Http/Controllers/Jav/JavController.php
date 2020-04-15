@@ -14,7 +14,6 @@ use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
-use App\Jobs\JavDownload;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -127,11 +126,27 @@ class JavController extends BaseController
         );
     }
 
+    /**
+     * Add to download
+     * @param  string  $itemNumber
+     */
     public function download(string $itemNumber)
     {
-        JavDownload::dispatch($itemNumber)->onConnection('database');
+        if (\App\JavDownload::where(['item_number'=>$itemNumber])->first()) {
+            return;
+        }
+
+        $model = app(\App\JavDownload::class);
+        $model->item_number = $itemNumber;
+        $model->save();
     }
 
+    /**
+     * @param  Builder  $model
+     * @param  Request  $request
+     * @param  array  $options
+     * @return Builder
+     */
     protected function advanceSearch(Builder $model, Request $request, array $options = [])
     {
         if ($keyword = $request->get('director')) {

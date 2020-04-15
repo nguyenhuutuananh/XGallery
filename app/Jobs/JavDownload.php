@@ -12,16 +12,16 @@ class JavDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string $itemNumber;
+    protected \App\JavDownload $javDownload;
 
     /**
      * Create a new job instance.
      *
-     * @param  string  $itemNumber
+     * @param  \App\JavDownload  $javDownload
      */
-    public function __construct(string $itemNumber)
+    public function __construct(\App\JavDownload $javDownload)
     {
-        $this->itemNumber = $itemNumber;
+        $this->javDownload = $javDownload;
     }
 
     /**
@@ -32,11 +32,14 @@ class JavDownload implements ShouldQueue
     public function handle()
     {
         $crawler = app(\App\Crawlers\Crawler\Onejav::class);
-        $pages   = $crawler->search([$this->itemNumber]);
+        $pages   = $crawler->search([$this->javDownload->item_number]);
         $pages->each(function ($page) use ($crawler) {
             $item       = $page->sortByDesc('size')->first();
             $itemDetail = $crawler->getItemDetail($item['url']);
             $crawler->download($itemDetail->torrent, 'onejav');
+            $this->javDownload->is_downloaded = true;
+            $this->javDownload->save();
+            return;
         });
     }
 }
