@@ -25,7 +25,7 @@ class XCityVideo extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'xcity:video {task=fully} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xcity:video {task=fully} {--url} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.

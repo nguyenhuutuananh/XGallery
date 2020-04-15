@@ -27,7 +27,7 @@ class R18 extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'r18 {task=daily} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'r18 {task=daily} {--url} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.

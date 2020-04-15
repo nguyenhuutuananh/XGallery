@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
-        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')
+        $schedule->command('batdongsan fully')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
 
@@ -71,37 +71,23 @@ class Kernel extends ConsoleKernel
          * Schedule everyFiveMinutes
          */
 
-        $schedule->command('r18 fully --url=https://www.r18.com/videos/vod/movies/list/pagesize=30/price=all/sort=new/type=all')
+        $schedule->command('r18 fully')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
-        $xcityProfiles = [
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%82',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%8B',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%95',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%9F',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%AA',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%AF',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%BE',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%84',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%89',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%8F'
-        ];
+        $schedule->command('xcity:profile fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+        //->emailOutputOnFailure(config('mail.to'));
 
-        foreach ($xcityProfiles as $xcityProfile) {
-            $schedule->command('xcity:profile fully --url="'.urldecode($xcityProfile).'"')
-                ->everyFiveMinutes()
-                ->withoutOverlapping()->runInBackground();
-            //->emailOutputOnFailure(config('mail.to'));
-        }
 
         $schedule->command('xcity:video')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
-        $schedule->command('xiuren fully --url=http://www.xiuren.org/')
+        $schedule->command('xiuren fully')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));

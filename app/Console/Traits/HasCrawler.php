@@ -145,10 +145,6 @@ trait HasCrawler
      */
     protected function getModel(): Model
     {
-        if (isset($this->model)) {
-            return $this->model;
-        }
-
         $this->model = app('\App\\'.$this->getShortClassname());
 
         return $this->model;

@@ -17,4 +17,5 @@ use App\Database\Mongodb;
  */
 class Batdongsan extends Mongodb
 {
+    public $collection = 'batdongsan';
 }

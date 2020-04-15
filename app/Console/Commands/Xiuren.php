@@ -25,7 +25,7 @@ class Xiuren extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'xiuren {task=fully} {--url=http://www.xiuren.org/} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xiuren {task=fully} {--url} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.
@@ -36,11 +36,15 @@ class Xiuren extends BaseCommand
 
     public function fully(): bool
     {
-        if (!$url = $this->getOptionUrl()) {
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
 
-        if (!$pages = $this->getCrawler()->getIndexLinks($url, $this->initData[0], $this->initData[0])) {
+        if (!$pages = $this->getCrawler()->getIndexLinks(
+            $endpoint->url,
+            (int) $endpoint->page,
+            (int) $endpoint->page
+        )) {
             return false;
         }
 

@@ -9,6 +9,7 @@
 
 namespace App\OAuth;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
@@ -37,7 +38,13 @@ class OauthClient
         }
 
         $client   = $this->getClient();
-        $response = $client->request($method, $uri, $parameters);
+
+        try {
+            $response = $client->request($method, $uri, $parameters);
+        } catch (Exception $exception) {
+            Log::stack(['oauth'])->error($exception->getMessage());
+            return null;
+        }
 
         if ($response->getStatusCode() !== 200) {
             return null;
