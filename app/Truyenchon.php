@@ -10,4 +10,5 @@ use App\Database\Mongodb;
  */
 class Truyenchon extends Mongodb
 {
+    public $collection = 'truyenchon';
 }

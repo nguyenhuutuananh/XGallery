@@ -39,10 +39,16 @@ class XCityVideo extends BaseCommand
      */
     public function fully(): bool
     {
-        if (!$movies = $this->getCrawler()
-            ->getItemLinks('https://xxx.xcity.jp/avod/list/?style=simple&page='.$this->initData[0])) {
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
+
+        if (!$movies = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page)) {
+            return false;
+        }
+
+        $endpoint->page = (int) $endpoint->page + 1;
+        $endpoint->save();
 
         $this->createProgressBar();
         $this->progressBar->setMaxSteps(1);

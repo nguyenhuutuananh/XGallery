@@ -9,6 +9,7 @@
 
 namespace App\Console\Traits;
 
+use App\CrawlerEndpoints;
 use App\Crawlers\Crawler\CrawlerInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
@@ -167,5 +168,27 @@ trait HasCrawler
         }
 
         return $url;
+    }
+
+    /**
+     * @return Model|null
+     */
+    protected function getCrawlerEndpoint()
+    {
+        /**
+         * @var Model $endpoint
+         */
+        if (!$endpoint = CrawlerEndpoints::where(['crawler' => $this->getShortClassname()])->orderBy(
+            'updated_at',
+            'asc'
+        )->get()->first()) {
+            return null;
+        }
+
+        if ($endpoint->page === null || $endpoint === 0) {
+            $endpoint->page = 1;
+        }
+
+        return $endpoint;
     }
 }

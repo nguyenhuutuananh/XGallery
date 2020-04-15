@@ -41,13 +41,20 @@ class R18 extends BaseCommand
      */
     public function fully(): bool
     {
-        if (!$url = $this->getOptionUrl()) {
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
 
-        if (!$pages = $this->getCrawler()->getIndexLinks($url, $this->initData[0], $this->initData[0])) {
+        if (!$pages = $this->getCrawler()->getIndexLinks(
+            $endpoint->url,
+            (int) $endpoint->page,
+            (int) $endpoint->page
+        )) {
             return false;
         }
+
+        $endpoint->page = (int) $endpoint->page + 1;
+        $endpoint->save();
 
         $this->progressBar = $this->createProgressBar();
         $this->progressBar->setMaxSteps($pages->count());

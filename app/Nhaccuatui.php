@@ -17,4 +17,5 @@ use App\Database\Mongodb;
  */
 class Nhaccuatui extends Mongodb
 {
+    public $collection = 'nhaccuatui';
 }

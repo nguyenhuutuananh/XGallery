@@ -27,7 +27,7 @@ class Onejav extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'onejav {task=daily} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'onejav {task=daily} {--url} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.
@@ -119,9 +119,16 @@ class Onejav extends BaseCommand
      */
     protected function fully(): bool
     {
-        if (!$results = $this->getCrawler()->getItemLinks('https://onejav.com/new?page='.$this->initData[0])) {
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
+
+        if (!$results = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page)) {
+            return false;
+        }
+
+        $endpoint->page = (int) $endpoint->page + 1;
+        $endpoint->save();
 
         $this->createProgressBar();
         $this->progressBar->setMaxSteps(1);

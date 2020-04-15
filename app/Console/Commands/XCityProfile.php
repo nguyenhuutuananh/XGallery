@@ -25,7 +25,7 @@ class XCityProfile extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'xcity:profile {task=daily} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xcity:profile {task=daily} {--url} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.
@@ -47,11 +47,15 @@ class XCityProfile extends BaseCommand
      */
     protected function fully(): bool
     {
-        if (!$url = $this->getOptionUrl()) {
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
 
-        if (!$pages = $this->getCrawler()->getIndexLinks($url, $this->initData[0], $this->initData[0])) {
+        if (!$pages = $this->getCrawler()->getIndexLinks(
+            $endpoint->url,
+            (int) $endpoint->page,
+            (int) $endpoint->page
+        )) {
             return false;
         }
 

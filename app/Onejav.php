@@ -17,4 +17,5 @@ use App\Database\Mongodb;
  */
 class Onejav extends Mongodb
 {
+    public $collection = 'onejav';
 }

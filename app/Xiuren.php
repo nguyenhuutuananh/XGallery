@@ -17,4 +17,5 @@ use App\Database\Mongodb;
  */
 class Xiuren extends Mongodb
 {
+    public $collection = 'xiuren';
 }

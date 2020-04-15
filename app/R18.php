@@ -17,4 +17,5 @@ use App\Database\Mongodb;
  */
 class R18 extends Mongodb
 {
+    public $collection = 'r18';
 }
