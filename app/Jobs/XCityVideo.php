@@ -22,12 +22,11 @@ class XCityVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $item;
-
     /**
      * @var int Execute timeout
      */
-    public int $timeout = 300;
+    public int      $timeout = 300;
+    protected array $item;
 
     /**
      * Create a new job instance.

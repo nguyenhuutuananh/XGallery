@@ -9,23 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Batdongsan extends BaseCommand
+class Batdongsan extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'batdongsan {task=fully} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'batdongsan {task=fully} {--url=} {--pageFrom=1} {--pageTo=}';
 
     /**
      * The console command description.
@@ -39,20 +36,9 @@ class Batdongsan extends BaseCommand
      */
     protected function fully(): bool
     {
-        if (!$endpoint = $this->getCrawlerEndpoint()) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        )) {
-            return false;
-        }
-
-        $endpoint->page = (int) $endpoint->page + 1;
-        $endpoint->save();
 
         $this->progressBar = $this->createProgressBar();
         $this->progressBar->setMaxSteps($pages->count());
@@ -82,16 +68,6 @@ class Batdongsan extends BaseCommand
         });
 
         return true;
-    }
-
-    protected function daily(): bool
-    {
-        // TODO: Implement daily() method.
-    }
-
-    protected function index(): bool
-    {
-        // TODO: Implement index() method.
     }
 
     /**

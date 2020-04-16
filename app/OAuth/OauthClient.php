@@ -37,7 +37,7 @@ class OauthClient
             return Cache::get($id);
         }
 
-        $client   = $this->getClient();
+        $client = $this->getClient();
 
         try {
             $response = $client->request($method, $uri, $parameters);

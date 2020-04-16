@@ -28,13 +28,12 @@ class UpdateIdols implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private JavMovies $movie;
-    private array     $idols;
-
     /**
      * @var int Execute timeout
      */
-    public int $timeout = 300;
+    public int        $timeout = 300;
+    private JavMovies $movie;
+    private array     $idols;
 
     /**
      * UpdateJavIdols constructor.
@@ -70,7 +69,7 @@ class UpdateIdols implements ShouldQueue
                  * We can not determine who is she. The only way is assumed she's unique and belong this movie
                  */
                 if (empty($actresses)) {
-                    Log::stack(['jav'])->info('Can not found '.$actress.' on XCity');
+                    Log::stack(['jav'])->info('Can not found idol '.$actress.' on XCity');
                     $model = app(JavIdols::class);
                     /**
                      * Because we can't determine idol profile than only way to use reference_url as unique

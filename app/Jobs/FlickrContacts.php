@@ -48,7 +48,7 @@ class FlickrContacts implements ShouldQueue
                 continue;
             }
 
-            $model = app(\App\FlickrContacts::class);
+            $model      = app(\App\FlickrContacts::class);
             $properties = get_object_vars($contact);
 
             foreach ($properties as $key => $value) {

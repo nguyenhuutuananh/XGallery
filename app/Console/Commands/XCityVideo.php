@@ -9,23 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * Class XCityVideo
  * @package App\Console\Commands
  */
-class XCityVideo extends BaseCommand
+class XCityVideo extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'xcity:video {task=fully} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xcity:video {task=fully} {--url=} {--pageFrom=1} {--pageTo=1}';
 
     /**
      * The console command description.
@@ -60,25 +57,6 @@ class XCityVideo extends BaseCommand
             $this->progressBar->setMessage($index + 1, 'step');
         });
 
-        return true;
-    }
-
-    public function item(): bool
-    {
-        // TODO: Implement item() method.
-        return true;
-    }
-
-    public function daily(): bool
-    {
-        // TODO: Implement daily() method.
-
-        return true;
-    }
-
-    public function index(): bool
-    {
-        // TODO: Implement index() method.
         return true;
     }
 }

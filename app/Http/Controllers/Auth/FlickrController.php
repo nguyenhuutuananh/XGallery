@@ -27,7 +27,7 @@ class FlickrController extends BaseController
      */
     public function login()
     {
-        return Socialite::driver('flickr')->with(['perms'=>'read, write, or delete'])->redirect();
+        return Socialite::driver('flickr')->with(['perms' => 'read, write, or delete'])->redirect();
     }
 
     /**

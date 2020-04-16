@@ -96,6 +96,6 @@ final class Xiuren extends AbstractCrawler
      */
     protected function buildUrlWithPage(Url $url, int $page): string
     {
-        return $this->buildUrl($url->getPath().'page-'.$page .'.html');
+        return $this->buildUrl($url->getPath().'page-'.$page.'.html');
     }
 }

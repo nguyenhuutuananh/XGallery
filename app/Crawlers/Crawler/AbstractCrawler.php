@@ -26,8 +26,8 @@ use function GuzzleHttp\Psr7\build_query;
 abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
 {
     protected Crawler        $crawler;
-    protected array $config;
-    protected string $name;
+    protected array          $config;
+    protected string         $name;
 
     /**
      * AbstractCrawler constructor.
@@ -53,12 +53,20 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     public function crawl(string $uri): ?Crawler
     {
         if (!$response = $this->request(Request::METHOD_GET, $uri)) {
-            $this->getLogger()->warning('Can not crawl ' . $uri, $this->getErrors());
+            $this->getLogger()->warning('Can not crawl '.$uri, $this->getErrors());
             return null;
         }
 
         $this->crawler = new Crawler($response, $uri);
         return $this->crawler;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    protected function getLogger(): LoggerInterface
+    {
+        return Log::stack(['crawl']);
     }
 
     /**
@@ -93,18 +101,6 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     }
 
     /**
-     * @param  string  $path
-     * @param  array  $parameters
-     * @param  int  $encoding
-     * @return string
-     */
-    public function buildUrl(string $path = '', array $parameters = [], $encoding = PHP_QUERY_RFC3986): string
-    {
-        $query = empty($parameters) ? '' : '?'.build_query($parameters, $encoding);
-        return Url::fromString($this->config['http_client']['base_uri'])->withPath($path).$query;
-    }
-
-    /**
      * @param  Url  $url
      * @param  int  $page
      * @return string
@@ -119,10 +115,14 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     }
 
     /**
-     * @return LoggerInterface
+     * @param  string  $path
+     * @param  array  $parameters
+     * @param  int  $encoding
+     * @return string
      */
-    protected function getLogger(): LoggerInterface
+    public function buildUrl(string $path = '', array $parameters = [], $encoding = PHP_QUERY_RFC3986): string
     {
-        return Log::stack(['crawl']);
+        $query = empty($parameters) ? '' : '?'.build_query($parameters, $encoding);
+        return Url::fromString($this->config['http_client']['base_uri'])->withPath($path).$query;
     }
 }

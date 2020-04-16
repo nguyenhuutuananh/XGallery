@@ -26,13 +26,12 @@ class UpdateGenres implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private JavMovies $movie;
-    private array     $genres;
-
     /**
      * @var int Execute timeout
      */
-    public int $timeout = 300;
+    public int        $timeout = 300;
+    private JavMovies $movie;
+    private array     $genres;
 
     /**
      * UpdateJavGenres constructor.

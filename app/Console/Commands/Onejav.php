@@ -9,8 +9,7 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
@@ -18,16 +17,14 @@ use MongoDB\BSON\UTCDateTime;
  * Class Onejav
  * @package App\Console\Commands
  */
-class Onejav extends BaseCommand
+class Onejav extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'onejav {task=daily} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'onejav {task=daily} {--url} {--pageFrom=1} {--pageTo=}';
 
     /**
      * The console command description.
@@ -136,10 +133,5 @@ class Onejav extends BaseCommand
         $this->itemsProcess($results);
 
         return true;
-    }
-
-    protected function item()
-    {
-        // TODO: Implement item() method.
     }
 }

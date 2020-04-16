@@ -17,7 +17,7 @@ class FlickrPhotos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private int $page;
+    private int    $page;
     private object $contact;
 
     /**
@@ -53,7 +53,7 @@ class FlickrPhotos implements ShouldQueue
                 continue;
             }
 
-            $model = app(\App\FlickrPhotos::class);
+            $model      = app(\App\FlickrPhotos::class);
             $properties = get_object_vars($photo);
 
             foreach ($properties as $key => $value) {

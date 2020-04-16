@@ -7,15 +7,12 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Traits;
+namespace App\Console\Traits\Crawlers;
 
 use App\CrawlerEndpoints;
 use App\Crawlers\Crawler\CrawlerInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Storage;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Trait HasCrawler
@@ -27,8 +24,6 @@ trait HasCrawler
 
     protected Model $model;
 
-    protected array $initData = [1, 0];
-
     public function handle()
     {
         $task = $this->argument('task');
@@ -38,63 +33,14 @@ trait HasCrawler
             return;
         }
 
-        if ($task === 'fully') {
-            $tmpFile = strtolower($this->getShortClassname()).'.tmp';
-            if (Storage::disk('local')->exists($tmpFile)) {
-                $this->initData = explode(':', Storage::disk('local')->get($tmpFile));
-            }
-
-            if ($this->initData[1] == 4) {
-                Storage::disk('local')->delete($tmpFile);
-                return;
-            }
-        }
-
-        $result = call_user_func([$this, $task]);
-
-        if ($task !== 'fully') {
-            return;
-        }
-
-        if ($result) {
-            $this->initData[1] = 0;
-        } else {
-            $this->initData[1]++;
-        }
-
-        $this->initData[0]++;
-        Storage::disk('local')->put($tmpFile, $this->initData[0].':'.$this->initData[1]);
+        call_user_func([$this, $task]);
     }
 
     /**
-     * @return string|null
+     * Process WHOLE site by specific URL
+     * @return bool
      */
-    private function getShortClassname(): ?string
-    {
-        try {
-            return (new ReflectionClass($this))->getShortName();
-        } catch (ReflectionException $exception) {
-            $classname = get_class($this);
-            if ($pos = strrpos($classname, '\\')) {
-                return substr($classname, $pos + 1);
-            }
-            return $classname;
-        }
-    }
-
-    /**
-     * @return CrawlerInterface
-     */
-    protected function getCrawler(): CrawlerInterface
-    {
-        if (isset($this->crawler)) {
-            return $this->crawler;
-        }
-
-        $this->crawler = app('\App\Crawlers\Crawler\\'.$this->getShortClassname());
-
-        return $this->crawler;
-    }
+    abstract protected function fully(): bool;
 
     /**
      * Process specific daily index page
@@ -107,13 +53,7 @@ trait HasCrawler
     abstract protected function item(): bool;
 
     /**
-     * Process WHOLE site by specific URL
-     * @return bool
-     */
-    abstract protected function fully(): bool;
-
-    /**
-     * @param array $data
+     * @param  array  $data
      */
     protected function insertItem(array $data)
     {
@@ -150,20 +90,24 @@ trait HasCrawler
         return $this->model;
     }
 
-    /**
-     * @return string|null
-     */
-    protected function getOptionUrl(): ?string
+    protected function getIndexLinks()
     {
-        if (!$url = $this->option('url')) {
-            $url = $this->ask('Please enter URL');
+        if (!$endpoint = $this->getCrawlerEndpoint()) {
+            return false;
         }
 
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            return null;
+        if (!$pages = $this->getCrawler()->getIndexLinks(
+            $endpoint->url,
+            (int) $endpoint->page,
+            (int) $endpoint->page
+        )) {
+            return false;
         }
 
-        return $url;
+        $endpoint->page = (int) $endpoint->page + 1;
+        $endpoint->save();
+
+        return $pages;
     }
 
     /**
@@ -186,5 +130,19 @@ trait HasCrawler
         }
 
         return $endpoint;
+    }
+
+    /**
+     * @return CrawlerInterface
+     */
+    protected function getCrawler(): CrawlerInterface
+    {
+        if (isset($this->crawler)) {
+            return $this->crawler;
+        }
+
+        $this->crawler = app('\App\Crawlers\Crawler\\'.$this->getShortClassname());
+
+        return $this->crawler;
     }
 }

@@ -9,23 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * Class XCity
  * @package App\Console\Commands
  */
-class XCityProfile extends BaseCommand
+class XCityProfile extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'xcity:profile {task=daily} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xcity:profile {task=daily} {--url=} {--pageFrom=1} {--pageTo=}';
 
     /**
      * The console command description.
@@ -34,28 +31,12 @@ class XCityProfile extends BaseCommand
      */
     protected $description = 'Fetching profile data from XCity';
 
-    protected function daily(): bool
-    {
-    }
-
-    protected function index(): bool
-    {
-    }
-
     /**
      * @return bool
      */
     protected function fully(): bool
     {
-        if (!$endpoint = $this->getCrawlerEndpoint()) {
-            return false;
-        }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        )) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
 
@@ -70,9 +51,7 @@ class XCityProfile extends BaseCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-
                 \App\Jobs\XCityProfile::dispatch($item)->onConnection('database');
-
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });
@@ -80,9 +59,5 @@ class XCityProfile extends BaseCommand
         });
 
         return true;
-    }
-
-    protected function item(): bool
-    {
     }
 }

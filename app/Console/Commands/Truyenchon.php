@@ -9,23 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Truyenchon extends BaseCommand
+class Truyenchon extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'truyenchon {task=fully} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'truyenchon {task=fully} {--url} {--pageFrom=1} {--pageTo=1}';
 
     /**
      * The console command description.
@@ -39,20 +36,9 @@ class Truyenchon extends BaseCommand
      */
     protected function fully(): bool
     {
-        if (!$endpoint = $this->getCrawlerEndpoint()) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        )) {
-            return false;
-        }
-
-        $endpoint->page = (int) $endpoint->page + 1;
-        $endpoint->save();
 
         $this->progressBar = $this->createProgressBar();
         $this->progressBar->setMaxSteps($pages->count());
@@ -73,16 +59,6 @@ class Truyenchon extends BaseCommand
         });
 
         return true;
-    }
-
-    protected function daily(): bool
-    {
-        // TODO: Implement daily() method.
-    }
-
-    protected function index(): bool
-    {
-        // TODO: Implement index() method.
     }
 
     /**

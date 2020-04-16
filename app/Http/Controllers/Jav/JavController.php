@@ -10,6 +10,7 @@
 namespace App\Http\Controllers\Jav;
 
 use App\Http\Controllers\BaseController;
+use App\JavDownload;
 use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
@@ -132,11 +133,11 @@ class JavController extends BaseController
      */
     public function download(string $itemNumber)
     {
-        if (\App\JavDownload::where(['item_number'=>$itemNumber])->first()) {
+        if (JavDownload::where(['item_number' => $itemNumber])->first()) {
             return;
         }
 
-        $model = app(\App\JavDownload::class);
+        $model              = app(JavDownload::class);
         $model->item_number = $itemNumber;
         $model->save();
     }

@@ -19,12 +19,11 @@ class XiurenDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private string $id;
-
     /**
      * @var int Execute timeout
      */
-    public int $timeout = 300;
+    public int     $timeout = 300;
+    private string $id;
 
     /**
      * Create a new job instance.
@@ -44,12 +43,12 @@ class XiurenDownload implements ShouldQueue
     public function handle()
     {
         $item    = Xiuren::find($this->id);
-        $name = basename($item->url, '.html');
+        $name    = basename($item->url, '.html');
         $crawler = app(\App\Crawlers\Crawler\Xiuren::class);
         try {
             foreach ($item->images as $image) {
-                if (!$crawler->download($image, 'xiuren' . DIRECTORY_SEPARATOR . $name)) {
-                    Log::stack(['download'])->warning('Download error ' . $image);
+                if (!$crawler->download($image, 'xiuren'.DIRECTORY_SEPARATOR.$name)) {
+                    Log::stack(['download'])->warning('Download error '.$image);
                 }
             }
         } catch (Exception $exception) {

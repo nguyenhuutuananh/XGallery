@@ -9,25 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
-use Illuminate\Notifications\Notifiable;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * R18 only used to get videos. There are no idol information
  * @package App\Console\Commands
  */
-class R18 extends BaseCommand
+class R18 extends BaseCrawlerCommand
 {
-    use Notifiable;
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'r18 {task=daily} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'r18 {task=daily} {--url=} {--pageFrom=1} {--pageTo=}';
 
     /**
      * The console command description.
@@ -41,20 +36,9 @@ class R18 extends BaseCommand
      */
     public function fully(): bool
     {
-        if (!$endpoint = $this->getCrawlerEndpoint()) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        )) {
-            return false;
-        }
-
-        $endpoint->page = (int) $endpoint->page + 1;
-        $endpoint->save();
 
         $this->progressBar = $this->createProgressBar();
         $this->progressBar->setMaxSteps($pages->count());
@@ -77,15 +61,6 @@ class R18 extends BaseCommand
         });
 
         return true;
-    }
-
-    public function item(): bool
-    {
-    }
-
-    public function index(): bool
-    {
-        // TODO: Implement index() method.
     }
 
     /**

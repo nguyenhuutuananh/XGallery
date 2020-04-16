@@ -23,25 +23,6 @@ final class Nhaccuatui extends AbstractCrawler
     protected string $name = 'nhaccuatui';
 
     /**
-     * @param $node
-     * @return array
-     */
-    private function extractData($node): array
-    {
-        try {
-            return [
-                'url' => $node->filter('a.name_song')->attr('href'),
-                'name' => $node->filter('a.name_song')->text(),
-                'singers' => $node->filter('a.name_singer')->each(function ($singer) {
-                    return trim($singer->text());
-                }),
-            ];
-        } catch (Exception $exception) {
-            return [];
-        }
-    }
-
-    /**
      * @param  string  $itemUri
      * @return object|null
      */
@@ -84,6 +65,15 @@ final class Nhaccuatui extends AbstractCrawler
     }
 
     /**
+     * @param  string|null  $indexUri
+     * @return Collection
+     */
+    public function getItemLinks(string $indexUri = null): ?Collection
+    {
+        return $this->getItems($indexUri, 'li.list_song');
+    }
+
+    /**
      * @param  string  $indexUri
      * @param  string  $filter
      * @return Collection|null
@@ -104,12 +94,22 @@ final class Nhaccuatui extends AbstractCrawler
     }
 
     /**
-     * @param  string|null  $indexUri
-     * @return Collection
+     * @param $node
+     * @return array
      */
-    public function getItemLinks(string $indexUri = null): ?Collection
+    private function extractData($node): array
     {
-        return $this->getItems($indexUri, 'li.list_song');
+        try {
+            return [
+                'url' => $node->filter('a.name_song')->attr('href'),
+                'name' => $node->filter('a.name_song')->text(),
+                'singers' => $node->filter('a.name_singer')->each(function ($singer) {
+                    return trim($singer->text());
+                }),
+            ];
+        } catch (Exception $exception) {
+            return [];
+        }
     }
 
     /**

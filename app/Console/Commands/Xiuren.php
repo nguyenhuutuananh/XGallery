@@ -9,23 +9,20 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 
 /**
  * Class Xiuren
  * @package App\Console\Commands
  */
-class Xiuren extends BaseCommand
+class Xiuren extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'xiuren {task=fully} {--url} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'xiuren {task=fully} {--url=} {--pageFrom=1} {--pageTo=}';
 
     /**
      * The console command description.
@@ -36,15 +33,7 @@ class Xiuren extends BaseCommand
 
     public function fully(): bool
     {
-        if (!$endpoint = $this->getCrawlerEndpoint()) {
-            return false;
-        }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        )) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
 
@@ -78,16 +67,6 @@ class Xiuren extends BaseCommand
         return true;
     }
 
-    public function daily(): bool
-    {
-        // TODO: Implement daily() method.
-    }
-
-    public function index(): bool
-    {
-        // TODO: Implement index() method.
-    }
-
     public function item(): bool
     {
         if (!$url = $this->getOptionUrl()) {
@@ -103,5 +82,7 @@ class Xiuren extends BaseCommand
         foreach ($itemDetail->images as $image) {
             $this->getCrawler()->download($image, 'xiuren'.DIRECTORY_SEPARATOR.$name);
         }
+
+        return true;
     }
 }

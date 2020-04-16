@@ -24,6 +24,15 @@ class ApiController extends BaseController
     ];
 
     /**
+     * @param  null  $data
+     * @return Response
+     */
+    public function apiSucceed($data = null)
+    {
+        return $this->respondSucceed(response()->json($this->getResponse($data)));
+    }
+
+    /**
      * @param $data
      * @param  bool  $isSucceed
      * @return array
@@ -33,14 +42,5 @@ class ApiController extends BaseController
         $this->response['data']    = $data;
         $this->response['succeed'] = $isSucceed;
         return $this->response;
-    }
-
-    /**
-     * @param  null  $data
-     * @return Response
-     */
-    public function apiSucceed($data = null)
-    {
-        return $this->respondSucceed(response()->json($this->getResponse($data)));
     }
 }
