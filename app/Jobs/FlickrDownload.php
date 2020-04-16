@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Crawlers\HttpClient;
-use App\OAuth\Services\Flickr\Flickr;
+use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

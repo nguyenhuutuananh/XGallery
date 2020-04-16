@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Flickr;
 use App\FlickrContacts;
 use App\Http\Controllers\BaseController;
 use App\Jobs\FlickrDownload;
-use App\OAuth\Services\Flickr\Flickr;
+use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

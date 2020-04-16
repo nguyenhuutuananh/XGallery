@@ -7,9 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\OAuth\Services\Flickr;
+namespace App\Oauth\Services\Flickr;
 
-use App\OAuth\OauthClient;
+use App\Oauth\OauthClient;
 
 /**
  * Class Flickr

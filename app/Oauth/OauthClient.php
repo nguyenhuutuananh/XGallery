@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\OAuth;
+namespace App\Oauth;
 
 use App\Oauth;
 use Exception;
