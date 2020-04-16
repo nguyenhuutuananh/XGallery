@@ -62,6 +62,7 @@ Route::namespace('App\Http\Controllers\Flickr')
     ->prefix('flickr')
     ->group(function () {
         Route::get('/', [FlickrController::class, 'dashboard'])->name('flickr.dashboard.view');
+        Route::post('/', [FlickrController::class, 'download'])->name('flickr.download.request');
         Route::get('/contact/{nsid}', [FlickrController::class, 'contact'])->name('flickr.contact.view');
     });
 
@@ -70,5 +71,4 @@ Route::namespace('App\Http\Controllers\Auth')
     ->group(function () {
         Route::get('flickr', [\App\Http\Controllers\Auth\FlickrController::class, 'login']);
         Route::get('flickr/callback', [\App\Http\Controllers\Auth\FlickrController::class, 'callback']);
-        Route::get('flickr/user', [\App\Http\Controllers\Auth\FlickrController::class, 'user']);
     });

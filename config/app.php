@@ -171,7 +171,7 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
+
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
@@ -185,6 +185,11 @@ return [
          * Crawler
          */
         App\Crawlers\Providers\CrawlerProvider::class,
+
+        /**
+         * Oauth
+         */
+        App\Oauth\Providers\FlickrServiceProvider::class,
     ],
 
     /*

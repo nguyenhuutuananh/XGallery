@@ -7,8 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\OAuth;
+namespace App\OAuth\Services\Flickr;
 
+use App\OAuth\OauthClient;
+
+/**
+ * Class Flickr
+ * @package App\OAuth\Services\Flickr
+ */
 class Flickr extends OauthClient
 {
     const REST_ENDPOINT = 'https://api.flickr.com/services/rest';

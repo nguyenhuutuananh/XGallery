@@ -10,7 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCommand;
-use App\OAuth\Flickr;
+use App\OAuth\Services\Flickr\Flickr;
 
 /**
  * Class FlickrPhotos

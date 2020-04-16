@@ -9,6 +9,7 @@
 
 namespace App\OAuth;
 
+use App\Oauth;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -16,6 +17,10 @@ use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class OauthClient
+ * @package App\OAuth
+ */
 class OauthClient
 {
     /**
@@ -62,18 +67,19 @@ class OauthClient
 
         $content = json_decode($content);
 
-        Cache::put($id, $content, 3600);
+        Cache::put($id, $content, 86400); // Day
         return Cache::get($id);
     }
 
     protected function getClient(): Client
     {
+        $flickr = Oauth::where(['name' =>'flickr'])->get()->first();
         $stack      = HandlerStack::create();
         $middleware = new Oauth1([
             'consumer_key' => env('FLICKR_KEY'),
             'consumer_secret' => env('FLICKR_SECRET'),
-            'token' => env('FLICKR_ACCESS_TOKEN'),
-            'token_secret' => env('FLICKR_ACCESS_TOKEN_SECRET'),
+            'token' => $flickr->oauth_token,
+            'token_secret' => $flickr->oauth_token_secret,
         ]);
         $stack->push($middleware);
 

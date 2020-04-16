@@ -11,6 +11,8 @@ namespace App\Http\Controllers\Flickr;
 
 use App\FlickrContacts;
 use App\Http\Controllers\BaseController;
+use App\Jobs\FlickrDownload;
+use App\OAuth\Services\Flickr\Flickr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -49,6 +51,47 @@ class FlickrController extends BaseController
         );
     }
 
+    /**
+     * @param  Request  $request
+     */
+    public function download(Request $request)
+    {
+        if (!$url = $request->get('url')) {
+            return;
+        }
+
+        if (strpos($url, 'albums') !== false) {
+            $urls = explode('/', $url);
+            $url  = end($urls);
+
+            $flickrClient = app(Flickr::class);
+            $photos       = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url]);
+
+            if (!$photos) {
+                return;
+            }
+
+            foreach ($photos->photoset->photo as $photo) {
+                FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('database');
+            }
+
+            if ($photos->photoset->page == 1) {
+                return;
+            }
+
+            for ($page = 2; $page <= $photos->photoset->pages; $page++) {
+                $photos = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url, 'page' => $page]);
+                foreach ($photos->photoset->photo as $photo) {
+                    FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('database');
+                }
+            }
+        }
+    }
+
+    /**
+     * @param  string  $nsid
+     * @return Application|Factory|View
+     */
     public function contact(string $nsid)
     {
         return view(

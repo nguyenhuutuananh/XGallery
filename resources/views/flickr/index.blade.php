@@ -1,6 +1,6 @@
 @extends('base')
 @section('content')
-    @include('jav.includes.navbar')
+    @include('flickr.includes.navbar')
     <div class="card-columns">
         @foreach ($items as $item)
             <div class="card">
@@ -16,7 +16,6 @@
                             class="far fa-calendar-alt mr-1"></i>{{$item->photos()->count()}}</small>
                 </div>
             </div>
-
         @endforeach
     </div>
     {{ $items->links() }}

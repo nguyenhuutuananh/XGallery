@@ -10,7 +10,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
-use App\OAuth\Flickr;
+use App\Oauth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -37,15 +37,17 @@ class FlickrController extends BaseController
      */
     public function callback()
     {
-        $user = Socialite::driver('flickr')->user();
-        dd($user);
-    }
+        if (!$user = Socialite::driver('flickr')->user()) {
+            return;
+        }
 
-    public function user()
-    {
-        $flickr = new Flickr();
-        $res    = $flickr->get(['method' => 'flickr.contacts.getList']);
+        $model       = app(Oauth::class);
+        $model->name = 'flickr';
 
-        dd($res);
+        foreach ($user->accessTokenResponseBody as $key => $value) {
+            $model->{$key} = $value;
+        }
+
+        $model->save();
     }
 }
