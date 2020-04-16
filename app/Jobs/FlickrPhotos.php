@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Oauth\Flickr;
+use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,9 +39,9 @@ class FlickrPhotos implements ShouldQueue
      */
     public function handle()
     {
-        $flickr = new Flickr();
+        $flickrClient = app(Flickr::class);
 
-        if (!$photos = $flickr->get(
+        if (!$photos = $flickrClient->get(
             'people.getPhotos',
             ['user_id' => $this->contact->nsid, 'page' => $this->page]
         )) {

@@ -27,7 +27,7 @@ class TruyenchonDownload implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  string  $id
      */
     public function __construct(string $id)
     {
@@ -51,12 +51,10 @@ class TruyenchonDownload implements ShouldQueue
                 return;
             }
 
-            foreach ($item->images as $image) {
-                $crawler->download(
-                    $image,
-                    'truyenchon'.DIRECTORY_SEPARATOR.Str::slug($model->title).DIRECTORY_SEPARATOR.$index
-                );
-            }
+            TruyenchonChapterDownload::dispatch(
+                $item->images->toArray(),
+                DIRECTORY_SEPARATOR.Str::slug($model->title).DIRECTORY_SEPARATOR.$index
+            )->onConnection('database');
         });
     }
 }
