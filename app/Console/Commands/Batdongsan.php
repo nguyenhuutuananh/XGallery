@@ -22,7 +22,7 @@ class Batdongsan extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'batdongsan {task=fully} {--url=} {--pageFrom=1} {--pageTo=}';
+    protected $signature = 'batdongsan {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -51,18 +51,9 @@ class Batdongsan extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-                /**
-                 * @TODO Use Job instead directly
-                 */
-                if (!$itemDetail = $this->getCrawler()->getItemDetail($item['url'])) {
-                    $this->progressBar->setMessage($index + 1, 'step');
-                    $this->progressBar->setMessage('FAILED', 'status');
-                    return;
-                }
-
-                $this->insertItem(get_object_vars($itemDetail));
+                \App\Jobs\Batdongsan::dispatch($item['url'])->onConnection('database');
                 $this->progressBar->setMessage($index + 1, 'step');
-                $this->progressBar->setMessage('COMPLETED', 'status');
+                $this->progressBar->setMessage('QUEUED', 'status');
             });
             $this->progressBar->advance();
         });
