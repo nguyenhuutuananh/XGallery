@@ -10,6 +10,8 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
@@ -24,7 +26,7 @@ class Onejav extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'onejav {task=daily} {--url} {--pageFrom=1} {--pageTo=}';
+    protected $signature = 'onejav {task=daily} {--url=}';
 
     /**
      * The console command description.
@@ -38,7 +40,16 @@ class Onejav extends BaseCrawlerCommand
      */
     protected function daily(): bool
     {
-        $url = 'https://onejav.com/'.date('Y/m/d');
+        return $this->indexProcess('https://onejav.com/'.date('Y/m/d'));
+    }
+
+    /**
+     * Get links in a index page and process these
+     * @param  string  $url
+     * @return bool
+     */
+    private function indexProcess(string $url)
+    {
         if (!$pages = $this->getCrawler()->getIndexLinks($url)) {
             return false;
         }
@@ -84,35 +95,9 @@ class Onejav extends BaseCrawlerCommand
     }
 
     /**
-     * Process specific index
-     * @return bool
-     */
-    protected function index(): bool
-    {
-        if (!$url = $this->getOptionUrl()) {
-            return false;
-        }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks($url)) {
-            return false;
-        }
-
-        $this->progressBar = $this->createProgressBar();
-        $this->progressBar->setMaxSteps($pages->count());
-
-        $pages->each(function ($items) {
-            // Pages process
-            $this->progressBar->setMessage(0, 'step');
-            $this->progressBar->setMessage($items->count(), 'steps');
-            $this->itemsProcess($items);
-            $this->progressBar->advance();
-        });
-        return true;
-    }
-
-    /**
      * Process to get all OneJav data
      * @return bool
+     * @throws Exception
      */
     protected function fully(): bool
     {
@@ -120,6 +105,7 @@ class Onejav extends BaseCrawlerCommand
             return false;
         }
 
+        // For moment we can't use getIndexLinks because we are using recursive to get last page of this site
         if (!$results = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page)) {
             return false;
         }
@@ -133,5 +119,13 @@ class Onejav extends BaseCrawlerCommand
         $this->itemsProcess($results);
 
         return true;
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return app(\App\Models\Onejav::class);
     }
 }

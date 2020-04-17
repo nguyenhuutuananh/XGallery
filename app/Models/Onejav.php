@@ -7,13 +7,13 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
 use App\Database\Mongodb;
 
 /**
  * Class Onejav
- * @package App
+ * @package App\Models
  */
 class Onejav extends Mongodb
 {
