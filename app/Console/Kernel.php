@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
-        $schedule->command('batdongsan fully')
+        $schedule->command('batdongsan')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
 
