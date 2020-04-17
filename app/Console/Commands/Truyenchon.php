@@ -10,9 +10,11 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Batdongsan
+ * Class Truyenchon
  * @package App\Console\Commands
  */
 class Truyenchon extends BaseCrawlerCommand
@@ -22,7 +24,7 @@ class Truyenchon extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'truyenchon {task=fully} {--url} {--pageFrom=1} {--pageTo=1}';
+    protected $signature = 'truyenchon {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -33,6 +35,7 @@ class Truyenchon extends BaseCrawlerCommand
 
     /**
      * @return bool
+     * @throws Exception
      */
     protected function fully(): bool
     {
@@ -77,5 +80,13 @@ class Truyenchon extends BaseCrawlerCommand
         $this->insertItem(get_object_vars($itemDetail));
 
         return true;
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return app(\App\Models\Truyenchon::class);
     }
 }
