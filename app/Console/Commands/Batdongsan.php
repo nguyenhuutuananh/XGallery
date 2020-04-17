@@ -22,7 +22,7 @@ class Batdongsan extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'batdongsan {task=fully} {--url=}';
+    protected $signature = 'batdongsan {task=fully}';
 
     /**
      * The console command description.
@@ -57,24 +57,6 @@ class Batdongsan extends BaseCrawlerCommand
             });
             $this->progressBar->advance();
         });
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function item(): bool
-    {
-        if (!$url = $this->getOptionUrl()) {
-            return false;
-        }
-
-        if (!$itemDetail = $this->getCrawler()->getItemDetail($url)) {
-            return false;
-        }
-
-        $this->insertItem(get_object_vars($itemDetail));
 
         return true;
     }
