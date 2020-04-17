@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
 
 /**
  * R18 only used to get videos. There are no idol information
@@ -22,7 +23,7 @@ class R18 extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'r18 {task=daily} {--url=} {--pageFrom=1} {--pageTo=}';
+    protected $signature = 'r18 {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -33,6 +34,7 @@ class R18 extends BaseCrawlerCommand
 
     /**
      * @return bool
+     * @throws Exception
      */
     public function fully(): bool
     {
@@ -51,9 +53,7 @@ class R18 extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-
                 \App\Jobs\R18::dispatch($item)->onConnection('database');
-
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });
