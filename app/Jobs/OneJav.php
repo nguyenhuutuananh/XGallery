@@ -55,7 +55,7 @@ class OneJav implements ShouldQueue
         if (!$movie = $model->where(['item_number' => $itemNumber])->first()) {
             // Not found than create new model
             $movie = app(JavMovies::class);
-            Log::stack(['jav'])->info('Saving new video', $this->itemDetail);
+            Log::stack(['jav'])->info('New video', $this->itemDetail);
         }
 
         $movie->item_number     = $itemNumber;
@@ -67,6 +67,6 @@ class OneJav implements ShouldQueue
         // Trigger job to update genres and xref
         UpdateGenres::dispatch($movie, $this->itemDetail['tags'])->onConnection('database');
         // Trigger job to update idols and xref
-        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onConnection('database');
+        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onQueue('limited')->onConnection('database');
     }
 }
