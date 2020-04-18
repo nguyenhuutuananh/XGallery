@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 
 /**
  * Class XCityProfile
@@ -64,19 +63,5 @@ class XCityProfile implements ShouldQueue
         $item->hips          = $itemDetail->hips ?? null;
 
         $item->save();
-    }
-
-    /**
-     * @param  null  $exception
-     */
-    public function fail($exception = null)
-    {
-        Mail::send(
-            $exception->getMessage()
-            [],
-            function ($message) {
-                $message->to('soulevilx@gmail.com')->from('me@soulevil.com')->subject('Testing mails');
-            }
-        );
     }
 }

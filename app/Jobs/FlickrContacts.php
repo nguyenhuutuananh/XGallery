@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Oauth\Flickr;
+use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,19 +36,21 @@ class FlickrContacts implements ShouldQueue
      */
     public function handle()
     {
-        $flickr = app(Flickr::class);
+        $client = app(Flickr::class);
 
-        if (!$contacts = $flickr->get('contacts.getList', ['page' => $this->page])) {
+        if (!$contacts = $client->get('contacts.getList', ['page' => $this->page])) {
             return;
         }
 
         foreach ($contacts->contacts->contact as $contact) {
-            // Contact already exists
-            if ($item = \App\FlickrContacts::where(['nsid' => $contact->nsid])->first()) {
+            /**
+             * @TODO Trigger sub job for flickr.people.getInfo
+             */
+            $model = app(\App\Models\FlickrContacts::class);
+            if ($item = $model->where(['nsid' => $contact->nsid])->first()) {
                 continue;
             }
 
-            $model      = app(\App\FlickrContacts::class);
             $properties = get_object_vars($contact);
 
             foreach ($properties as $key => $value) {

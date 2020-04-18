@@ -39,9 +39,9 @@ class FlickrPhotos implements ShouldQueue
      */
     public function handle()
     {
-        $flickrClient = app(Flickr::class);
+        $client = app(Flickr::class);
 
-        if (!$photos = $flickrClient->get(
+        if (!$photos = $client->get(
             'people.getPhotos',
             ['user_id' => $this->contact->nsid, 'page' => $this->page]
         )) {
@@ -49,11 +49,11 @@ class FlickrPhotos implements ShouldQueue
         }
 
         foreach ($photos->photos->photo as $photo) {
-            if ($item = \App\FlickrPhotos::where(['id' => $photo->id, 'owner' => $photo->owner])->first()) {
+            $model = app(\App\Models\FlickrPhotos::class);
+            if ($item = $model->where(['id' => $photo->id, 'owner' => $photo->owner])->first()) {
                 continue;
             }
 
-            $model      = app(\App\FlickrPhotos::class);
             $properties = get_object_vars($photo);
 
             foreach ($properties as $key => $value) {

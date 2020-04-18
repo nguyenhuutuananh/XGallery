@@ -7,15 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
-use App\Database\Mongodb;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Nhaccuatui
- * @package App
+ * Class CrawlerEndpoints
+ * @package App\Models
  */
-class Nhaccuatui extends Mongodb
+class CrawlerEndpoints extends Model
 {
-    public $collection = 'nhaccuatui';
 }

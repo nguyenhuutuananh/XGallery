@@ -19,8 +19,8 @@ class FlickrDownload implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int        $timeout = 300;
-    private string $owner;
-    private object $photo;
+    private string    $owner;
+    private object    $photo;
 
     /**
      * Create a new job instance.

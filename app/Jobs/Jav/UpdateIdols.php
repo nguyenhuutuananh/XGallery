@@ -21,8 +21,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class UpdateIdols
- * @package App\Jobs\OneJav
+ * Search and update idol
+ * @package App\Jobs\Jav
  */
 class UpdateIdols implements ShouldQueue
 {
@@ -33,6 +33,9 @@ class UpdateIdols implements ShouldQueue
      */
     public int        $timeout = 300;
     private JavMovies $movie;
+    /**
+     * @var array Array of idol names
+     */
     private array     $idols;
 
     /**

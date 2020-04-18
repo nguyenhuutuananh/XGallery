@@ -9,6 +9,11 @@
             <exclude>./app/Crawlers/Tests/External</exclude>
             <exclude>./app/Crawlers/Tests/Traits</exclude>
         </testsuite>
+        <testsuite name="Commands">
+            <directory suffix="Test.php">./tests</directory>
+            <exclude>./tests/External</exclude>
+            <exclude>./tests/Traits</exclude>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

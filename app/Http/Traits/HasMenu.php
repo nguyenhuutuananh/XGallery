@@ -9,7 +9,7 @@
 
 namespace App\Http\Traits;
 
-use App\MenuItems;
+use App\Models\MenuItems;
 
 /**
  * Trait HasMenu

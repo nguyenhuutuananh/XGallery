@@ -7,15 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
 use App\Database\Mongodb;
 
 /**
- * Class Xiuren
- * @package App
+ * Class Oauth
+ * @package App\Models
  */
-class Xiuren extends Mongodb
+class Oauth extends Mongodb
 {
-    public $collection = 'xiuren';
 }

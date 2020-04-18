@@ -7,13 +7,13 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
 use App\Database\Mongodb;
 
 /**
  * Class FlickrPhotos
- * @package App
+ * @package App\Models
  */
 class FlickrPhotos extends Mongodb
 {

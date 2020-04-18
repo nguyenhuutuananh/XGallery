@@ -7,14 +7,15 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
 use App\Database\Mongodb;
+use App\FlickrPhotos;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class FlickrContacts
- * @package App
+ * @package App\Models
  */
 class FlickrContacts extends Mongodb
 {

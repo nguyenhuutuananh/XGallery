@@ -7,15 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
-use App\Database\Mongodb;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class R18
+ * Class MenuItems
  * @package App
  */
-class R18 extends Mongodb
+class MenuItems extends Model
 {
-    public $collection = 'r18';
 }

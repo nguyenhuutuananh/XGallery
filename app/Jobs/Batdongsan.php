@@ -50,7 +50,7 @@ class Batdongsan implements ShouldQueue
         }
 
         $model = app(\App\Models\Batdongsan::class);
-        $data = get_object_vars($itemDetail);
+        $data  = get_object_vars($itemDetail);
 
         // Can not use fill() because it will be required fillable properties
         foreach ($data as $key => $value) {

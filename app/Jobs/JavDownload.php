@@ -8,18 +8,22 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class JavDownload
+ * @package App\Jobs
+ */
 class JavDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected \App\JavDownload $javDownload;
+    protected \App\Models\JavDownload $javDownload;
 
     /**
      * Create a new job instance.
      *
-     * @param  \App\JavDownload  $javDownload
+     * @param  \App\Models\JavDownload  $javDownload
      */
-    public function __construct(\App\JavDownload $javDownload)
+    public function __construct(\App\Models\JavDownload $javDownload)
     {
         $this->javDownload = $javDownload;
     }

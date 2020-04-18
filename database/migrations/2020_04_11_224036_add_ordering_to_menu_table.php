@@ -14,7 +14,7 @@ class AddOrderingToMenuTable extends Migration
     public function up()
     {
         Schema::table('menu_items', function (Blueprint $table) {
-            $table->integer('ordering')->nullable(false);
+            $table->integer('ordering')->nullable(true);
         });
     }
 

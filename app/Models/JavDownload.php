@@ -7,14 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App;
+namespace App\Models;
 
 use App\Database\Mongodb;
 
 /**
- * Class Oauth
+ * Class JavDownload
  * @package App
  */
-class Oauth extends Mongodb
+class JavDownload extends Mongodb
 {
 }

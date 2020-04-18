@@ -18,7 +18,7 @@ class TruyenchonChapterDownload implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int     $timeout = 600;
-    private array $images;
+    private array  $images;
     private string $path;
 
     /**
@@ -30,7 +30,7 @@ class TruyenchonChapterDownload implements ShouldQueue
     public function __construct(array $images, string $path)
     {
         $this->images = $images;
-        $this->path = $path;
+        $this->path   = $path;
     }
 
     /**
@@ -44,7 +44,7 @@ class TruyenchonChapterDownload implements ShouldQueue
         foreach ($this->images as $image) {
             $crawler->download(
                 $image,
-                'truyenchon'. $this->path
+                'truyenchon'.$this->path
             );
         }
     }
