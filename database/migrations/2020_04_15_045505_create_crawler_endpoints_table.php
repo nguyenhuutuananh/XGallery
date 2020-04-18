@@ -25,6 +25,7 @@ class CreateCrawlerEndpointsTable extends Migration
             $table->string('crawler')->nullable(false);
             $table->string('url')->nullable(false);
             $table->integer('page')->nullable(true);
+            $table->smallInteger('failed')->nullable();
             $table->timestamps();
         });
     }

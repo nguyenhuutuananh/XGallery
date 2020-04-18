@@ -9,10 +9,11 @@
 
 namespace App\Console\Traits\Crawlers;
 
-use App\CrawlerEndpoints;
 use App\Crawlers\Crawler\CrawlerInterface;
+use App\Models\CrawlerEndpoints;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Collection;
 
 /**
  * Trait HasCrawler
@@ -63,11 +64,6 @@ trait HasCrawler
          * @var Model $item
          */
         if ($item = $model->where(['url' => $data['url']])->first()) {
-            if (!isset($item->created_at)) {
-                $item->created_at = Date::now();
-                $item->updated_at = Date::now();
-                $item->save();
-            }
             $item->touch();
             return;
         }
@@ -90,17 +86,33 @@ trait HasCrawler
         return $this->model;
     }
 
+    /**
+     * @return bool|Collection
+     * @throws Exception
+     */
     protected function getIndexLinks()
     {
         if (!$endpoint = $this->getCrawlerEndpoint()) {
             return false;
         }
 
-        if (!$pages = $this->getCrawler()->getIndexLinks(
+        $pages = $this->getCrawler()->getIndexLinks(
             $endpoint->url,
             (int) $endpoint->page,
             (int) $endpoint->page
-        )) {
+        );
+
+        if ($pages->isEmpty()) {
+            $endpoint->failed = (int) $endpoint->failed + 1;
+            if ($endpoint->failed === 10) {
+                $endpoint->page = 1;
+                $endpoint->failed = 0;
+                $endpoint->save();
+                return false;
+            }
+
+            $endpoint->page = (int) $endpoint->page + 1;
+            $endpoint->save();
             return false;
         }
 
@@ -112,6 +124,7 @@ trait HasCrawler
 
     /**
      * @return Model|null
+     * @throws Exception
      */
     protected function getCrawlerEndpoint()
     {
@@ -122,7 +135,7 @@ trait HasCrawler
             'updated_at',
             'asc'
         )->get()->first()) {
-            return null;
+            throw new Exception('Crawler endpoint not found');
         }
 
         if ($endpoint->page === null || $endpoint === 0) {
