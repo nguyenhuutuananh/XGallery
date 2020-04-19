@@ -36,27 +36,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**
-         * Schedule with daily
-         */
-
-        $schedule->command('onejav daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('r18 daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('queue:restart')
-            ->daily()
-            ->withoutOverlapping();
-        $schedule->command('queue:retry all')
-            ->daily()
-            ->withoutOverlapping();
-
-        /**
          * Schedule everyMinute
          */
 
@@ -68,43 +47,6 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
-
-        /**
-         * Schedule everyFiveMinutes
-         */
-
-        $schedule->command('onejav fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('r18 fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('xcity:profile fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-
-        $schedule->command('xcity:video')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('xiuren fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('flickr:photos')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        $schedule->command('flickr:photossizes')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
     }
 
     /**
