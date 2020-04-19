@@ -28,10 +28,6 @@ class UpdateGenres implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     use HasJob;
 
-    /**
-     * @var int Execute timeout
-     */
-    public int        $timeout = 300;
     private JavMovies $movie;
     private array     $genres;
 
