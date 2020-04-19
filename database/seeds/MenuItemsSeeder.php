@@ -19,56 +19,56 @@ class MenuItemsSeeder extends Seeder
             [
                 [
                     'name' => 'Dashboard',
-                    'link' => '/',
+                    'link' => null,
                     'type' => 'header',
                     'icon' => 'fas fa-home',
                     'ordering' => 1
                 ],
                 [
                     'name' => 'Adult',
-                    'link' => '#',
+                    'link' => null,
                     'type' => 'header',
                     'icon' => 'fas fa-female',
                     'ordering' => 2
                 ],
                 [
                     'name' => 'Jav',
-                    'link' => '/jav',
+                    'link' => 'jav',
                     'type' => 'item',
                     'icon'=> null,
                     'ordering' => 3
                 ],
                 [
                     'name' => 'Xiuren',
-                    'link' => '/xiuren',
+                    'link' => 'xiuren',
                     'type' => 'item',
                     'icon'=> null,
                     'ordering' => 4
                 ],
                 [
                     'name' => 'Comics',
-                    'link' => '#',
+                    'link' => null,
                     'type' => 'header',
                     'icon' => 'fas fa-book',
                     'ordering' => 5
                 ],
                 [
                     'name' => 'Truyện chọn',
-                    'link' => '/truyenchon',
+                    'link' => 'truyenchon',
                     'type' => 'item',
                     'icon'=> null,
                     'ordering' => 6
                 ],
                 [
                     'name' => 'Tools',
-                    'link' => '#',
+                    'link' => null,
                     'type' => 'header',
                     'icon' => 'fas fa-tools',
                     'ordering' => 7
                 ],
                 [
                     'name' => 'Flickr',
-                    'link' => '/flickr',
+                    'link' => 'flickr',
                     'type' => 'item',
                     'icon'=> null,
                     'ordering' => 8
