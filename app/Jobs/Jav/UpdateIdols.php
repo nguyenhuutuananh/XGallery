@@ -13,6 +13,7 @@ use App\Crawlers\Crawler\XCityProfile;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
+use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Log;
 class UpdateIdols implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     /**
      * @var int Execute timeout

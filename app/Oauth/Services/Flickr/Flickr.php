@@ -38,6 +38,10 @@ class Flickr extends OauthClient
             ]
         );
 
+        if (!$content) {
+            return null;
+        }
+
         if ($content->stat !== 'ok') {
             return null;
         }

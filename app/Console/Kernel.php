@@ -49,6 +49,13 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
+        $schedule->command('queue:restart')
+            ->daily()
+            ->withoutOverlapping();
+        $schedule->command('queue:retry all')
+            ->daily()
+            ->withoutOverlapping();
+
         /**
          * Schedule everyMinute
          */

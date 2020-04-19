@@ -1,7 +1,15 @@
 <?php
+/**
+ * Copyright (c) 2020 JOOservices Ltd
+ * @author Viet Vu <jooservices@gmail.com>
+ * @package XGallery
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
-namespace App\Jobs;
+namespace App\Jobs\Flickr;
 
+use App\Jobs\Traits\HasJob;
 use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,12 +18,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class FlickrPhotos
- * @package App\Jobs
+ * Fetch photos in a contact page
+ * @package App\Jobs\Flickr
  */
 class FlickrPhotos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private int    $page;
     private object $contact;

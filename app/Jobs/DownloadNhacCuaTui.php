@@ -10,6 +10,7 @@
 namespace App\Jobs;
 
 use App\Crawlers\Crawler\Nhaccuatui;
+use App\Jobs\Traits\HasJob;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,6 +25,7 @@ use Illuminate\Queue\SerializesModels;
 class DownloadNhacCuaTui implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private string $url;
 

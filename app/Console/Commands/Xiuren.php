@@ -10,6 +10,8 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Xiuren
@@ -22,7 +24,7 @@ class Xiuren extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'xiuren {task=fully} {--url=} {--pageFrom=1} {--pageTo=}';
+    protected $signature = 'xiuren {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -31,6 +33,10 @@ class Xiuren extends BaseCrawlerCommand
      */
     protected $description = 'Fetching data from http://www.xiuren.org/';
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function fully(): bool
     {
         if (!$pages = $this->getIndexLinks()) {
@@ -67,6 +73,9 @@ class Xiuren extends BaseCrawlerCommand
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function item(): bool
     {
         if (!$url = $this->getOptionUrl()) {
@@ -84,5 +93,13 @@ class Xiuren extends BaseCrawlerCommand
         }
 
         return true;
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return app(\App\Models\Xiuren::class);
     }
 }

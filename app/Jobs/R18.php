@@ -12,6 +12,7 @@ namespace App\Jobs;
 use App\JavMovies;
 use App\Jobs\Jav\UpdateGenres;
 use App\Jobs\Jav\UpdateIdols;
+use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Log;
 class R18 implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private array $item;
 

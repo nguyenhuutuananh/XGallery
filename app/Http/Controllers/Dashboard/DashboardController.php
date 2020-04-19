@@ -31,7 +31,6 @@ class DashboardController extends BaseController
             'xcity' => $this->getCount('xcityprofile').' / '.$this->getCount('xcityvideo')
         ];
 
-
         return view(
             'dashboard.index',
             [

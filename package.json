@@ -19,7 +19,7 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
-        "husky": "^4.2.3"
+        "husky": "^4.2.5"
     },
     "husky": {
         "hooks": {

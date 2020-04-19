@@ -1,8 +1,16 @@
 <?php
+/**
+ * Copyright (c) 2020 JOOservices Ltd
+ * @author Viet Vu <jooservices@gmail.com>
+ * @package XGallery
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
-namespace App\Jobs;
+namespace App\Jobs\Flickr;
 
 use App\Crawlers\HttpClient;
+use App\Jobs\Traits\HasJob;
 use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,13 +20,13 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class FlickrDownload
- * @package App\Jobs
+ * @package App\Jobs\Flickr
  */
 class FlickrDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
-    public int        $timeout = 300;
     private string    $owner;
     private object    $photo;
 
@@ -40,10 +48,10 @@ class FlickrDownload implements ShouldQueue
      */
     public function handle()
     {
-        $flickrClient = app(Flickr::class);
+        $client = app(Flickr::class);
         $httpClient   = app(HttpClient::class);
 
-        if (!$sizes = $flickrClient->get('photos.getSizes', ['photo_id' => $this->photo->id])) {
+        if (!$sizes = $client->get('photos.getSizes', ['photo_id' => $this->photo->id])) {
             return;
         }
 

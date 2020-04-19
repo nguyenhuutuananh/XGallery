@@ -7,14 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Flickr;
 
 use App\Console\BaseCommand;
-use App\Oauth\Services\Flickr\Flickr;
+use App\Jobs\Flickr\FlickrPhotoSizes;
 
 /**
  * Class FlickrPhotosSizes
- * @package App\Console\Commands
+ * @package App\Console\Commands\Flickr
  */
 class FlickrPhotosSizes extends BaseCommand
 {
@@ -34,15 +34,10 @@ class FlickrPhotosSizes extends BaseCommand
 
     public function handle()
     {
-        $flickr = app(Flickr::class);
-        $photos = \App\FlickrPhotos::where(['sizes' => null])->take(30)->get();
+        $photos = \App\Models\FlickrPhotos::where(['sizes' => null])->take(30)->get();
 
         foreach ($photos as $photo) {
-            if (!$sizes = $flickr->get('photos.getSizes', ['photo_id' => $photo->id])) {
-                continue;
-            }
-            $photo->sizes = $sizes->sizes;
-            $photo->save();
+            FlickrPhotoSizes::dispatch($photo)->onConnection('redis');
         }
     }
 }

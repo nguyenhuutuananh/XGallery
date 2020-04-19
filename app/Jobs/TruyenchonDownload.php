@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Crawlers\Crawler\Truyenchon;
+use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,11 +18,8 @@ use Illuminate\Support\Str;
 class TruyenchonDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
-    /**
-     * @var int Execute timeout
-     */
-    public int     $timeout = 300;
     private string $id;
 
     /**

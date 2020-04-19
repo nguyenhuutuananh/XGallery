@@ -9,9 +9,9 @@
 
 namespace App\Http\Controllers\Flickr;
 
-use App\FlickrContacts;
 use App\Http\Controllers\BaseController;
-use App\Jobs\FlickrDownload;
+use App\Jobs\Flickr\FlickrDownload;
+use App\Models\FlickrContacts;
 use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -72,7 +72,7 @@ class FlickrController extends BaseController
             }
 
             foreach ($photos->photoset->photo as $photo) {
-                FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('database');
+                FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('redis');
             }
 
             if ($photos->photoset->page == 1) {
@@ -82,7 +82,7 @@ class FlickrController extends BaseController
             for ($page = 2; $page <= $photos->photoset->pages; $page++) {
                 $photos = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url, 'page' => $page]);
                 foreach ($photos->photoset->photo as $photo) {
-                    FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('database');
+                    FlickrDownload::dispatch($photos->photoset->owner, $photo)->onConnection('redis');
                 }
             }
         }

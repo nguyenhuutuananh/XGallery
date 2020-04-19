@@ -26,7 +26,7 @@ class Onejav extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'onejav {task=daily} {--url=}';
+    protected $signature = 'onejav {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -106,7 +106,19 @@ class Onejav extends BaseCrawlerCommand
         }
 
         // For moment we can't use getIndexLinks because we are using recursive to get last page of this site
-        if (!$results = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page)) {
+        $items = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page);
+
+        if (!$items || $items->isEmpty()) {
+            $endpoint->failed = (int) $endpoint->failed + 1;
+            if ($endpoint->failed === 10) {
+                $endpoint->page   = 1;
+                $endpoint->failed = 0;
+                $endpoint->save();
+                return false;
+            }
+
+            $endpoint->page = (int) $endpoint->page + 1;
+            $endpoint->save();
             return false;
         }
 
@@ -115,8 +127,8 @@ class Onejav extends BaseCrawlerCommand
 
         $this->createProgressBar();
         $this->progressBar->setMaxSteps(1);
-        $this->progressBar->setMessage($results->count(), 'steps');
-        $this->itemsProcess($results);
+        $this->progressBar->setMessage($items->count(), 'steps');
+        $this->itemsProcess($items);
 
         return true;
     }

@@ -7,14 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Flickr;
 
 use App\Console\BaseCommand;
 use App\Oauth\Services\Flickr\Flickr;
 
 /**
  * Class FlickrPhotos
- * @package App\Console\Commands
+ * @package App\Console\Commands\Flickr
  */
 class FlickrPhotos extends BaseCommand
 {
@@ -34,17 +34,22 @@ class FlickrPhotos extends BaseCommand
 
     public function handle()
     {
-        $flickr  = app(Flickr::class);
-        $contact = \App\FlickrContacts::orderBy('updated_at', 'asc')->first();
+        $client = app(Flickr::class);
+        if (!$contact = \App\Models\FlickrContacts::orderBy('updated_at', 'asc')->first()) {
+            return;
+        }
+
         $contact->touch();
 
-        if (!$photos = $flickr->get('people.getPhotos', ['user_id' => $contact->nsid])) {
+        $this->output->title('Working on contact '.$contact->nsid);
+
+        if (!$photos = $client->get('people.getPhotos', ['user_id' => $contact->nsid])) {
             return;
         }
 
         // Trigger job to fetch photos of user
         for ($page = 1; $page <= $photos->photos->pages; $page++) {
-            \App\Jobs\FlickrPhotos::dispatch($contact, $page)->onConnection('database');
+            \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page)->onConnection('redis');
         }
     }
 }

@@ -7,6 +7,7 @@ use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\Jav\UpdateGenres;
+use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,11 +22,8 @@ use Illuminate\Support\Facades\Log;
 class XCityVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
-    /**
-     * @var int Execute timeout
-     */
-    public int      $timeout = 300;
     protected array $item;
 
     /**

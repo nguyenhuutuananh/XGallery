@@ -33,7 +33,6 @@ class FlickrController extends BaseController
     /**
      * Obtain the user information from GitHub.
      *
-     * @return void
      */
     public function callback()
     {
@@ -41,7 +40,7 @@ class FlickrController extends BaseController
             return;
         }
 
-        $model       = app(Oauth::class);
+        $model = app(Oauth::class);
         $model->name = 'flickr';
 
         foreach ($user->accessTokenResponseBody as $key => $value) {

@@ -10,11 +10,11 @@
 namespace App\Http\Controllers\Jav;
 
 use App\Http\Controllers\BaseController;
-use App\JavDownload;
 use App\JavGenres;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
+use App\Models\JavDownload;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;

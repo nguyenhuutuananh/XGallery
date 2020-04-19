@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
 
 /**
  * Class XCityVideo
@@ -22,7 +23,7 @@ class XCityVideo extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'xcity:video {task=fully} {--url=} {--pageFrom=1} {--pageTo=1}';
+    protected $signature = 'xcity:video {task=fully}';
 
     /**
      * The console command description.
@@ -33,6 +34,7 @@ class XCityVideo extends BaseCrawlerCommand
 
     /**
      * @return bool
+     * @throws Exception
      */
     public function fully(): bool
     {
@@ -40,7 +42,19 @@ class XCityVideo extends BaseCrawlerCommand
             return false;
         }
 
-        if (!$movies = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page)) {
+        $items = $this->getCrawler()->getItemLinks($endpoint->url.$endpoint->page);
+
+        if (!$items || $items->isEmpty()) {
+            $endpoint->failed = (int) $endpoint->failed + 1;
+            if ($endpoint->failed === 10) {
+                $endpoint->page   = 1;
+                $endpoint->failed = 0;
+                $endpoint->save();
+                return false;
+            }
+
+            $endpoint->page = (int) $endpoint->page + 1;
+            $endpoint->save();
             return false;
         }
 
@@ -49,12 +63,37 @@ class XCityVideo extends BaseCrawlerCommand
 
         $this->createProgressBar();
         $this->progressBar->setMaxSteps(1);
-        $this->progressBar->setMessage($movies->count(), 'steps');
+        $this->progressBar->setMessage($items->count(), 'steps');
 
-        $movies->each(function ($item, $index) {
+        $items->each(function ($item, $index) {
             $this->progressBar->setMessage($item['title'], 'info');
+            // This queue trigger on limited channel
             \App\Jobs\XCityVideo::dispatch($item)->onConnection('database');
             $this->progressBar->setMessage($index + 1, 'step');
+        });
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function daily(): bool
+    {
+        if (!$items = $this->getCrawler()->getItemLinks('https://xxx.xcity.jp/avod/list/?style=simple')) {
+            return false;
+        }
+
+        $this->progressBar = $this->createProgressBar();
+        $this->progressBar->setMaxSteps($items->count());
+
+        $items->each(function ($item) {
+            $this->progressBar->setMessage($item['url'], 'info');
+            $this->progressBar->setMessage('FETCHING', 'status');
+            // Because this is daily request. We don't need use limit channel
+            \App\Jobs\XCityVideo::dispatch($item)->onConnection('database');
+            $this->progressBar->setMessage('QUEUED', 'status');
+            $this->progressBar->advance();
         });
 
         return true;

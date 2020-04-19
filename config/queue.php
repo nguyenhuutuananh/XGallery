@@ -67,7 +67,7 @@ return [
              * For example, if the value of retry_after is set to 90, the job will be released back onto the queue if it has been processing for 90 seconds without being deleted.
              * Typically, you should set the retry_after value to the maximum number of seconds your jobs should reasonably take to complete processing.
              */
-            'retry_after' => 600,
+            'retry_after' => 900,
             'block_for' => null,
         ],
 

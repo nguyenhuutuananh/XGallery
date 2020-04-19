@@ -11,6 +11,7 @@ namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
 use App\Jobs\DownloadNhacCuaTui;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Nhaccuatui
@@ -72,5 +73,13 @@ class Nhaccuatui extends BaseCrawlerCommand
         });
 
         return true;
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return app(\App\Models\Nhaccuatui::class);
     }
 }

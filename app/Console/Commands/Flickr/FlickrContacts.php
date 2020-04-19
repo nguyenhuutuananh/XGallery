@@ -7,14 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Flickr;
 
 use App\Console\BaseCommand;
 use App\Oauth\Services\Flickr\Flickr;
 
 /**
  * Class FlickrContacts
- * @package App\Console\Commands
+ * @package App\Console\Commands\Flickr
  */
 class FlickrContacts extends BaseCommand
 {
@@ -34,14 +34,13 @@ class FlickrContacts extends BaseCommand
 
     public function handle()
     {
-        $flickr = app(Flickr::class);
-
-        if (!$contacts = $flickr->get('contacts.getList')) {
+        if (!$contacts = app(Flickr::class)->get('contacts.getList')) {
             return;
         }
 
         for ($page = 1; $page <= $contacts->contacts->pages; $page++) {
-            \App\Jobs\FlickrContacts::dispatch($page)->onConnection('database');
+            // Add contacts on a page
+            \App\Jobs\Flickr\FlickrContacts::dispatch($page)->onConnection('redis');
         }
     }
 }

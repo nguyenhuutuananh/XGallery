@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
 
 /**
  * Class Batdongsan
@@ -33,6 +34,7 @@ class Batdongsan extends BaseCrawlerCommand
 
     /**
      * @return bool
+     * @throws Exception
      */
     protected function fully(): bool
     {

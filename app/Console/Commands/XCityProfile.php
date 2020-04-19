@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use Exception;
 
 /**
  * Class XCity
@@ -22,7 +23,7 @@ class XCityProfile extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'xcity:profile {task=daily} {--url=} {--pageFrom=1} {--pageTo=}';
+    protected $signature = 'xcity:profile {task=fully}';
 
     /**
      * The console command description.
@@ -33,6 +34,31 @@ class XCityProfile extends BaseCrawlerCommand
 
     /**
      * @return bool
+     */
+    public function daily(): bool
+    {
+        if (!$items = $this->getCrawler()->getItemLinks('https://xxx.xcity.jp/idol/')) {
+            return false;
+        }
+
+        $this->progressBar = $this->createProgressBar();
+        $this->progressBar->setMaxSteps($items->count());
+
+        $items->each(function ($item) {
+            $this->progressBar->setMessage($item['url'], 'info');
+            $this->progressBar->setMessage('FETCHING', 'status');
+            // Because this is daily request. We don't need use limit channel
+            \App\Jobs\XCityProfile::dispatch($item)->onConnection('database');
+            $this->progressBar->setMessage('QUEUED', 'status');
+            $this->progressBar->advance();
+        });
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
      */
     protected function fully(): bool
     {
@@ -51,6 +77,7 @@ class XCityProfile extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
+                // This queue trigger on limited channel
                 \App\Jobs\XCityProfile::dispatch($item)->onConnection('database');
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
