@@ -57,6 +57,6 @@ class IndexController extends ApiController
             $args['--singer'] = $singer;
         }
 
-        Artisan::queue('nhaccuatui', $args)->onConnection('database');
+        Artisan::queue('nhaccuatui', $args);
     }
 }

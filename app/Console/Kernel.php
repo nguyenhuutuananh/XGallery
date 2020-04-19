@@ -60,11 +60,6 @@ class Kernel extends ConsoleKernel
          * Schedule everyMinute
          */
 
-        $schedule->command('onejav fully')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
         $schedule->command('batdongsan')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
@@ -77,6 +72,11 @@ class Kernel extends ConsoleKernel
         /**
          * Schedule everyFiveMinutes
          */
+
+        $schedule->command('onejav fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+        //->emailOutputOnFailure(config('mail.to'));
 
         $schedule->command('r18 fully')
             ->everyFiveMinutes()

@@ -37,8 +37,11 @@ class XiurenController extends BaseController
         );
     }
 
+    /**
+     * @param  string  $id
+     */
     public function download(string $id)
     {
-        XiurenDownload::dispatch($id)->onConnection('database');
+        XiurenDownload::dispatch($id);
     }
 }

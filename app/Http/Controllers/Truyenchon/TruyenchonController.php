@@ -69,6 +69,6 @@ class TruyenchonController extends BaseController
      */
     public function download(string $id)
     {
-        TruyenchonDownload::dispatch($id)->onConnection('database');
+        TruyenchonDownload::dispatch($id)->onQueue('downloads');
     }
 }

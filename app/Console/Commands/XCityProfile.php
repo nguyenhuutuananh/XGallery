@@ -48,7 +48,7 @@ class XCityProfile extends BaseCrawlerCommand
             $this->progressBar->setMessage($item['url'], 'info');
             $this->progressBar->setMessage('FETCHING', 'status');
             // Because this is daily request. We don't need use limit channel
-            \App\Jobs\XCityProfile::dispatch($item)->onConnection('database');
+            \App\Jobs\XCityProfile::dispatch($item);
             $this->progressBar->setMessage('QUEUED', 'status');
             $this->progressBar->advance();
         });
@@ -78,7 +78,7 @@ class XCityProfile extends BaseCrawlerCommand
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
                 // This queue trigger on limited channel
-                \App\Jobs\XCityProfile::dispatch($item)->onConnection('database');
+                \App\Jobs\XCityProfile::dispatch($item);
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });

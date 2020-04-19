@@ -59,7 +59,7 @@ class Nhaccuatui extends BaseCrawlerCommand
                 $this->progressBar->setMessage('', 'status');
 
                 if ($this->argument('download') == 1) {
-                    DownloadNhacCuaTui::dispatch($item['url'])->onConnection('database');
+                    DownloadNhacCuaTui::dispatch($item['url']);
                     $this->progressBar->setMessage('Added to download queues', 'status');
                 }
 

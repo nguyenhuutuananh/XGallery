@@ -89,7 +89,7 @@ class Onejav extends BaseCrawlerCommand
             $this->insertItem($item);
 
             // Process to OneJAV to JavMovies with: Idols & Genres
-            \App\Jobs\OneJav::dispatch($originalItem)->onConnection('database');
+            \App\Jobs\OneJav::dispatch($originalItem);
             $this->progressBar->setMessage($index + 1, 'step');
         });
     }
