@@ -36,6 +36,22 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**
+         * Schedule with daily
+         */
+
+        $schedule->command('onejav daily')
+            ->daily()
+            ->withoutOverlapping()->runInBackground();
+        //->emailOutputOnFailure(config('mail.to'));
+
+        $schedule->command('queue:restart')
+            ->daily()
+            ->withoutOverlapping();
+        $schedule->command('queue:retry all')
+            ->daily()
+            ->withoutOverlapping();
+
+        /**
          * Schedule everyMinute
          */
 
@@ -45,6 +61,20 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('truyenchon fully')
             ->everyMinute()
+            ->withoutOverlapping()->runInBackground();
+        //->emailOutputOnFailure(config('mail.to'));
+
+        /**
+         * Schedule everyFiveMinutes
+         */
+
+        $schedule->command('onejav fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+        //->emailOutputOnFailure(config('mail.to'));
+
+        $schedule->command('xiuren fully')
+            ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
     }

@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jav;
 
 use App\Console\BaseCrawlerCommand;
 use Exception;
@@ -17,7 +17,7 @@ use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class Onejav
- * @package App\Console\Commands
+ * @package App\Console\Commands\Jav
  */
 class Onejav extends BaseCrawlerCommand
 {
@@ -89,7 +89,7 @@ class Onejav extends BaseCrawlerCommand
             $this->insertItem($item);
 
             // Process to OneJAV to JavMovies with: Idols & Genres
-            \App\Jobs\OneJav::dispatch($originalItem);
+            \App\Jobs\Jav\OneJav::dispatch($originalItem);
             $this->progressBar->setMessage($index + 1, 'step');
         });
     }

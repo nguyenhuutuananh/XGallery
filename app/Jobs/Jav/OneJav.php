@@ -7,11 +7,9 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Jobs;
+namespace App\Jobs\Jav;
 
 use App\JavMovies;
-use App\Jobs\Jav\UpdateGenres;
-use App\Jobs\Jav\UpdateIdols;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +20,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * This job handle process OneJAV to JavMovies and update related data: idols / genres
- * @package App\Jobs
+ * @package App\Jobs\Jav
  */
 class OneJav implements ShouldQueue
 {
