@@ -67,8 +67,8 @@ class OneJav implements ShouldQueue
         $movie->save();
 
         // Trigger job to update genres and xref
-        UpdateGenres::dispatch($movie, $this->itemDetail['tags'])->onConnection('database');
+        UpdateGenres::dispatch($movie, $this->itemDetail['tags']);
         // Trigger job to update idols and xref
-        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onConnection('database');
+        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onQueue('limited');
     }
 }

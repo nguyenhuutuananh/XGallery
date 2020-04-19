@@ -80,8 +80,8 @@ class R18 implements ShouldQueue
         $movie->save();
 
         // Trigger job to update genres and xref
-        UpdateGenres::dispatch($movie, $itemDetail->categories)->onConnection('database');
+        UpdateGenres::dispatch($movie, $itemDetail->categories);
         // Trigger job to update idols and xref
-        UpdateIdols::dispatch($movie, $itemDetail->actress)->onConnection('database');
+        UpdateIdols::dispatch($movie, $itemDetail->actress)->onQueue('limited');
     }
 }

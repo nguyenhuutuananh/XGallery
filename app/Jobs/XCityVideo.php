@@ -122,7 +122,7 @@ class XCityVideo implements ShouldQueue
             $this->insertXRef($model, $movie);
         }
 
-        UpdateGenres::dispatch($movie, $itemDetail->genres)->onConnection('database');
+        UpdateGenres::dispatch($movie, $itemDetail->genres);
     }
 
     /**
