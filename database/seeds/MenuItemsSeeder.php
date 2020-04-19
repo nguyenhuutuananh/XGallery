@@ -21,13 +21,53 @@ class MenuItemsSeeder extends Seeder
                     'name' => 'Dashboard',
                     'link' => '/',
                     'type' => 'header',
-                    'ordering' => 0
+                    'icon' => 'fas fa-home',
+                    'ordering' => 1
                 ],
                 [
-                    'name' => 'JAV',
-                    'link' => '/jav',
+                    'name' => 'Adult',
+                    'link' => '#',
                     'type' => 'header',
-                    'ordering' => 0
+                    'icon' => 'fas fa-female',
+                    'ordering' => 2
+                ],
+                [
+                    'name' => 'Jav',
+                    'link' => '/jav',
+                    'type' => 'item',
+                    'ordering' => 3
+                ],
+                [
+                    'name' => 'Xiuren',
+                    'link' => '/xiuren',
+                    'type' => 'item',
+                    'ordering' => 4
+                ],
+                [
+                    'name' => 'Comics',
+                    'link' => '#',
+                    'type' => 'header',
+                    'icon' => 'fas fa-book',
+                    'ordering' => 5
+                ],
+                [
+                    'name' => 'Truyện chọn',
+                    'link' => '/truyenchon',
+                    'type' => 'item',
+                    'ordering' => 6
+                ],
+                [
+                    'name' => 'Tools',
+                    'link' => '#',
+                    'type' => 'header',
+                    'icon' => 'fas fa-tools',
+                    'ordering' => 7
+                ],
+                [
+                    'name' => 'Flickr',
+                    'link' => '/flickr',
+                    'type' => 'item',
+                    'ordering' => 8
                 ]
             ]
         );
