@@ -35,12 +35,14 @@ class MenuItemsSeeder extends Seeder
                     'name' => 'Jav',
                     'link' => '/jav',
                     'type' => 'item',
+                    'icon'=> null,
                     'ordering' => 3
                 ],
                 [
                     'name' => 'Xiuren',
                     'link' => '/xiuren',
                     'type' => 'item',
+                    'icon'=> null,
                     'ordering' => 4
                 ],
                 [
@@ -54,6 +56,7 @@ class MenuItemsSeeder extends Seeder
                     'name' => 'Truyện chọn',
                     'link' => '/truyenchon',
                     'type' => 'item',
+                    'icon'=> null,
                     'ordering' => 6
                 ],
                 [
@@ -67,6 +70,7 @@ class MenuItemsSeeder extends Seeder
                     'name' => 'Flickr',
                     'link' => '/flickr',
                     'type' => 'item',
+                    'icon'=> null,
                     'ordering' => 8
                 ]
             ]
