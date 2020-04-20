@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class FlickrContacts
@@ -50,6 +51,8 @@ class FlickrContacts implements ShouldQueue
         if (!$contacts = $client->get('contacts.getList', ['page' => $this->page])) {
             return;
         }
+
+        Log::debug('Got '.count($contacts->contacts->contact).' contact');
 
         foreach ($contacts->contacts->contact as $contact) {
             /**
