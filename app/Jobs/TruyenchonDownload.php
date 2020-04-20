@@ -52,7 +52,7 @@ class TruyenchonDownload implements ShouldQueue
             TruyenchonChapterDownload::dispatch(
                 $item->images->toArray(),
                 DIRECTORY_SEPARATOR.Str::slug($model->title).DIRECTORY_SEPARATOR.$index
-            );
+            )->onQueue('downloads');
         });
     }
 }

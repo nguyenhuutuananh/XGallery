@@ -37,7 +37,7 @@ class FlickrPhotosSizes extends BaseCommand
         $photos = \App\Models\FlickrPhotos::where(['sizes' => null])->take(30)->get();
 
         foreach ($photos as $photo) {
-            FlickrPhotoSizes::dispatch($photo);
+            FlickrPhotoSizes::dispatch($photo)->onQueue('flickr');
         }
     }
 }

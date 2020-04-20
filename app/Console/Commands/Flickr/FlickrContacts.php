@@ -40,7 +40,7 @@ class FlickrContacts extends BaseCommand
 
         for ($page = 1; $page <= $contacts->contacts->pages; $page++) {
             // Add contacts on a page
-            \App\Jobs\Flickr\FlickrContacts::dispatch($page);
+            \App\Jobs\Flickr\FlickrContacts::dispatch($page)->onQueue('flickr');
         }
     }
 }

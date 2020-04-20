@@ -72,7 +72,7 @@ class FlickrController extends BaseController
             }
 
             foreach ($photos->photoset->photo as $photo) {
-                FlickrDownload::dispatch($photos->photoset->owner, $photo);
+                FlickrDownload::dispatch($photos->photoset->owner, $photo)->onQueue('flickr');
             }
 
             if ($photos->photoset->page == 1) {
@@ -82,7 +82,7 @@ class FlickrController extends BaseController
             for ($page = 2; $page <= $photos->photoset->pages; $page++) {
                 $photos = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url, 'page' => $page]);
                 foreach ($photos->photoset->photo as $photo) {
-                    FlickrDownload::dispatch($photos->photoset->owner, $photo);
+                    FlickrDownload::dispatch($photos->photoset->owner, $photo)->onQueue('flickr');
                 }
             }
         }
