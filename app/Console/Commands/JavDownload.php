@@ -35,7 +35,7 @@ class JavDownload extends BaseCommand
     {
         $downloads = \App\Models\JavDownload::where(['is_downloaded' => null])->get();
         $downloads->each(function ($download) {
-            \App\Jobs\JavDownload::dispatch($download)->onQueue('downloads');
+            \App\Jobs\JavDownload::dispatch($download);
         });
     }
 }

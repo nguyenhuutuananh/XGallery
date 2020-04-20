@@ -49,7 +49,7 @@ class FlickrPhotos extends BaseCommand
 
         // Trigger job to fetch photos of user
         for ($page = 1; $page <= $photos->photos->pages; $page++) {
-            \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page)->onQueue('flickr');
+            \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page);
         }
     }
 }
