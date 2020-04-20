@@ -45,6 +45,7 @@ class Flickr extends OauthClient
         }
 
         if ($content->stat !== 'ok') {
+            Log::stack(['oauth'])->warning('Flickr request failed');
             return null;
         }
 

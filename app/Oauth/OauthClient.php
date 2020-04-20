@@ -31,19 +31,19 @@ class OauthClient
      */
     public function request(string $method, string $uri, array $parameters = [])
     {
-        $id = md5(serialize([$method, $uri, $parameters]));
+        $key = md5(serialize([$method, $uri, $parameters]));
+
         Log::stack(['oauth'])->info(
-            Cache::has($id) ? 'Requesting '.$uri.' with CACHE'
+            Cache::has($key) ? 'Requesting '.$uri.' with CACHE'
                 : 'Requesting '.$uri,
             [$method, $uri, $parameters]
         );
 
-        if (Cache::has($id)) {
-            return Cache::get($id);
+        if (Cache::has($key)) {
+            return Cache::get($key);
         }
 
         if (!$client = $this->getClient()) {
-            Log::stack(['oauth'])->warning('Can not get client');
             return null;
         }
 
@@ -55,7 +55,7 @@ class OauthClient
         }
 
         if ($response->getStatusCode() !== 200) {
-            Log::stack(['oauth'])->warning('Status code is not 200');
+            Log::stack(['oauth'])->warning('Status code ' . $response->getStatusCode());
             return null;
         }
 
@@ -71,13 +71,17 @@ class OauthClient
 
         $content = json_decode($content);
 
-        Cache::put($id, $content, 86400); // Day
-        return Cache::get($id);
+        Cache::put($key, $content, 86400); // Day
+        return Cache::get($key);
     }
 
+    /**
+     * @return Client|null
+     */
     protected function getClient(): ?Client
     {
         if (!$client = Oauth::where(['name' => 'flickr'])->get()->first()) {
+            Log::stack(['oauth'])->warning('Flickr Oauth not found');
             return null;
         }
 

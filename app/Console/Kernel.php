@@ -42,9 +42,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('onejav daily')
             ->daily()
             ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
 
         $schedule->command('flickr:contacts')
+            ->daily()
+            ->withoutOverlapping()->runInBackground();
+
+        $schedule->command('r18 daily')
             ->daily()
             ->withoutOverlapping()->runInBackground();
 
@@ -66,7 +69,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('truyenchon fully')
             ->everyMinute()
             ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
 
         /**
          * Schedule everyFiveMinutes
@@ -75,7 +77,21 @@ class Kernel extends ConsoleKernel
         $schedule->command('onejav fully')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
+
+        $schedule->command('r18 fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+
+        $schedule->command('xcity:profile fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+        $schedule->command('xcity:video')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
+
+        $schedule->command('xiuren fully')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
 
         $schedule->command('flickr:photos')
             ->everyFiveMinutes()
