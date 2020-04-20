@@ -44,6 +44,10 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
+        $schedule->command('flickr:contacts')
+            ->daily()
+            ->withoutOverlapping()->runInBackground();
+
         $schedule->command('queue:restart')
             ->daily()
             ->withoutOverlapping();
@@ -73,10 +77,12 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()->runInBackground();
         //->emailOutputOnFailure(config('mail.to'));
 
-        $schedule->command('xiuren fully')
+        $schedule->command('flickr:photos')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
+        $schedule->command('flickr:photossizes')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()->runInBackground();
     }
 
     /**
