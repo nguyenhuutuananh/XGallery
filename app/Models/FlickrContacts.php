@@ -10,7 +10,6 @@
 namespace App\Models;
 
 use App\Database\Mongodb;
-use App\FlickrPhotos;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
