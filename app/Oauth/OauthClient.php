@@ -43,6 +43,7 @@ class OauthClient
         }
 
         if (!$client = $this->getClient()) {
+            Log::stack(['oauth'])->warning('Can not get client');
             return null;
         }
 
@@ -54,6 +55,7 @@ class OauthClient
         }
 
         if ($response->getStatusCode() !== 200) {
+            Log::stack(['oauth'])->warning('Status code is not 200');
             return null;
         }
 

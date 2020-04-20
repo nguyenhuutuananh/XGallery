@@ -10,6 +10,7 @@
 namespace App\Oauth\Services\Flickr;
 
 use App\Oauth\OauthClient;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Flickr
@@ -39,6 +40,7 @@ class Flickr extends OauthClient
         );
 
         if (!$content) {
+            Log::stack(['oauth'])->warning('Request responded with no content');
             return null;
         }
 
