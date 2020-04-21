@@ -1,9 +1,7 @@
 <div class="card">
-    @if(!empty($item->cover))
-        <a href="{{route('jav.movie.view',$item->id)}}">
-            <img class="bd-placeholder-img card-img-top" width="100%" src="{{$item->cover}}"/>
-        </a>
-    @endif
+    <a href="{{route('jav.movie.view',$item->id)}}">
+        <img class="bd-placeholder-img card-img-top" width="100%" src="{{$item->getCover()}}" alt="{{$item->name}}"/>
+    </a>
     <div class="card-body">
         <div class="col-12">
             <a href="{{route('jav.movie.view',$item->id)}}">

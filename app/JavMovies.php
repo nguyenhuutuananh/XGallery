@@ -18,6 +18,19 @@ use Illuminate\Support\Facades\DB;
  */
 class JavMovies extends Model
 {
+    /**
+     * @param  int  $holderSize
+     * @return string
+     */
+    public function getCover(int $holderSize = 350): string
+    {
+        if (empty($this->cover)) {
+            return 'https://via.placeholder.com/' . $holderSize;
+        }
+
+        return $this->cover;
+    }
+
     public function search(array $fields, string $keyword)
     {
         $this->where(function ($query) use ($fields, $keyword) {

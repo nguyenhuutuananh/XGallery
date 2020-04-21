@@ -17,4 +17,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class JavIdols extends Model
 {
+    /**
+     * @param  int  $holderSize
+     * @return string
+     */
+    public function getCover(int $holderSize = 350): string
+    {
+        if (empty($this->cover)) {
+            return 'https://via.placeholder.com/' . $holderSize;
+        }
+
+        return $this->cover;
+    }
 }
