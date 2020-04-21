@@ -69,7 +69,7 @@ class HttpClient extends Client
                     $options,
                     [
                         'headers' => [
-                            'Accept-Encoding' => 'gzip',
+                            'Accept-Encoding' => 'gzip, deflate',
                             'User-Agent' => UserAgent::random([
                                 'device_type' => ['Desktop'],
                             ]),

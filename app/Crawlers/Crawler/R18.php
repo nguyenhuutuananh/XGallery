@@ -110,6 +110,10 @@ final class R18 extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         $links = $crawler->filter('.main .cmn-list-product01 li.item-list a')->each(
             function ($el) {
                 if ($el->attr('href') === null) {
