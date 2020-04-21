@@ -23,7 +23,7 @@ class JavIdols extends Model
      */
     public function getCover(int $holderSize = 350): string
     {
-        if (empty($this->cover)) {
+        if (empty($this->cover) || !config('adult.cover')) {
             return 'https://via.placeholder.com/' . $holderSize;
         }
 
