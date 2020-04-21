@@ -55,7 +55,7 @@ class OauthClient
         }
 
         if ($response->getStatusCode() !== 200) {
-            Log::stack(['oauth'])->warning('Status code ' . $response->getStatusCode());
+            Log::stack(['oauth'])->warning('Status code '.$response->getStatusCode());
             return null;
         }
 
@@ -87,8 +87,8 @@ class OauthClient
 
         $stack      = HandlerStack::create();
         $middleware = new Oauth1([
-            'consumer_key' => env('FLICKR_KEY'),
-            'consumer_secret' => env('FLICKR_SECRET'),
+            'consumer_key' => config('auth.flickr.token'),
+            'consumer_secret' => config('auth.flickr.token_secret'),
             'token' => $client->oauth_token,
             'token_secret' => $client->oauth_token_secret,
         ]);

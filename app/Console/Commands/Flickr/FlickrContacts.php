@@ -38,6 +38,10 @@ class FlickrContacts extends BaseCommand
             return;
         }
 
+        $this->output->text(
+            'Got '.count($contacts->contacts->contact).' contacts in '.$contacts->contacts->pages.' pages'
+        );
+
         for ($page = 1; $page <= $contacts->contacts->pages; $page++) {
             // Add contacts on a page
             \App\Jobs\Flickr\FlickrContacts::dispatch($page)->onQueue('flickr');

@@ -114,4 +114,8 @@ return [
 
     'password_timeout' => 10800,
 
+    'flickr' => [
+        'token' => env('FLICKR_KEY'),
+        'token_secret' => env('FLICKR_SECRET')
+    ]
 ];

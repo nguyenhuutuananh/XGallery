@@ -59,6 +59,6 @@ class Flickr extends OauthClient
      */
     private function getDefaultFlickrParameters()
     {
-        return ['format' => 'json', 'nojsoncallback' => 1, 'api_key' => env('FLICKR_KEY')];
+        return ['format' => 'json', 'nojsoncallback' => 1, 'api_key' => config('auth.flickr.token')];
     }
 }
