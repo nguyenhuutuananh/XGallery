@@ -70,6 +70,10 @@ final class Truyenchon extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         $links = $crawler->filter('.ModuleContent .items .item')->each(function ($el) {
             return [
                 'url' => $el->filter('.image a')->attr('href'),

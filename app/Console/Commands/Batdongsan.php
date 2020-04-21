@@ -47,6 +47,9 @@ class Batdongsan extends BaseCrawlerCommand
 
         // Process all pages
         $pages->each(function ($page) {
+            if (!$page) {
+                return;
+            }
             $this->progressBar->setMessage($page->count(), 'steps');
             $this->progressBar->setMessage(0, 'step');
             // Process items on page
