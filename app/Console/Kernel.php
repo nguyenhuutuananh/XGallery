@@ -43,11 +43,11 @@ class Kernel extends ConsoleKernel
             ->daily()
             ->withoutOverlapping()->runInBackground();
 
-        $schedule->command('flickr:contacts')
+        $schedule->command('r18 daily')
             ->daily()
             ->withoutOverlapping()->runInBackground();
 
-        $schedule->command('r18 daily')
+        $schedule->command('flickr:contacts')
             ->daily()
             ->withoutOverlapping()->runInBackground();
 

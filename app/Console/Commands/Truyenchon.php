@@ -10,6 +10,7 @@
 namespace App\Console\Commands;
 
 use App\Console\BaseCrawlerCommand;
+use App\Jobs\Truyenchon\Chapters;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,7 +55,13 @@ class Truyenchon extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
+                // Save a book with information only
                 $this->insertItem($item);
+                if ($chapters = $this->crawler->getItemChapters($item['url'])) {
+                    foreach ($chapters as $chapterUrl) {
+                        Chapters::dispatch($item, $chapterUrl);
+                    }
+                }
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('COMPLETED', 'status');
             });
