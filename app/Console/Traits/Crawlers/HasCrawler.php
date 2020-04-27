@@ -55,6 +55,7 @@ trait HasCrawler
 
     /**
      * @param  array  $data
+     * @return Model
      */
     protected function insertItem(array $data)
     {
@@ -65,7 +66,7 @@ trait HasCrawler
          */
         if ($item = $model->where(['url' => $data['url']])->first()) {
             $item->touch();
-            return;
+            return $item;
         }
 
         // Can not use fill() because it will be required fillable properties
@@ -74,6 +75,8 @@ trait HasCrawler
         }
 
         $model->save();
+
+        return $model;
     }
 
     /**
