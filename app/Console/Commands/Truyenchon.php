@@ -58,7 +58,7 @@ class Truyenchon extends BaseCrawlerCommand
                 // Save a book with information only
                 $entityItem = $this->insertItem($item);
                 if ($chapters = $this->crawler->getItemChapters($item['url'])) {
-                    $entityItem->totalChapters = count($chapters);
+                    $entityItem->drop('totalChapters');
                     $entityItem->save();
                     foreach ($chapters as $chapterUrl) {
                         Chapters::dispatch($item, $chapterUrl);
