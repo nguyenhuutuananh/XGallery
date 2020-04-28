@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class Chapters
+ * Get and save chapter items
  * @package App\Jobs\Truyenchon
  */
 class Chapters implements ShouldQueue
@@ -43,18 +43,20 @@ class Chapters implements ShouldQueue
 
     public function handle()
     {
+        /**
+         * @var Truyenchon $item
+         */
         if (!$item = Truyenchon::where(['url' => $this->item['url']])->first()) {
             return;
         }
 
         $chapter = explode('/', $this->chapterUrl);
-
-        $crawler = app(\App\Crawlers\Crawler\Truyenchon::class);
-        if (!$itemDetail = $crawler->getItemDetail($this->chapterUrl)) {
+        if (!$itemDetail = app(\App\Crawlers\Crawler\Truyenchon::class)->getItemDetail($this->chapterUrl)) {
             return;
         }
 
-        $item->{$chapter[5]} = $itemDetail->images->toArray();
+        $item->drop($chapter[5]);
+        $item->chapters = array_merge($item->chapters ?? [], [$chapter[5] => $itemDetail->images->toArray()]);
         $item->save();
     }
 }

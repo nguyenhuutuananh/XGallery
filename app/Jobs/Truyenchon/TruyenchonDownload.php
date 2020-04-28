@@ -1,6 +1,13 @@
 <?php
+/**
+ * Copyright (c) 2020 JOOservices Ltd
+ * @author Viet Vu <jooservices@gmail.com>
+ * @package XGallery
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
-namespace App\Jobs;
+namespace App\Jobs\Truyenchon;
 
 use App\Crawlers\Crawler\Truyenchon;
 use App\Jobs\Traits\HasJob;
@@ -12,8 +19,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
 /**
- * Class TruyenchonDownload
- * @package App\Jobs
+ * Request download a book
+ * @package App\Jobs\Truyenchon
  */
 class TruyenchonDownload implements ShouldQueue
 {
@@ -39,12 +46,14 @@ class TruyenchonDownload implements ShouldQueue
      */
     public function handle()
     {
-        $model = \App\Truyenchon::find($this->id);
+        $model = \App\Models\Truyenchon::find($this->id);
 
         $crawler = app(Truyenchon::class);
-        $chapers = $crawler->getItemChapters($model->url);
+        if (!$chapters = $crawler->getItemChapters($model->url)) {
+            return;
+        }
 
-        $chapers->each(function ($chapter, $index) use ($crawler, $model) {
+        $chapters->each(function ($chapter, $index) use ($crawler, $model) {
             if (!$item = $crawler->getItemDetail($chapter)) {
                 return;
             }

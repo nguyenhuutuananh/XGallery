@@ -1,6 +1,13 @@
 <?php
+/**
+ * Copyright (c) 2020 JOOservices Ltd
+ * @author Viet Vu <jooservices@gmail.com>
+ * @package XGallery
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 
-namespace App\Jobs;
+namespace App\Jobs\Truyenchon;
 
 use App\Crawlers\Crawler\Truyenchon;
 use App\Jobs\Traits\HasJob;
@@ -9,10 +16,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Imagick;
+use ImagickException;
 
 /**
- * Class TruyenchonChapterDownload
- * @package App\Jobs
+ * Process download each book' chapter
+ * @package App\Jobs\Truyenchon
  */
 class TruyenchonChapterDownload implements ShouldQueue
 {
@@ -20,6 +29,9 @@ class TruyenchonChapterDownload implements ShouldQueue
     use HasJob;
 
     private array  $images;
+    /**
+     * @var string Save to path
+     */
     private string $path;
 
     /**
@@ -31,22 +43,28 @@ class TruyenchonChapterDownload implements ShouldQueue
     public function __construct(array $images, string $path)
     {
         $this->images = $images;
-        $this->path   = $path;
+        $this->path = $path;
     }
 
     /**
-     * Execute the job.
-     *
-     * @return void
+     * @throws ImagickException
      */
     public function handle()
     {
         $crawler = app(Truyenchon::class);
+        $files = [];
         foreach ($this->images as $image) {
-            $crawler->download(
+            $files[] = storage_path('app/'.$crawler->download(
                 $image,
                 'truyenchon'.$this->path
-            );
+            ));
         }
+
+        $chapter = explode('/', $this->path);
+        $chapter = end($chapter);
+
+        $pdf = new Imagick($files);
+        $pdf->setImageFormat('pdf');
+        $pdf->writeImages(storage_path('app/chapter-'.$chapter).'.pdf', true);
     }
 }
