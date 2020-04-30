@@ -190,6 +190,7 @@ return [
          * Oauth
          */
         App\Oauth\Providers\FlickrServiceProvider::class,
+        App\Providers\GoogleServiceProvider::class,
     ],
 
     /*
