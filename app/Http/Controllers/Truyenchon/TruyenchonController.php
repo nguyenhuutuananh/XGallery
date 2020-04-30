@@ -10,7 +10,7 @@
 namespace App\Http\Controllers\Truyenchon;
 
 use App\Http\Controllers\BaseController;
-use App\Jobs\TruyenchonDownload;
+use App\Jobs\Truyenchon\TruyenchonDownload;
 use App\Models\Truyenchon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
