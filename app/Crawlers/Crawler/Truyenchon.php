@@ -16,7 +16,7 @@ use stdClass;
 
 /**
  * Class Truyenchon
- * @package App\Services\Crawler
+ * @package App\Crawlers\Crawler
  */
 final class Truyenchon extends AbstractCrawler
 {
@@ -29,6 +29,10 @@ final class Truyenchon extends AbstractCrawler
     public function getItemDetail(string $itemUri): ?object
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
+
+        if (!$crawler) {
+            return null;
+        }
 
         $item         = new stdClass;
         $item->url    = $itemUri;
