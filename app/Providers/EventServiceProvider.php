@@ -30,7 +30,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         SocialiteWasCalled::class => [
             // add your listeners (aka providers) here
-            'SocialiteProviders\Flickr\FlickrExtendSocialite@handle',
+            'SocialiteProviders\\Flickr\\FlickrExtendSocialite@handle',
+            'SocialiteProviders\\Google\\GoogleExtendSocialite@handle',
         ],
     ];
 
