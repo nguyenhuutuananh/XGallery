@@ -56,7 +56,7 @@ class Batdongsan extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-                \App\Jobs\Batdongsan::dispatch($item['url']);
+                \App\Jobs\Batdongsan::dispatch($item['url'])->onQueue('batdongsan');
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });
