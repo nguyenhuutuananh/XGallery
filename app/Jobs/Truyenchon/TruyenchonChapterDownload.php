@@ -65,6 +65,12 @@ class TruyenchonChapterDownload implements ShouldQueue
 
         $pdf = new Imagick($files);
         $pdf->setImageFormat('pdf');
-        $pdf->writeImages(storage_path('app/chapter-'.$chapter).'.pdf', true);
+        if (!$file = $pdf->writeImages(storage_path('app/chapter-'.$chapter).'.pdf', true)) {
+            return;
+        }
+
+        /**
+         * Upload file to drive
+         */
     }
 }
