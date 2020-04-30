@@ -13,6 +13,7 @@ use App\Console\BaseCrawlerCommand;
 use App\Jobs\Truyenchon\Chapters;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * Class Truyenchon
@@ -49,6 +50,15 @@ class Truyenchon extends BaseCrawlerCommand
 
         // Process all pages
         $pages->each(function ($page) {
+            /**
+             * @var Collection $page
+             */
+            if ($page->isEmpty()) {
+                $this->progressBar->setMessage('', 'steps');
+                $this->progressBar->setMessage(0, 'step');
+                $this->progressBar->advance();
+                return;
+            }
             $this->progressBar->setMessage($page->count(), 'steps');
             $this->progressBar->setMessage(0, 'step');
             // Process items on page
