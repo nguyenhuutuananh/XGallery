@@ -15,10 +15,10 @@ use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class FlickrController
+ * Class GoogleController
  * @package App\Http\Controllers\Auth
  */
-class FlickrController extends BaseController
+class GoogleController extends BaseController
 {
     /**
      * Redirect the user to the GitHub authentication page.
@@ -27,7 +27,7 @@ class FlickrController extends BaseController
      */
     public function login()
     {
-        return Socialite::driver('flickr')->with(['perms' => 'read, write, delete'])->redirect();
+        return Socialite::driver('Google')->scopes(['https://www.googleapis.com/auth/drive'])->redirect();
     }
 
     /**
@@ -36,14 +36,14 @@ class FlickrController extends BaseController
      */
     public function callback()
     {
-        if (!$user = Socialite::driver('flickr')->user()) {
+        if (!$user = Socialite::driver('Google')->user()) {
             return;
         }
 
         $model = app(Oauth::class);
-        $model->name = 'flickr';
+        $model->name = 'google';
 
-        foreach ($user->accessTokenResponseBody as $key => $value) {
+        foreach ($user as $key => $value) {
             $model->{$key} = $value;
         }
 
