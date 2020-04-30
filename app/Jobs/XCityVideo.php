@@ -66,7 +66,7 @@ class XCityVideo implements ShouldQueue
         $movie->director     = $itemDetail->director;
         $movie->item_number  = $itemDetail->item_number;
         $movie->time         = $itemDetail->time;
-        $movie->release_date = $itemDetail->release_date;
+        $movie->release_date = $itemDetail->release_date ?? null;
         $movie->description  = isset($itemDetail->description) ? $itemDetail->description : null;
 
         $movie->save();
