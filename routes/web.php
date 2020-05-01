@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Flickr\FlickrController;
 use App\Http\Controllers\Jav\JavController;
@@ -51,6 +52,7 @@ Route::namespace('App\Http\Controllers\Truyenchon')
     ->prefix('truyenchon')
     ->group(function () {
         Route::get('/', [TruyenchonController::class, 'dashboard'])->name('truyenchon.dashboard.view');
+        Route::get('/{id}/{chapter}', [TruyenchonController::class, 'story'])->name('truyenchon.story.view');
         Route::post('/search', [TruyenchonController::class, 'search'])->name('truyenchon.search.view');
         Route::post(
             '/download/{id}',
@@ -71,4 +73,6 @@ Route::namespace('App\Http\Controllers\Auth')
     ->group(function () {
         Route::get('flickr', [\App\Http\Controllers\Auth\FlickrController::class, 'login']);
         Route::get('flickr/callback', [\App\Http\Controllers\Auth\FlickrController::class, 'callback']);
+        Route::get('google', [GoogleController::class, 'login']);
+        Route::get('google/callback', [GoogleController::class, 'callback']);
     });

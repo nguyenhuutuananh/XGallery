@@ -11,14 +11,20 @@
                     </a>
                 </div>
                 <div class="card-footer">
+                    <small class="text-muted">
+                        @foreach($item->chapters as $key => $chapter)
+                            <a href="{{route('truyenchon.story.view', ['id'=>$item->id, 'chapter'=>$key])}}"><span
+                                    class="badge badge-primary">{{$key}}</span>
+                            </a>
+                        @endforeach
+                    </small>
                     @if(config('app.adult.download'))
                         <span class="float-right">
                          <button type="button" class="btn btn-primary btn-sm ajax-pool"
                                  data-ajax-url="{{route('truyenchon.download.request', $item->id)}}"
                                  data-ajax-command="download"
                          >
-                        <i class="fas fa-download mr-1"></i>Download
-                        </button>
+                        @include('macros.general.download')
                     </span>
                     @endif
                 </div>

@@ -18,6 +18,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -53,6 +54,7 @@ class FlickrController extends BaseController
 
     /**
      * @param  Request  $request
+     * @return RedirectResponse|void
      */
     public function download(Request $request)
     {
@@ -62,13 +64,13 @@ class FlickrController extends BaseController
 
         if (strpos($url, 'albums') !== false) {
             $urls = explode('/', $url);
-            $url  = end($urls);
+            $url = end($urls);
 
             $client = app(Flickr::class);
-            $photos       = $client->get('photosets.getPhotos', ['photoset_id' => $url]);
+            $photos = $client->get('photosets.getPhotos', ['photoset_id' => $url]);
 
             if (!$photos) {
-                return;
+                return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
             }
 
             foreach ($photos->photoset->photo as $photo) {
@@ -76,7 +78,7 @@ class FlickrController extends BaseController
             }
 
             if ($photos->photoset->page == 1) {
-                return;
+                return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
             }
 
             for ($page = 2; $page <= $photos->photoset->pages; $page++) {
@@ -86,6 +88,8 @@ class FlickrController extends BaseController
                 }
             }
         }
+
+        return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
     }
 
     /**

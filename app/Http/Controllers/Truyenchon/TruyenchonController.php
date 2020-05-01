@@ -48,6 +48,31 @@ class TruyenchonController extends BaseController
     }
 
     /**
+     * @param  string  $id
+     * @param  string  $chapter
+     * @return Application|Factory|View
+     */
+    public function story(string $id, string $chapter)
+    {
+        $story = Truyenchon::find($id);
+        $keys = array_keys($story->chapters);
+        $position = array_search($chapter, $keys);
+        $nextKey = $keys[$position + 1];
+
+        return view(
+            'truyenchon.story',
+            [
+                'story'=> $story,
+                'items' => $story->chapters[$chapter],
+                'next'=> $nextKey,
+                'sidebar' => $this->getMenuItems(),
+                'title' => 'Truyenchon - ' . $story->title,
+                'description' => ''
+            ]
+        );
+    }
+
+    /**
      * @param  Request  $request
      * @return Application|Factory|View
      */
