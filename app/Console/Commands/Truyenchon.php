@@ -100,6 +100,31 @@ class Truyenchon extends BaseCrawlerCommand
     }
 
     /**
+     * Update chapters for a story
+     * @return bool
+     */
+    protected function story(): bool
+    {
+        if (!$url = $this->getOptionUrl()) {
+            return false;
+        }
+
+        if (!$chapters = $this->getCrawler()->getItemChapters($url)) {
+            return false;
+        }
+
+        if (!$entity = \App\Models\Truyenchon::where(['url' => $url])->first()) {
+            return false;
+        }
+
+        foreach ($chapters as $chapterUrl) {
+            Chapters::dispatch(['url' => $url], $chapterUrl)->onQueue('truyenchon');
+        }
+
+        return true;
+    }
+
+    /**
      * @return Model
      */
     protected function getModel(): Model
