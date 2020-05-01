@@ -66,12 +66,10 @@ class Truyenchon extends BaseCrawlerCommand
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
                 // Save a book with information only
-                $entityItem = $this->insertItem($item);
+                $this->insertItem($item);
                 if ($chapters = $this->crawler->getItemChapters($item['url'])) {
-                    $entityItem->drop('totalChapters');
-                    $entityItem->save();
                     foreach ($chapters as $chapterUrl) {
-                        Chapters::dispatch($item, $chapterUrl);
+                        Chapters::dispatch($item, $chapterUrl)->onQueue('truyenchon');
                     }
                 }
                 $this->progressBar->setMessage($index + 1, 'step');
