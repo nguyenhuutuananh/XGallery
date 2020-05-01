@@ -18,4 +18,17 @@ use App\Database\Mongodb;
 class Xiuren extends Mongodb
 {
     public $collection = 'xiuren';
+
+    /**
+     * @param  int  $holderSize
+     * @return string
+     */
+    public function getCover(int $holderSize = 350): string
+    {
+        if (empty($this->cover) || !config('adult.cover')) {
+            return 'https://via.placeholder.com/' . $holderSize;
+        }
+
+        return $this->cover;
+    }
 }

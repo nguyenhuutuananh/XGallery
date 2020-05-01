@@ -64,8 +64,8 @@ class FlickrController extends BaseController
             $urls = explode('/', $url);
             $url  = end($urls);
 
-            $flickrClient = app(Flickr::class);
-            $photos       = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url]);
+            $client = app(Flickr::class);
+            $photos       = $client->get('photosets.getPhotos', ['photoset_id' => $url]);
 
             if (!$photos) {
                 return;
@@ -80,7 +80,7 @@ class FlickrController extends BaseController
             }
 
             for ($page = 2; $page <= $photos->photoset->pages; $page++) {
-                $photos = $flickrClient->get('photosets.getPhotos', ['photoset_id' => $url, 'page' => $page]);
+                $photos = $client->get('photosets.getPhotos', ['photoset_id' => $url, 'page' => $page]);
                 foreach ($photos->photoset->photo as $photo) {
                     FlickrDownload::dispatch($photos->photoset->owner, $photo)->onQueue('flickr');
                 }

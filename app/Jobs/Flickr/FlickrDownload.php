@@ -17,6 +17,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class FlickrDownload
@@ -56,6 +59,18 @@ class FlickrDownload implements ShouldQueue
         }
 
         $size = end($sizes->sizes->size);
-        $httpClient->download($size->source, 'flickr'.DIRECTORY_SEPARATOR.$this->owner);
+        if (!$filePath = $httpClient->download($size->source, 'flickr'.DIRECTORY_SEPARATOR.$this->owner)) {
+            return;
+        }
+
+        $process = new Process(['./gdrive.sh']);
+        $process->run();
+
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        Storage::delete($filePath);
     }
 }
