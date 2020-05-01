@@ -146,6 +146,10 @@ final class R18 extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return 1;
+        }
+
         try {
             return (int) $crawler->filter('li.next')->previousAll()->filter('a')->text();
         } catch (Exception $exception) {
