@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - with:
+        php-version: '7.5'
+        extensions: imagick
       - run: composer install
       - uses: StephaneBour/actions-php-security-checker@1.0
   build-test:
@@ -15,5 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - with:
+        php-version: '7.5'
+        extensions: imagick
       - run: composer install
       - run: composer test
