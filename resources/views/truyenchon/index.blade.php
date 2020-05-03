@@ -12,11 +12,13 @@
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">
-                        @foreach($item->chapters as $key => $chapter)
-                            <a href="{{route('truyenchon.story.view', ['id'=>$item->id, 'chapter'=>$key])}}"><span
-                                    class="badge badge-primary">{{$key}}</span>
-                            </a>
-                        @endforeach
+                        @if(isset($item->chapters))
+                            @foreach($item->chapters as $key => $chapter)
+                                <a href="{{route('truyenchon.story.view', ['id'=>$item->id, 'chapter'=>$key])}}"><span
+                                        class="badge badge-primary">{{$key}}</span>
+                                </a>
+                            @endforeach
+                        @endif
                     </small>
                     @if(config('app.adult.download'))
                         <span class="float-right">
