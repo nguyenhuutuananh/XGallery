@@ -63,7 +63,7 @@ class FlickrDownload implements ShouldQueue
             return;
         }
 
-        $process = new Process(['./gdrive.sh']);
+        $process = new Process([base_path() .'/gdrive.sh']);
         $process->run();
 
         // executes after the command finishes
