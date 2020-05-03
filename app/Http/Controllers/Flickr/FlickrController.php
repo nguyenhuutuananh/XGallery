@@ -62,6 +62,8 @@ class FlickrController extends BaseController
             return;
         }
 
+        $flashMessage = '';
+
         if (strpos($url, 'albums') !== false) {
             $urls = explode('/', $url);
             $url = end($urls);
@@ -70,15 +72,18 @@ class FlickrController extends BaseController
             $photos = $client->get('photosets.getPhotos', ['photoset_id' => $url]);
 
             if (!$photos) {
-                return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
+                return redirect()->route('flickr.dashboard.view')->with('error', 'Can not get photosets');
             }
+
+            $flashMessage = 'Added '.count($photos->photoset->photo).' photos of album '
+                .$photos->photoset->title.' to queue';
 
             foreach ($photos->photoset->photo as $photo) {
                 FlickrDownload::dispatch($photos->photoset->owner, $photo)->onQueue('flickr');
             }
 
             if ($photos->photoset->page == 1) {
-                return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
+                return redirect()->route('flickr.dashboard.view')->with('success', $flashMessage);
             }
 
             for ($page = 2; $page <= $photos->photoset->pages; $page++) {
@@ -89,7 +94,7 @@ class FlickrController extends BaseController
             }
         }
 
-        return redirect()->route('flickr.dashboard.view')->with('success', 'Download added to queue');
+        return redirect()->route('flickr.dashboard.view')->with('success', $flashMessage);
     }
 
     /**
