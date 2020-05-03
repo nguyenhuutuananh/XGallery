@@ -86,7 +86,7 @@ class HttpClient extends Client
 
         switch ($this->response->getStatusCode()) {
             case Response::HTTP_OK:
-                Cache::put($key, $this->response->getBody()->getContents());
+                Cache::put($key, $this->response->getBody()->getContents(), 3600); // 1 hour
                 break;
             default:
                 Log::stack(['http'])->error($this->response->getStatusCode());
