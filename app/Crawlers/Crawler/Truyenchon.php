@@ -39,7 +39,16 @@ final class Truyenchon extends AbstractCrawler
         $item->images = collect($crawler->filter('.page-chapter img')->each(function ($img) {
             return $img->attr('data-original');
         }));
-        $item->title  = trim($crawler->filter('h1.txt-primary a')->text());
+
+        if ($crawler->filter('h1.txt-primary a')->count()) {
+            $item->title  = trim($crawler->filter('h1.txt-primary a')->text());
+        } elseif ($crawler->filter('h1.txt-primary a')->count()) {
+            $item->title  = trim($crawler->filter('h1.title-detail')->text());
+        }
+
+        if ($crawler->filter('.detail-content p')->count()) {
+            $item->description = $crawler->filter('.detail-content p')->text();
+        }
 
         return $item;
     }
