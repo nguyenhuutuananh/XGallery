@@ -75,8 +75,8 @@ class FlickrController extends BaseController
                 return redirect()->route('flickr.dashboard.view')->with('error', 'Can not get photosets');
             }
 
-            $flashMessage = 'Added '.count($photos->photoset->photo).' photos of album '
-                .$photos->photoset->title.' to queue';
+            $flashMessage = 'Added '.count($photos->photoset->photo).' photos of album <strong>'
+                .$photos->photoset->title.'</strong> to queue';
 
             foreach ($photos->photoset->photo as $photo) {
                 FlickrDownload::dispatch($photos->photoset->owner, $photo)->onQueue('flickr');
