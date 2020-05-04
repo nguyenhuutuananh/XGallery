@@ -51,6 +51,10 @@ final class Xiuren extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         $links = $crawler->filter('#main .loop .content a')->each(
             function ($el) {
                 return [
