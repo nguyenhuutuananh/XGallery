@@ -55,22 +55,27 @@ trait HasCrawler
 
     /**
      * @param  array  $data
+     * @param  bool  $isNew
      * @return Model
      */
-    protected function insertItem(array $data)
+    protected function insertItem(array $data, &$isNew = false)
     {
         $model = $this->getModel();
 
         /**
          * @var Model $item
          */
-        if ($item = $model->where(['url' => $data['url']])->first()) {
+        if ($item = $model->getItemByUrl($data['url'])) {
             $item->touch();
+            $isNew = true;
             return $item;
         }
 
         // Can not use fill() because it will be required fillable properties
         foreach ($data as $key => $value) {
+            if (empty($value) || is_null($value)) {
+                continue;
+            }
             $model->{$key} = $value;
         }
 

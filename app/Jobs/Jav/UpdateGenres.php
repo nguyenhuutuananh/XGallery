@@ -9,10 +9,10 @@
 
 namespace App\Jobs\Jav;
 
-use App\JavGenres;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\Traits\HasJob;
+use App\Models\JavGenres;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

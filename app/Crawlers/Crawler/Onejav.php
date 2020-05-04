@@ -17,10 +17,11 @@ use stdClass;
 
 /**
  * Class Onejav
- * @package App\Services\Crawler
+ * @package App\Crawlers\Crawler
  */
 final class Onejav extends AbstractCrawler
 {
+    const ENDPOINT = 'https://onejav.com';
 
     /**
      * @param  string  $itemUri
@@ -64,7 +65,7 @@ final class Onejav extends AbstractCrawler
             return null === $value || empty($value);
         });
 
-        $description       = $crawler->filter('.level.has-text-grey-dark');
+        $description = $crawler->filter('.level.has-text-grey-dark');
         $item->description = trim($description->count() ? trim($description->text(null, false)) : null);
 
         $item->actresses = collect($crawler->filter('.panel .panel-block')->each(
@@ -75,7 +76,7 @@ final class Onejav extends AbstractCrawler
             return null === $value || empty($value);
         });
 
-        $item->torrent = 'https://onejav.com'.trim($crawler->filter('.control.is-expanded a')->attr('href'));
+        $item->torrent = self::ENDPOINT.trim($crawler->filter('.control.is-expanded a')->attr('href'));
 
         return $item;
     }
@@ -116,7 +117,7 @@ final class Onejav extends AbstractCrawler
                 $data['cover'] = trim($el->filter('.columns img.image')->attr('src'));
             }
 
-            $data['url'] = 'https://onejav.com'.trim($el->filter('h5.title a')->attr('href'));
+            $data['url'] = self::ENDPOINT.trim($el->filter('h5.title a')->attr('href'));
 
             if ($el->filter('h5 a')->count()) {
                 $data['title'] = (trim($el->filter('h5 a')->text(null, false)));
@@ -135,7 +136,6 @@ final class Onejav extends AbstractCrawler
 
             // Date
             $data['date'] = $this->convertStringToDateTime(trim($el->filter('.subtitle.is-6 a')->attr('href')));
-
             $data['tags'] = collect($el->filter('.tags .tag')->each(
                 function ($tag) {
                     return trim($tag->text(null, false));
@@ -144,7 +144,7 @@ final class Onejav extends AbstractCrawler
                 return null === $value || empty($value);
             })->toArray();
 
-            $description         = $el->filter('.level.has-text-grey-dark');
+            $description = $el->filter('.level.has-text-grey-dark');
             $data['description'] = trim($description->count() ? trim($description->text(null, false)) : null);
 
             $data['actresses'] = collect($el->filter('.panel .panel-block')->each(
@@ -155,7 +155,7 @@ final class Onejav extends AbstractCrawler
                 return null === $value || empty($value);
             })->toArray();
 
-            $data['torrent'] = 'https://onejav.com'.trim($el->filter('.control.is-expanded a')->attr('href'));
+            $data['torrent'] = self::ENDPOINT.trim($el->filter('.control.is-expanded a')->attr('href'));
 
             return $data;
         });
@@ -175,11 +175,11 @@ final class Onejav extends AbstractCrawler
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
         try {
-            $page  = (int) $crawler->filter('a.pagination-link')->last()->text();
+            $page = (int) $crawler->filter('a.pagination-link')->last()->text();
             $class = $crawler->filter('a.pagination-link')->last()->attr('class');
 
             if (strpos($class, 'is-inverted') !== false) {
-                $url  = $this->buildUrlWithPage(Url::fromString($indexUri), $page);
+                $url = $this->buildUrlWithPage(Url::fromString($indexUri), $page);
                 $page = $this->getIndexPagesCount($url);
             }
 

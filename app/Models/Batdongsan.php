@@ -10,6 +10,7 @@
 namespace App\Models;
 
 use App\Database\Mongodb;
+use App\Models\Traits\HasUrl;
 
 /**
  * Class Batdongsan
@@ -17,5 +18,7 @@ use App\Database\Mongodb;
  */
 class Batdongsan extends Mongodb
 {
+    use HasUrl;
+
     public $collection = 'batdongsan';
 }

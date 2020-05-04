@@ -10,6 +10,8 @@
 namespace App\Models;
 
 use App\Database\Mongodb;
+use App\Models\Traits\HasCover;
+use App\Models\Traits\HasUrl;
 
 /**
  * Class Xiuren
@@ -17,18 +19,8 @@ use App\Database\Mongodb;
  */
 class Xiuren extends Mongodb
 {
+    use HasUrl;
+    use HasCover;
+
     public $collection = 'xiuren';
-
-    /**
-     * @param  int  $holderSize
-     * @return string
-     */
-    public function getCover(int $holderSize = 350): string
-    {
-        if (empty($this->cover) || !config('adult.cover')) {
-            return 'https://via.placeholder.com/' . $holderSize;
-        }
-
-        return $this->cover;
-    }
 }
