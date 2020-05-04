@@ -46,9 +46,6 @@
         "phpunit/phpunit": "^8.5",
         "squizlabs/php_codesniffer": "^3.5"
     },
-    "provide": {
-        "ext-imagick": "*"
-    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
