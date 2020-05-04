@@ -20,10 +20,9 @@ use function GuzzleHttp\Psr7\build_query;
 
 /**
  * Class AbstractCrawler
- * @package App\Services\Crawler
- * @TODO Do not extend from HttpClient
+ * @package App\Crawlers\Crawler
  */
-abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
+abstract class AbstractCrawler implements CrawlerInterface
 {
     protected Crawler        $crawler;
     protected array          $config;
@@ -35,15 +34,26 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
      */
     public function __construct(array $config = [])
     {
-        $this->config = config('crawler.'.$this->name);
+        $this->config = array_merge($config, config('crawler.'.$this->name));
 
-        parent::__construct(
-            array_merge(
-                $config,
-                config('httpclient'),
-                isset($this->config['http_client']) ? $this->config['http_client'] : []
-            )
+        if (!isset($this->config['cache'])) {
+            $this->config['cache'] = 3600;
+        }
+    }
+
+    /**
+     * @param  array  $options
+     * @return HttpClient
+     */
+    public function getClient(array $options = []): HttpClient
+    {
+        $options =  array_merge(
+            $options,
+            config('httpclient'),
+            isset($this->config['http_client']) ? $this->config['http_client'] : []
         );
+
+        return new HttpClient($options);
     }
 
     /**
@@ -52,8 +62,8 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
      */
     public function crawl(string $uri): ?Crawler
     {
-        if (!$response = $this->request(Request::METHOD_GET, $uri)) {
-            $this->getLogger()->warning('Can not crawl '.$uri, $this->getErrors());
+        if (!$response = $this->getClient()->request(Request::METHOD_GET, $uri)) {
+            $this->getLogger()->warning('Can not crawl '.$uri);
             return null;
         }
 
@@ -124,5 +134,15 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     {
         $query = empty($parameters) ? '' : '?'.build_query($parameters, $encoding);
         return Url::fromString($this->config['http_client']['base_uri'])->withPath($path).$query;
+    }
+
+    /**
+     * @param  string  $url
+     * @param  string  $saveToFile
+     * @return bool|string
+     */
+    public function download(string $url, string $saveToFile)
+    {
+        return $this->getClient()->download($url, $saveToFile);
     }
 }

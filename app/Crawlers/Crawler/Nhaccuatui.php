@@ -43,7 +43,7 @@ final class Nhaccuatui extends AbstractCrawler
             return null;
         }
 
-        if (!$xml = $this->request('GET', $url)) {
+        if (!$xml = $this->getClient()->request('GET', $url)) {
             return null;
         }
 

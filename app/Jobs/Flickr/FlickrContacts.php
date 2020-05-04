@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class FlickrContacts
+ * Process get all contacts
  * @package App\Jobs\Flickr
  */
 class FlickrContacts implements ShouldQueue

@@ -10,11 +10,13 @@
 namespace App\Crawlers;
 
 use App\Crawlers\Crawler\Traits\HasCurl;
-use App\Events\OnHttpRequested;
-use Campo\UserAgent;
+use App\Crawlers\Traits\HasHeaders;
+use App\Events\HttpResponded;
+use App\Events\HttpRespondedEvent;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
@@ -27,19 +29,11 @@ use Symfony\Component\HttpFoundation\Response;
 class HttpClient extends Client
 {
     use HasCurl;
+    use HasHeaders;
 
     protected ResponseInterface $response;
 
     private array $errors = [];
-
-    /**
-     * HttpClient constructor.
-     * @param  array  $config
-     */
-    public function __construct(array $config = [])
-    {
-        parent::__construct(array_merge($config, config('httpclient')));
-    }
 
     /**
      * @param  string  $method
@@ -65,19 +59,10 @@ class HttpClient extends Client
             $this->response = parent::request(
                 $method,
                 $uri,
-                array_merge(
-                    $options,
-                    [
-                        'headers' => [
-                            'Accept-Encoding' => 'gzip, deflate',
-                            'User-Agent' => UserAgent::random([
-                                'device_type' => ['Desktop'],
-                            ]),
-                        ],
-                    ],
-                )
+                array_merge($options, ['headers' => $this->getHeaders()])
             );
-            event(new OnHttpRequested($this->response));
+
+            \event(new HttpResponded($this->response));
         } catch (Exception $exception) {
             Log::stack(['http'])->error($exception->getMessage());
             $this->errors[$uri] = $exception->getMessage();
@@ -119,7 +104,7 @@ class HttpClient extends Client
             return false;
         }
 
-        $fileName   = basename($url);
+        $fileName = basename($url);
         $saveToFile = $saveTo.DIRECTORY_SEPARATOR.$fileName;
 
         if (Storage::exists($saveToFile)) {

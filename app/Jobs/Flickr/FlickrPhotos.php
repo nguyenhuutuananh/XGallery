@@ -38,7 +38,7 @@ class FlickrPhotos implements ShouldQueue
     public function __construct(object $contact, int $page)
     {
         $this->contact = $contact;
-        $this->page    = $page;
+        $this->page = $page;
     }
 
     /**
@@ -59,6 +59,8 @@ class FlickrPhotos implements ShouldQueue
 
         foreach ($photos->photos->photo as $photo) {
             $model = app(\App\Models\FlickrPhotos::class);
+
+            // Photo already exists
             if ($item = $model->where(['id' => $photo->id, 'owner' => $photo->owner])->first()) {
                 continue;
             }

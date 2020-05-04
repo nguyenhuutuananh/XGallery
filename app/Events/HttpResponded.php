@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright (c) 2020 JOOservices Ltd
- * @author Viet Vu <jooservices@gmail.com>
- * @package XGallery
- * @license GPL
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- */
 
 namespace App\Events;
 
@@ -16,18 +9,15 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class OnHttpRequested
- * @package App\Events
- */
-class OnHttpRequested
+class HttpResponded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public ResponseInterface $response;
+    private ResponseInterface $response;
 
     /**
-     * OnHttpRequested constructor.
+     * Create a new event instance.
+     *
      * @param  ResponseInterface  $response
      */
     public function __construct(ResponseInterface $response)

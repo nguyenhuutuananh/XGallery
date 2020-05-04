@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Crawlers\Crawler\Onejav;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,7 +38,7 @@ class JavDownload implements ShouldQueue
      */
     public function handle()
     {
-        $crawler = app(\App\Crawlers\Crawler\Onejav::class);
+        $crawler = app(Onejav::class);
         $pages   = $crawler->search([$this->javDownload->item_number]);
         $pages->each(function ($page) use ($crawler) {
             $item       = $page->sortByDesc('size')->first();
