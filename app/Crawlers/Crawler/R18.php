@@ -21,7 +21,6 @@ use stdClass;
  */
 final class R18 extends AbstractCrawler
 {
-    protected string $name = 'r18';
 
     /**
      * @param  string  $itemUri

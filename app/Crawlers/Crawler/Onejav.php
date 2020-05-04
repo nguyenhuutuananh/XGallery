@@ -21,7 +21,6 @@ use stdClass;
  */
 final class Onejav extends AbstractCrawler
 {
-    protected string $name = 'onejav';
 
     /**
      * @param  string  $itemUri

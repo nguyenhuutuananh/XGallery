@@ -20,7 +20,6 @@ use stdClass;
  */
 final class XCityProfile extends AbstractCrawler
 {
-    protected string $name = 'xcityprofile';
 
     /**
      * @param  string  $itemUri

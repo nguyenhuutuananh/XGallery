@@ -10,6 +10,7 @@
 namespace App\Crawlers\Crawler;
 
 use App\Crawlers\HttpClient;
+use App\Traits\HasObject;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Log\LoggerInterface;
@@ -24,6 +25,8 @@ use function GuzzleHttp\Psr7\build_query;
  */
 abstract class AbstractCrawler implements CrawlerInterface
 {
+    use HasObject;
+
     protected Crawler        $crawler;
     protected array          $config;
     protected string         $name;
@@ -34,7 +37,7 @@ abstract class AbstractCrawler implements CrawlerInterface
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($config, config('crawler.'.$this->name));
+        $this->config = array_merge($config, config('crawler.'.strtolower($this->getShortClassname())));
 
         if (!isset($this->config['cache'])) {
             $this->config['cache'] = 3600;

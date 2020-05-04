@@ -12,7 +12,6 @@ namespace App\Crawlers;
 use App\Crawlers\Crawler\Traits\HasCurl;
 use App\Crawlers\Traits\HasHeaders;
 use App\Events\HttpResponded;
-use App\Events\HttpRespondedEvent;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HttpClient
- * @package App\Services
+ * @package App\Crawlers
  */
 class HttpClient extends Client
 {
@@ -62,7 +61,7 @@ class HttpClient extends Client
                 array_merge($options, ['headers' => $this->getHeaders()])
             );
 
-            \event(new HttpResponded($this->response));
+            Event::dispatch(new HttpResponded($this->response));
         } catch (Exception $exception) {
             Log::stack(['http'])->error($exception->getMessage());
             $this->errors[$uri] = $exception->getMessage();

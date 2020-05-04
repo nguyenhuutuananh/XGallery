@@ -16,11 +16,10 @@ use stdClass;
 
 /**
  * Class Batdongsan
- * @package App\Services\Crawler
+ * @package App\Crawlers\Crawler
  */
 final class Batdongsan extends AbstractCrawler
 {
-    protected string $name = 'batdongsan';
 
     /**
      * @param  string  $itemUri

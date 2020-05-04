@@ -20,7 +20,6 @@ use stdClass;
  */
 final class Xiuren extends AbstractCrawler
 {
-    protected string $name = 'xiuren';
 
     /**
      * @param  string  $itemUri

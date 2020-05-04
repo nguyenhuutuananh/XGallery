@@ -20,7 +20,6 @@ use stdClass;
  */
 final class XCityVideo extends AbstractCrawler
 {
-    protected string $name = 'xcityvideo';
 
     /**
      * @param  string  $itemUri
