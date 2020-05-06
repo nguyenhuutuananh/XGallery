@@ -47,6 +47,10 @@ class FlickrPhotos extends BaseCommand
             return;
         }
 
+        $this->output->text(
+            'Got '.$photos->photos->total.' photos in '.$photos->photos->pages.' pages'
+        );
+
         // Trigger job to fetch photos of user
         for ($page = 1; $page <= $photos->photos->pages; $page++) {
             \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page)->onQueue('flickr');
