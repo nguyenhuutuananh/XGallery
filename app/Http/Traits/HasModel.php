@@ -9,6 +9,7 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,14 @@ trait HasModel
 {
     private int      $itemsPerPage = 15;
 
+    /**
+     * @param  Request  $request
+     * @param  array  $options
+     * @return LengthAwarePaginator
+     */
     protected function getItems(Request $request, array $options = [])
     {
-        $model = $this->getModel();
-        $model = $model->orderBy(
+        $model = $this->getModel()->orderBy(
             $request->get('sort-by', $this->sortBy['by']),
             $request->get('sort-dir', $this->sortBy['dir'])
         );
@@ -47,13 +52,16 @@ trait HasModel
         ));
     }
 
+    /**
+     * @return Model
+     */
     protected function getModel(): Model
     {
         return app($this->modelClass);
     }
 
-    protected function advanceSearch(Builder $model, Request $request, array $options = [])
+    protected function advanceSearch(Builder $builder, Request $request, array $options = [])
     {
-        return $model;
+        return $builder;
     }
 }

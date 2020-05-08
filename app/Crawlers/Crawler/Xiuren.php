@@ -29,8 +29,12 @@ final class Xiuren extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
-        $item         = new stdClass;
-        $item->url    = $itemUri;
+        if (!$crawler) {
+            return null;
+        }
+
+        $item = new stdClass;
+        $item->url = $itemUri;
         $item->images = collect($crawler->filter('#main .post .photoThum a')->each(
             function ($a) {
                 return $a->attr('href');

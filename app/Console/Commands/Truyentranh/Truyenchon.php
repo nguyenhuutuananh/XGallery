@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Truyentranh;
 
 use App\Console\BaseCrawlerCommand;
 use App\Jobs\Truyenchon\Chapters;
@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class Truyenchon
- * @package App\Console\Commands
+ * @package App\Console\Commands\Truyentranh
  */
 class Truyenchon extends BaseCrawlerCommand
 {

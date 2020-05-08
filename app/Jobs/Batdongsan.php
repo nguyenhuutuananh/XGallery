@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -38,11 +37,12 @@ class Batdongsan implements ShouldQueue
      */
     public function handle()
     {
+        $model = app(\App\Models\Batdongsan::class);
         /**
          * Validate if item already in database
-         * @var Model $item
+         * @var \App\Models\Batdongsan $item
          */
-        if ($item = \App\Models\Batdongsan::where(['url' => $this->url])->first()) {
+        if ($item = $model->getItemByUrl($this->url)) {
             $item->touch();
             return;
         }
@@ -51,7 +51,6 @@ class Batdongsan implements ShouldQueue
             return;
         }
 
-        $model = app(\App\Models\Batdongsan::class);
         $data  = get_object_vars($itemDetail);
 
         // Can not use fill() because it will be required fillable properties

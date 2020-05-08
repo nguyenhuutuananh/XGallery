@@ -18,7 +18,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 
 /**
  * Class XiurenController
- * @package App\Http\Controllers
+ * @package App\Http\Controllers\Xiuren
  */
 class XiurenController extends BaseController
 {
@@ -42,6 +42,6 @@ class XiurenController extends BaseController
      */
     public function download(string $id)
     {
-        XiurenDownload::dispatch($id);
+        XiurenDownload::dispatch($id)->onQueue('downloads');
     }
 }

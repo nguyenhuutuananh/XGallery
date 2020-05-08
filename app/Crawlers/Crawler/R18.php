@@ -21,7 +21,6 @@ use stdClass;
  */
 final class R18 extends AbstractCrawler
 {
-
     /**
      * @param  string  $itemUri
      * @return object|null

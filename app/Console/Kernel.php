@@ -38,47 +38,57 @@ class Kernel extends ConsoleKernel
         /**
          * Schedule with daily
          */
-
-        $schedule->command('onejav daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('r18 daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('flickr:contacts')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('queue:restart')
-            ->daily()
-            ->withoutOverlapping();
-        $schedule->command('queue:retry all')
-            ->daily()
-            ->withoutOverlapping();
+        $dailyTasks = [
+            'onejav daily',
+            'r18 daily',
+            'flickr:contacts',
+            'queue:restart',
+            'queue:retry all'
+        ];
+        foreach ($dailyTasks as $dailyTask) {
+            $schedule->command($dailyTask)
+                ->daily()
+                ->withoutOverlapping()->runInBackground();
+        }
 
         /**
          * Schedule everyMinute
          */
+        $minuteTasks = [
+            'batdongsan',
+            'truyenchon'
+        ];
+        foreach ($minuteTasks as $minuteTask) {
+            $schedule->command($minuteTask)
+                ->everyMinute()
+                ->withoutOverlapping()->runInBackground();
+        }
 
-        $schedule->command('batdongsan')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('truyenchon fully')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
+        /**
+         * Schedule everyMinute
+         */
+        $fiveMinutesTasks = [
+            'onejav fully',
+            'r18 fully',
+            'xcity:profile',
+            'xcity:video',
+            'xiuren',
+            'flickr:photos',
+            'flickr:photossizes'
+        ];
+        foreach ($fiveMinutesTasks as $fiveMinutesTask) {
+            $schedule->command('')
+                ->everyFiveMinutes()
+                ->withoutOverlapping()->runInBackground();
+        }
 
         /**
          * Schedule everyFiveMinutes
          */
 
-        $schedule->command('onejav fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
 
-        $schedule->command('r18 fully')
+
+        $schedule->command('')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
 
@@ -93,10 +103,10 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
 
-        $schedule->command('flickr:photos')
+        $schedule->command('')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
-        $schedule->command('flickr:photossizes')
+        $schedule->command('')
             ->everyFiveMinutes()
             ->withoutOverlapping()->runInBackground();
 

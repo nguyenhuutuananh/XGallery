@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Trait HasCrawler
- * @package App\Console\Traits
+ * @package App\Console\Traits\Crawlers
  */
 trait HasCrawler
 {

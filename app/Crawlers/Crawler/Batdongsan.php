@@ -20,7 +20,6 @@ use stdClass;
  */
 final class Batdongsan extends AbstractCrawler
 {
-
     /**
      * @param  string  $itemUri
      * @return object|null
