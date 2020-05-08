@@ -65,7 +65,7 @@ class Kernel extends ConsoleKernel
         }
 
         /**
-         * Schedule everyMinute
+         * Schedule everyFiveMinute
          */
         $fiveMinutesTasks = [
             'onejav fully',
@@ -81,34 +81,6 @@ class Kernel extends ConsoleKernel
                 ->everyFiveMinutes()
                 ->withoutOverlapping()->runInBackground();
         }
-
-        /**
-         * Schedule everyFiveMinutes
-         */
-
-
-
-        $schedule->command('')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('xcity:profile fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        $schedule->command('xcity:video')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('xiuren fully')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        $schedule->command('')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
 
         // Clear cache
         $schedule->command('cache:clear')

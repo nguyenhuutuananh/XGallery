@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class AbstractCommand
+ * Class BaseCommand
  * @package App\Console
  */
 class BaseCommand extends Command

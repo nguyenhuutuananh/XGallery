@@ -24,7 +24,7 @@ class BaseCrawlerCommand extends BaseCommand
     use HasCrawler;
 
     /**
-     * Process WHOLE site by specific URL
+     * Process WHOLE site by specific Index URL
      * @return bool
      */
     protected function fully(): bool
@@ -41,11 +41,19 @@ class BaseCrawlerCommand extends BaseCommand
         return false;
     }
 
+    /**
+     * Process specific Index URL
+     * @return bool
+     */
     protected function index(): bool
     {
         return false;
     }
 
+    /**
+     * Process an item only
+     * @return bool
+     */
     protected function item(): bool
     {
         return false;
