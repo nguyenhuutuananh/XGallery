@@ -26,7 +26,7 @@ class Truyenchon extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'truyenchon {task=fully} {--url=}';
+    protected $signature = 'truyentranh:truyenchon {task=fully} {--url=}';
 
     /**
      * The console command description.

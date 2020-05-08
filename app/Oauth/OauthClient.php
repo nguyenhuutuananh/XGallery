@@ -32,14 +32,14 @@ class OauthClient
     public function request(string $method, string $uri, array $parameters = [])
     {
         $key = md5(serialize([$method, $uri, $parameters]));
-
+        $isCached = Cache::has($key);
         Log::stack(['oauth'])->info(
-            Cache::has($key) ? 'Requesting '.$uri.' with CACHE'
+            $isCached ? 'Requesting '.$uri.' with CACHE'
                 : 'Requesting '.$uri,
             [$method, $uri, $parameters]
         );
 
-        if (Cache::has($key)) {
+        if ($isCached) {
             return Cache::get($key);
         }
 

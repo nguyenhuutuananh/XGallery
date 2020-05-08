@@ -26,7 +26,7 @@ class Onejav extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'onejav {task=fully} {--url=}';
+    protected $signature = 'jav:onejav {task=fully} {--url=}';
 
     /**
      * The console command description.
@@ -74,23 +74,22 @@ class Onejav extends BaseCrawlerCommand
     private function itemsProcess(Collection $items)
     {
         if ($items->isEmpty()) {
+            $this->progressBar->setMessage('There are no items', 'info');
             return;
         }
 
         $items->each(function ($item, $index) {
             $this->progressBar->setMessage($item['title'], 'info');
-
             // Convert to Mongo DateTime
             $originalItem = $item;
             if (isset($item['date']) && null !== $item['date']) {
                 $item['date'] = new UTCDateTime($item['date']->getTimestamp() * 1000);
             }
-
             $this->insertItem($item);
-
             // Process to OneJAV to JavMovies with: Idols & Genres
             \App\Jobs\Jav\OneJav::dispatch($originalItem);
             $this->progressBar->setMessage($index + 1, 'step');
+            $this->progressBar->setMessage('QUEUED', 'status');
         });
     }
 
@@ -111,7 +110,7 @@ class Onejav extends BaseCrawlerCommand
         if (!$items || $items->isEmpty()) {
             $endpoint->failed = (int) $endpoint->failed + 1;
             if ($endpoint->failed === 10) {
-                $endpoint->page   = 1;
+                $endpoint->page = 1;
                 $endpoint->failed = 0;
                 $endpoint->save();
                 return false;

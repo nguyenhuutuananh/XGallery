@@ -43,14 +43,15 @@ class HttpClient extends Client
     public function request($method, $uri = '', array $options = []): ?string
     {
         $key = $this->getKey([$method, $uri]);
+        $isCached = Cache::has($key);
         Log::stack(['http'])
             ->info(
-                Cache::has($key)
+                $isCached
                     ? 'Request URI: '.urldecode($uri).' with CACHED key '.$key
                     : 'Request URI: '.urldecode($uri)
             );
 
-        if (Cache::has($key)) {
+        if ($isCached) {
             return Cache::get($key);
         }
 
@@ -119,7 +120,7 @@ class HttpClient extends Client
     /**
      * @return array
      */
-    protected function getErrors(): array
+    public function getErrors(): array
     {
         return $this->errors;
     }

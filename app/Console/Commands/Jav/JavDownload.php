@@ -7,12 +7,12 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jav;
 
 use App\Console\BaseCommand;
 
 /**
- * Class JavDownload
+ * Process download pending JAV
  * @package App\Console\Commands
  */
 class JavDownload extends BaseCommand

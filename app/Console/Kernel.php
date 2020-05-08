@@ -39,8 +39,8 @@ class Kernel extends ConsoleKernel
          * Schedule with daily
          */
         $dailyTasks = [
-            'onejav daily',
-            'r18 daily',
+            'jav:onejav daily',
+            'jav:r18 daily',
             'flickr:contacts',
             'queue:restart',
             'queue:retry all'
@@ -56,7 +56,7 @@ class Kernel extends ConsoleKernel
          */
         $minuteTasks = [
             'batdongsan',
-            'truyenchon'
+            'truyentranh:truyenchon'
         ];
         foreach ($minuteTasks as $minuteTask) {
             $schedule->command($minuteTask)
@@ -68,10 +68,10 @@ class Kernel extends ConsoleKernel
          * Schedule everyFiveMinute
          */
         $fiveMinutesTasks = [
-            'onejav fully',
-            'r18 fully',
-            'xcity:profile',
-            'xcity:video',
+            'jav:onejav fully',
+            'jav:r18 fully',
+            'jav:xcityprofile',
+            'jav:xcity:video',
             'xiuren',
             'flickr:photos',
             'flickr:photossizes'

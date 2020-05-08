@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jav;
 
 use App\Console\BaseCrawlerCommand;
 use Exception;
@@ -23,7 +23,7 @@ class R18 extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'r18 {task=fully} {--url=}';
+    protected $signature = 'jav:r18 {task=fully} {--url=}';
 
     /**
      * The console command description.

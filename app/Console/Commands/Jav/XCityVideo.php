@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jav;
 
 use App\Console\BaseCrawlerCommand;
 use Exception;
@@ -23,7 +23,7 @@ class XCityVideo extends BaseCrawlerCommand
      *
      * @var string
      */
-    protected $signature = 'xcity:video {task=fully}';
+    protected $signature = 'jav:xcityvideo {task=fully}';
 
     /**
      * The console command description.
