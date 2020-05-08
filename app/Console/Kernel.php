@@ -77,7 +77,7 @@ class Kernel extends ConsoleKernel
             'flickr:photossizes'
         ];
         foreach ($fiveMinutesTasks as $fiveMinutesTask) {
-            $schedule->command('')
+            $schedule->command($fiveMinutesTask)
                 ->everyFiveMinutes()
                 ->withoutOverlapping()->runInBackground();
         }
