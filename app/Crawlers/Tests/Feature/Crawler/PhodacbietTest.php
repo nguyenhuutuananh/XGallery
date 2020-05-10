@@ -2,6 +2,7 @@
 
 namespace App\Crawlers\Tests\Feature\Crawler;
 
+use App\Crawlers\Crawler\Phodacbiet;
 use App\Crawlers\Tests\TestCase;
 use App\Crawlers\Tests\Traits\HasCrawler;
 
@@ -9,7 +10,7 @@ use App\Crawlers\Tests\Traits\HasCrawler;
  * Class Phodacbiet
  * @package App\Crawlers\Tests\Feature\Crawler
  */
-class Phodacbiet extends TestCase
+class PhodacbietTest extends TestCase
 {
     use HasCrawler;
 
@@ -34,5 +35,5 @@ class Phodacbiet extends TestCase
         ]
     ];
 
-    protected string $crawlerClass = \App\Crawlers\Crawler\Phodacbiet::class;
+    protected string $crawlerClass = Phodacbiet::class;
 }

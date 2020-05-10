@@ -58,16 +58,14 @@ final class Xiuren extends AbstractCrawler
             return null;
         }
 
-        $links = $crawler->filter('#main .loop .content a')->each(
+        return collect($crawler->filter('#main .loop .content a')->each(
             function ($el) {
                 return [
                     'url' => $el->attr('href'),
                     'cover' => $el->filter('img')->attr('src'),
                 ];
             }
-        );
-
-        return collect($links);
+        ));
     }
 
     /**
