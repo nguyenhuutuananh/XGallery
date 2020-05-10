@@ -22,7 +22,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Genres</span>
-                    <span class="info-box-number">{{\App\JavGenres::count()}}</span>
+                    <span class="info-box-number">{{\App\Models\JavGenres::count()}}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
