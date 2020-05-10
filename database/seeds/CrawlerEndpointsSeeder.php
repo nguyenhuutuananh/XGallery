@@ -114,7 +114,12 @@ class CrawlerEndpointsSeeder extends Seeder
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ],
-
+                [
+                    'crawler' => 'Phodacbiet',
+                    'url' => 'https://phodacbiet.info/forums/anh-hotgirl-nguoi-mau.43/',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ],
             ]
         );
     }

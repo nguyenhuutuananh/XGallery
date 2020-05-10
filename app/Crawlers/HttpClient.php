@@ -56,12 +56,7 @@ class HttpClient extends Client
         }
 
         try {
-            $this->response = parent::request(
-                $method,
-                $uri,
-                array_merge($options, ['headers' => $this->getHeaders()])
-            );
-
+            $this->response = parent::request($method, $uri, array_merge($options, ['headers' => $this->getHeaders()]));
             Event::dispatch(new HttpResponded($this->response));
         } catch (Exception $exception) {
             Log::stack(['http'])->error($exception->getMessage());
@@ -97,11 +92,12 @@ class HttpClient extends Client
      */
     public function download(string $url, string $saveTo)
     {
-        if (!Storage::exists($saveTo)) {
-            Storage::makeDirectory($saveTo);
-        }
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             return false;
+        }
+
+        if (!Storage::exists($saveTo)) {
+            Storage::makeDirectory($saveTo);
         }
 
         $fileName = basename($url);
