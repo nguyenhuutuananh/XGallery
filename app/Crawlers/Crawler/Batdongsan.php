@@ -33,7 +33,7 @@ final class Batdongsan extends AbstractCrawler
             return null;
         }
 
-        $item     = new stdClass();
+        $item = new stdClass();
         $nameNode = $crawler->filter('.pm-title h1');
 
         if ($nameNode->count() === 0) {
@@ -42,12 +42,12 @@ final class Batdongsan extends AbstractCrawler
             return null;
         }
 
-        $item->url     = $itemUri;
-        $item->name    = trim($crawler->filter('.pm-title h1')->text(null, false));
-        $item->price   = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
-        $item->size    = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
+        $item->url = $itemUri;
+        $item->name = trim($crawler->filter('.pm-title h1')->text(null, false));
+        $item->price = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
+        $item->size = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
         $item->content = trim($crawler->filter('.pm-content .pm-desc')->html());
-        $fields        = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
+        $fields = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
             return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
         }))->reject(function ($value) {
             return null == $value;
@@ -72,7 +72,7 @@ final class Batdongsan extends AbstractCrawler
         }
 
         $fields = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
-            $key   = trim($node->filter('div.left')->text());
+            $key = trim($node->filter('div.left')->text());
             $value = trim($node->filter('div.right')->text());
 
             if ($key === 'Email') {

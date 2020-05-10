@@ -30,6 +30,7 @@ trait HasCrawler
     public function testGetItemDetail()
     {
         foreach ($this->itemDetails as $url => $requiredProperties) {
+            echo $url;
             $item = $this->crawler->getItemDetail($url);
 
             $this->assertIsObject($item, 'Item detail is not object');
@@ -51,6 +52,7 @@ trait HasCrawler
     public function testGetItemLinks()
     {
         foreach ($this->itemLinks as $url => $requiredProperties) {
+            echo $url;
             $links = $this->crawler->getItemLinks($url);
             foreach ($links as $link) {
                 foreach ($requiredProperties as $requiredProperty) {
@@ -70,6 +72,7 @@ trait HasCrawler
     {
         foreach ($this->indexLinks as $indexLink => $detail) {
             $pageCount = $this->crawler->getIndexPagesCount($indexLink);
+            echo $indexLink . ' pages: ' . $pageCount;
             $this->assertIsNumeric($pageCount);
             $this->assertGreaterThanOrEqual(
                 $detail['pageCount'],
@@ -79,11 +82,20 @@ trait HasCrawler
         }
     }
 
+    /**
+     *
+     */
     public function testGetIndexLinksWithFromTo()
     {
+        $expectEndPage = 4;
         foreach ($this->indexLinks as $indexLink => $detail) {
-            $links = $this->crawler->getIndexLinks($indexLink, 1, 4);
-            $this->assertEquals(4, $links->count(), __('Invalid pageCount on URL '.$indexLink));
+            $pageCount = $this->crawler->getIndexPagesCount($indexLink);
+            if ($pageCount < $expectEndPage) {
+                $expectEndPage = $pageCount;
+            }
+            echo $indexLink . ' page from 1 to ' . $expectEndPage;
+            $links = $this->crawler->getIndexLinks($indexLink, 1, $expectEndPage);
+            $this->assertEquals($expectEndPage, $links->count(), __('Invalid pageCount on URL '.$indexLink));
             $links = $links->first();
             $this->assertGreaterThanOrEqual(
                 $detail['itemPerPage'],

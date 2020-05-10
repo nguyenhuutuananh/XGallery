@@ -34,9 +34,9 @@ final class XCityVideo extends AbstractCrawler
         }
 
         try {
-            $item          = new stdClass();
-            $item->title   = $crawler->filter('#program_detail_title')->text(null, false);
-            $item->url     = $itemUri;
+            $item = new stdClass();
+            $item->title = $crawler->filter('#program_detail_title')->text(null, false);
+            $item->url = $itemUri;
             $item->gallery = $crawler->filter('img.launch_thumbnail')->each(function ($el) {
                 return $el->attr('src');
             });

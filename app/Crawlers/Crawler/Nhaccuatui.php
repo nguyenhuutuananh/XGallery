@@ -31,10 +31,10 @@ final class Nhaccuatui extends AbstractCrawler
         if (!$crawler) {
             return null;
         }
-        $text  = $crawler->text(null, false);
+        $text = $crawler->text(null, false);
         $start = strpos($text, '/flash/xml?html5=true&key1=');
-        $end   = strpos($text, '"', $start);
-        $url   = substr($text, $start, $end - $start);
+        $end = strpos($text, '"', $start);
+        $url = substr($text, $start, $end - $start);
 
         $url = $this->buildUrl($url);
 
@@ -51,10 +51,10 @@ final class Nhaccuatui extends AbstractCrawler
         }
 
         try {
-            $item           = new stdClass;
-            $item->url      = trim($url);
-            $item->title    = trim((string) $simpleXmlEl->track->title);
-            $item->creator  = trim((string) $simpleXmlEl->track->creator);
+            $item = new stdClass;
+            $item->url = trim($url);
+            $item->title = trim((string) $simpleXmlEl->track->title);
+            $item->creator = trim((string) $simpleXmlEl->track->creator);
             $item->download = trim((string) $simpleXmlEl->track->location);
 
             return $item;

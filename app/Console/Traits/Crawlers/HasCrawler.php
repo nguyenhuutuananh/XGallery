@@ -150,6 +150,8 @@ trait HasCrawler
             $endpoint->page = 1;
         }
 
+        $this->output->writeln('Endpoint '.$endpoint->url.' with page '.$endpoint->page);
+
         return $endpoint;
     }
 

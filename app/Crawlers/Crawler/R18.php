@@ -34,10 +34,10 @@ final class R18 extends AbstractCrawler
         }
 
         try {
-            $item             = new stdClass;
-            $item->url        = $itemUri;
-            $item->cover      = trim($crawler->filter('.detail-single-picture img')->attr('src'));
-            $item->name       = trim($crawler->filter('.product-details-page h1')->text(null, false));
+            $item = new stdClass;
+            $item->url = $itemUri;
+            $item->cover = trim($crawler->filter('.detail-single-picture img')->attr('src'));
+            $item->name = trim($crawler->filter('.product-details-page h1')->text(null, false));
             $item->categories = collect($crawler->filter('.product-categories-list a')->each(
                 function ($el) {
                     return trim($el->text(null, false));
@@ -48,7 +48,7 @@ final class R18 extends AbstractCrawler
 
             $fields = collect($crawler->filter('.product-onload .product-details dt')->each(
                 function ($dt) {
-                    $text  = trim($dt->text(null, false));
+                    $text = trim($dt->text(null, false));
                     $value = str_replace(['-'], [''], $dt->nextAll()->text(null, false));
 
                     return [strtolower(str_replace(' ', '_', str_replace([':'], [''], $text))) => trim($value)];
@@ -120,7 +120,7 @@ final class R18 extends AbstractCrawler
 
                 $data = [];
 
-                $url         = explode('?', $el->attr('href'));
+                $url = explode('?', $el->attr('href'));
                 $data['url'] = $url[0];
 
                 if ($el->filter('img.lazy')->count()) {

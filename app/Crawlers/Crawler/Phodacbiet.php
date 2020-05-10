@@ -11,6 +11,7 @@ namespace App\Crawlers\Crawler;
 
 use Exception;
 use Illuminate\Support\Collection;
+use Spatie\Url\Url;
 use stdClass;
 
 /**
@@ -93,5 +94,15 @@ class Phodacbiet extends AbstractCrawler
         } catch (Exception $exception) {
             return null;
         }
+    }
+
+    /**
+     * @param  Url  $url
+     * @param  int  $page
+     * @return string
+     */
+    protected function buildUrlWithPage(Url $url, int $page): string
+    {
+        return $this->buildUrl($url->getPath().'page-'.$page);
     }
 }

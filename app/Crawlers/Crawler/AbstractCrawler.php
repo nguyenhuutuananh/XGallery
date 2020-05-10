@@ -45,21 +45,6 @@ abstract class AbstractCrawler implements CrawlerInterface
     }
 
     /**
-     * @param  array  $options
-     * @return HttpClient
-     */
-    public function getClient(array $options = []): HttpClient
-    {
-        $options =  array_merge(
-            $options,
-            config('httpclient'),
-            isset($this->config['http_client']) ? $this->config['http_client'] : []
-        );
-
-        return new HttpClient($options);
-    }
-
-    /**
      * @param  string  $uri
      * @return Crawler
      */
@@ -72,6 +57,21 @@ abstract class AbstractCrawler implements CrawlerInterface
 
         $this->crawler = new Crawler($response, $uri);
         return $this->crawler;
+    }
+
+    /**
+     * @param  array  $options
+     * @return HttpClient
+     */
+    public function getClient(array $options = []): HttpClient
+    {
+        $options = array_merge(
+            $options,
+            config('httpclient'),
+            isset($this->config['http_client']) ? $this->config['http_client'] : []
+        );
+
+        return new HttpClient($options);
     }
 
     /**
@@ -94,7 +94,7 @@ abstract class AbstractCrawler implements CrawlerInterface
         ?int $to = null
     ): Collection {
         $pages = $this->getIndexPagesCount($indexUri);
-        $url   = Url::fromString($indexUri);
+        $url = Url::fromString($indexUri);
 
         $links = collect();
 

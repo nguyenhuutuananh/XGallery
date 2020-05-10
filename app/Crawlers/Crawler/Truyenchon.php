@@ -32,16 +32,16 @@ final class Truyenchon extends AbstractCrawler
             return null;
         }
 
-        $item         = new stdClass;
-        $item->url    = $itemUri;
+        $item = new stdClass;
+        $item->url = $itemUri;
         $item->images = collect($crawler->filter('.page-chapter img')->each(function ($img) {
             return $img->attr('data-original');
         }));
 
         if ($crawler->filter('h1.txt-primary a')->count()) {
-            $item->title  = trim($crawler->filter('h1.txt-primary a')->text());
+            $item->title = trim($crawler->filter('h1.txt-primary a')->text());
         } elseif ($crawler->filter('h1.txt-primary a')->count()) {
-            $item->title  = trim($crawler->filter('h1.title-detail')->text());
+            $item->title = trim($crawler->filter('h1.title-detail')->text());
         }
 
         if ($crawler->filter('.detail-content p')->count()) {
@@ -58,7 +58,7 @@ final class Truyenchon extends AbstractCrawler
     public function getItemChapters(string $itemUri): ?Collection
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
-        $nodes   = $crawler->filter('.list-chapter ul li.row');
+        $nodes = $crawler->filter('.list-chapter ul li.row');
 
         if ($nodes->count() === 0) {
             return null;

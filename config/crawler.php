@@ -45,5 +45,10 @@ return [
         'http_client' => [
             'base_uri' => 'https://phodacbiet.net',
         ]
+    ],
+    'kissgoddess'=>[
+        'http_client' => [
+            'base_uri' => 'https://kissgoddess.com',
+        ]
     ]
 ];
