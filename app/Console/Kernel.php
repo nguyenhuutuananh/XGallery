@@ -73,6 +73,7 @@ class Kernel extends ConsoleKernel
             'jav:xcityprofile',
             'jav:xcity:video',
             'xiuren',
+            'phodacbiet',
             'flickr:photos',
             'flickr:photossizes'
         ];

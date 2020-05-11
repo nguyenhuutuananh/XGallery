@@ -31,6 +31,13 @@ class JavMovies
         $this->builder = $model->limit(15);
     }
 
+    public function limit(int $limit)
+    {
+        $this->builder->limit($limit);
+
+        return $this;
+    }
+
     /**
      * @param  array  $filter
      * @return LengthAwarePaginator
