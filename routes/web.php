@@ -31,7 +31,6 @@ Route::namespace('App\Http\Controllers\Jav')
         Route::get('/movie/{id}', [JavController::class, 'movie'])->name('jav.movie.view');
         Route::get('/genre/{id}', [JavController::class, 'genre'])->name('jav.genre.view');
         Route::get('/idol/{id}', [JavController::class, 'idol'])->name('jav.idol.view');
-        Route::post('/search', [JavController::class, 'search'])->name('jav.search.view');
         Route::post(
             '/download/{itemNumber}',
             [JavController::class, 'download']

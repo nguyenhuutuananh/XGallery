@@ -1,7 +1,7 @@
 <div class="row mb-2">
     <div class="col-12">
         <nav class="navbar navbar-dark bg-dark">
-            <form class="form-inline" method="post" action="{{route('jav.search.view')}}">
+            <form class="form-inline" method="post" action="{{route('jav.dashboard.view')}}">
                 @csrf
                 <input class="form-control input-sm mr-sm-2" type="text" name="keyword" placeholder="Enter your search keyword" aria-label="Search" value="{{request()->get('keyword')}}">
                 <input class="form-control input-sm mr-sm-2" type="text" name="director" placeholder="Enter your search director" aria-label="Search" value="{{request()->get('director')}}">

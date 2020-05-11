@@ -17,7 +17,6 @@ use App\Models\JavDownload;
 use App\Models\JavGenres;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -32,12 +31,6 @@ class JavController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected string $modelClass   = JavMovies::class;
-    protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];
-    protected array  $filterFields = [
-        'name', 'item_number', 'content_id', 'dvd_id', 'director', 'studio', 'label', 'channel', 'series'
-    ];
-
     /**
      * @param  Request  $request
      * @return Application|Factory|View
@@ -47,7 +40,7 @@ class JavController extends BaseController
         return view(
             'jav.index',
             [
-                'items' => $this->getItems($request),
+                'items' => app(\App\Repositories\JavMovies::class)->getItems($request->request->all()),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV movies',
                 'description' => ''
@@ -74,15 +67,26 @@ class JavController extends BaseController
         );
     }
 
+    /**
+     * @param  int  $id
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
     public function genre(int $id, Request $request)
     {
+        $filter = array_merge(
+            $request->request->all(),
+            [
+                'ids' => JavMoviesXref::where([
+                    'xref_id' => $id, 'xref_type' => 'genre'
+                ])->select('movie_id')->get()->toArray()
+            ]
+        );
+
         return view(
             'jav.index',
             [
-                'items' => $this->getItems($request, [
-                    'ids' => JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'genre'])
-                        ->select('movie_id')->get()->toArray()
-                ]),
+                'items' => app(\App\Repositories\JavMovies::class)->getItems($filter),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
                 'description' => ''
@@ -90,38 +94,29 @@ class JavController extends BaseController
         );
     }
 
-    public function idol(int $id, Request $request)
-    {
-        return view(
-            'jav.idol',
-            [
-                'items' => $this->getItems(
-                    $request,
-                    [
-                        'ids' => JavMoviesXref::where(['xref_id' => $id, 'xref_type' => 'idol'])
-                            ->select('movie_id')->get()->toArray()
-                    ]
-                ),
-                'idol' => JavIdols::find($id),
-                'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV genre - '.JavGenres::find($id),
-                'description' => ''
-            ]
-        );
-    }
-
     /**
+     * @param  int  $id
      * @param  Request  $request
      * @return Application|Factory|View
      */
-    public function search(Request $request)
+    public function idol(int $id, Request $request)
     {
-        return view(
-            'jav.index',
+        $filter = array_merge(
+            $request->request->all(),
             [
-                'items' => $this->getItems($request),
+                'ids' => JavMoviesXref::where([
+                    'xref_id' => $id, 'xref_type' => 'idol'
+                ])->select('movie_id')->get()->toArray()
+            ]
+        );
+
+        return view(
+            'jav.idol',
+            [
+                'items' => app(\App\Repositories\JavMovies::class)->getItems($filter),
+                'idol' => JavIdols::find($id),
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV movies - Searching by keyword - '.$request->get('keyword'),
+                'title' => 'JAV genre - '.JavGenres::find($id),
                 'description' => ''
             ]
         );
@@ -137,31 +132,8 @@ class JavController extends BaseController
             return;
         }
 
-        $model              = app(JavDownload::class);
+        $model = app(JavDownload::class);
         $model->item_number = $itemNumber;
         $model->save();
-    }
-
-    /**
-     * @param  Builder  $model
-     * @param  Request  $request
-     * @param  array  $options
-     * @return Builder
-     */
-    protected function advanceSearch(Builder $model, Request $request, array $options = [])
-    {
-        if ($keyword = $request->get('director')) {
-            $model = $model->where('director', 'LIKE', '%'.$keyword.'%');
-        }
-
-        if ($keyword = $request->get('studio')) {
-            $model = $model->where('studio', 'LIKE', '%'.$keyword.'%');
-        }
-
-        if ($keyword = $request->get('label')) {
-            $model = $model->where('label', 'LIKE', '%'.$keyword.'%');
-        }
-
-        return $model;
     }
 }
