@@ -58,8 +58,23 @@ class BaseCommand extends Command
     }
 
     /**
+     * Entry point
+     */
+    public function handle()
+    {
+        $task = $this->argument('task');
+        $this->output->title('<info>Running </info>'.$task);
+
+        if (!method_exists($this, $task)) {
+            $this->output->warning('Task '.$task.' not found');
+            return false;
+        }
+
+        return call_user_func([$this, $task]);
+    }
+
+    /**
      * @param $status
-     * @return mixed
      */
     protected function completed($status)
     {
@@ -67,9 +82,13 @@ class BaseCommand extends Command
             $this->progressBar->finish();
         }
 
-        $this->output->newLine();
-        $this->comment('Completed');
+        if ($status) {
+            $this->output->newLine(2);
+            $this->output->success('Completed');
 
-        return $status;
+            return;
+        }
+
+        $this->output->error('Failed');
     }
 }

@@ -23,7 +23,7 @@ class FlickrContacts extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'flickr:contacts';
+    protected $signature = 'flickr:contacts {task=fully}';
 
     /**
      * The console command description.
@@ -32,19 +32,24 @@ class FlickrContacts extends BaseCommand
      */
     protected $description = 'Fetching Flickr contacts';
 
-    public function handle()
+    public function fully()
     {
         if (!$contacts = app(Flickr::class)->get('contacts.getList')) {
-            return;
+            return false;
         }
 
-        $this->output->text(
+        $this->output->note(
             'Got '.count($contacts->contacts->contact).' contacts in '.$contacts->contacts->pages.' pages'
         );
+
+        $this->createProgressBar($contacts->contacts->pages);
 
         for ($page = 1; $page <= $contacts->contacts->pages; $page++) {
             // Add contacts on a page
             \App\Jobs\Flickr\FlickrContacts::dispatch($page)->onQueue('flickr');
+            $this->progressBar->advance();
         }
+
+        return true;
     }
 }

@@ -23,7 +23,7 @@ class FlickrPhotosSizes extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'flickr:photossizes';
+    protected $signature = 'flickr:photossizes {task=fully}';
 
     /**
      * The console command description.
@@ -32,12 +32,19 @@ class FlickrPhotosSizes extends BaseCommand
      */
     protected $description = 'Fetching Flickr photos';
 
-    public function handle()
+    public function fully()
     {
-        $photos = \App\Models\FlickrPhotos::where(['sizes' => null])->take(30)->get();
+        if (!$photos = \App\Models\FlickrPhotos::where(['sizes' => null])->take(30)->get()) {
+            return false;
+        }
+
+        $this->createProgressBar(count($photos));
 
         foreach ($photos as $photo) {
             FlickrPhotoSizes::dispatch($photo)->onQueue('flickr');
+            $this->progressBar->advance();
         }
+
+        return true;
     }
 }

@@ -23,7 +23,7 @@ class FlickrPhotos extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'flickr:photos';
+    protected $signature = 'flickr:photos {task=fully}';
 
     /**
      * The console command description.
@@ -32,7 +32,7 @@ class FlickrPhotos extends BaseCommand
      */
     protected $description = 'Fetching Flickr photos';
 
-    public function handle()
+    public function fully()
     {
         $client = app(Flickr::class);
         if (!$contact = \App\Models\FlickrContacts::orderBy('updated_at', 'asc')->first()) {
@@ -47,13 +47,18 @@ class FlickrPhotos extends BaseCommand
             return;
         }
 
-        $this->output->text(
+        $this->output->note(
             'Got '.$photos->photos->total.' photos in '.$photos->photos->pages.' pages'
         );
+
+        $this->createProgressBar($photos->photos->pages);
 
         // Trigger job to fetch photos of user
         for ($page = 1; $page <= $photos->photos->pages; $page++) {
             \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page)->onQueue('flickr');
+            $this->progressBar->advance();
         }
+
+        return true;
     }
 }

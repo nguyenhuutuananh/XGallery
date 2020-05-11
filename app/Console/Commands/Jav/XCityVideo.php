@@ -69,6 +69,7 @@ class XCityVideo extends BaseCrawlerCommand
             $this->progressBar->setMessage($item['title'], 'info');
             // This queue trigger on limited channel
             \App\Jobs\XCityVideo::dispatch($item);
+            $this->progressBar->setMessage('QUEUED', 'status');
             $this->progressBar->setMessage($index + 1, 'step');
         });
 

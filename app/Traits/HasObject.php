@@ -12,9 +12,12 @@ namespace App\Traits;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Trait HasObject
+ * @package App\Traits
+ */
 trait HasObject
 {
-
     /**
      * @return string|null
      */
