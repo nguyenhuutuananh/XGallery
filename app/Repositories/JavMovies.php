@@ -28,14 +28,7 @@ class JavMovies
     public function __construct(\App\JavMovies $model)
     {
         $this->model = $model;
-        $this->builder = $model->limit(15);
-    }
-
-    public function limit(int $limit)
-    {
-        $this->builder->limit($limit);
-
-        return $this;
+        $this->builder = $model->query();
     }
 
     /**
