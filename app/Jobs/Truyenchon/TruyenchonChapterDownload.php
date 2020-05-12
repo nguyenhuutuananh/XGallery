@@ -10,6 +10,7 @@
 namespace App\Jobs\Truyenchon;
 
 use App\Crawlers\Crawler\Truyenchon;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,6 +45,7 @@ class TruyenchonChapterDownload implements ShouldQueue
     {
         $this->images = $images;
         $this->path = $path;
+        $this->onQueue(Queues::QUEUE_DOWNLOADS);
     }
 
     /**

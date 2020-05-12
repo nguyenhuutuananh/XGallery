@@ -31,6 +31,7 @@ class XiurenDownload implements ShouldQueue
     public function __construct(string $id)
     {
         $this->id = $id;
+        $this->onQueue(Queues::QUEUE_JAV_DOWNLOADS);
     }
 
     /**

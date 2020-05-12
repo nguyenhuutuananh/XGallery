@@ -36,6 +36,7 @@ class DownloadNhacCuaTui implements ShouldQueue
     public function __construct(string $url)
     {
         $this->url = $url;
+        $this->onQueue(Queues::QUEUE_DOWNLOADS);
     }
 
     /**

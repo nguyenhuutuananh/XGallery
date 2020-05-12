@@ -68,7 +68,7 @@ class XCityVideo extends BaseCrawlerCommand
         $items->each(function ($item, $index) {
             $this->progressBar->setMessage($item['title'], 'info');
             // This queue trigger on limited channel
-            \App\Jobs\XCityVideo::dispatch($item);
+            \App\Jobs\Jav\XCityVideo::dispatch($item);
             $this->progressBar->setMessage('QUEUED', 'status');
             $this->progressBar->setMessage($index + 1, 'step');
         });
@@ -92,7 +92,7 @@ class XCityVideo extends BaseCrawlerCommand
             $this->progressBar->setMessage($item['url'], 'info');
             $this->progressBar->setMessage('FETCHING', 'status');
             // Because this is daily request. We don't need use limit channel
-            \App\Jobs\XCityVideo::dispatch($item);
+            \App\Jobs\Jav\XCityVideo::dispatch($item);
             $this->progressBar->setMessage('QUEUED', 'status');
             $this->progressBar->advance();
         });

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\Onejav;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class JavDownload
- * @package App\Jobs
+ * @package App\Jobs\Jav
  */
 class JavDownload implements ShouldQueue
 {
@@ -22,13 +24,21 @@ class JavDownload implements ShouldQueue
     protected \App\Models\JavDownload $javDownload;
 
     /**
-     * Create a new job instance.
-     *
+     * JavDownload constructor.
      * @param  \App\Models\JavDownload  $javDownload
      */
     public function __construct(\App\Models\JavDownload $javDownload)
     {
         $this->javDownload = $javDownload;
+        $this->onQueue(Queues::QUEUE_JAV_DOWNLOADS);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('jav')];
     }
 
     /**

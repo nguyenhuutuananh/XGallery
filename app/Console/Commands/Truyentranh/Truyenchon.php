@@ -73,7 +73,7 @@ class Truyenchon extends BaseCrawlerCommand
                  */
                 if ($chapters = $this->crawler->getItemChapters($story['url'])) {
                     foreach ($chapters as $chapterUrl) {
-                        Chapters::dispatch($story, $chapterUrl)->onQueue('truyenchon');
+                        Chapters::dispatch($story, $chapterUrl);
                     }
                 }
                 $this->progressBar->setMessage($index + 1, 'step');
@@ -122,7 +122,7 @@ class Truyenchon extends BaseCrawlerCommand
         }
 
         foreach ($chapters as $chapterUrl) {
-            Chapters::dispatch(['url' => $url], $chapterUrl)->onQueue('truyenchon');
+            Chapters::dispatch(['url' => $url], $chapterUrl);
         }
 
         return true;

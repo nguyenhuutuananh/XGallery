@@ -53,7 +53,7 @@ class R18 extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-                \App\Jobs\R18::dispatch($item);
+                \App\Jobs\Jav\R18::dispatch($item);
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });
@@ -80,7 +80,7 @@ class R18 extends BaseCrawlerCommand
         $items->each(function ($item) {
             $this->progressBar->setMessage($item['url'], 'info');
             $this->progressBar->setMessage('FETCHING', 'status');
-            \App\Jobs\R18::dispatch($item);
+            \App\Jobs\Jav\R18::dispatch($item);
             $this->progressBar->setMessage('QUEUED', 'status');
             $this->progressBar->advance();
         });

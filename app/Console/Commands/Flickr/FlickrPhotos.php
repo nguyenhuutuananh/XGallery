@@ -36,7 +36,7 @@ class FlickrPhotos extends BaseCommand
     {
         $client = app(Flickr::class);
         if (!$contact = \App\Models\FlickrContacts::orderBy('updated_at', 'asc')->first()) {
-            return;
+            return false;
         }
 
         $contact->touch();
@@ -44,18 +44,23 @@ class FlickrPhotos extends BaseCommand
         $this->output->title('Working on contact '.$contact->nsid);
 
         if (!$photos = $client->get('people.getPhotos', ['user_id' => $contact->nsid])) {
-            return;
+            return false;
         }
 
         $this->output->note(
-            'Got '.$photos->photos->total.' photos in '.$photos->photos->pages.' pages'
+            sprintf(
+                'Got %d photos in %d pages',
+                $photos->photos->total,
+                $photos->photos->pages
+            )
         );
 
         $this->createProgressBar($photos->photos->pages);
 
         // Trigger job to fetch photos of user
         for ($page = 1; $page <= $photos->photos->pages; $page++) {
-            \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page)->onQueue('flickr');
+            \App\Jobs\Flickr\FlickrPhotos::dispatch($contact, $page);
+            $this->progressBar->setMessage('<fg=yellow;options=bold>QUEUED</>', 'status');
             $this->progressBar->advance();
         }
 

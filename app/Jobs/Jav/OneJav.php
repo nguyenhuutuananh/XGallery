@@ -10,6 +10,8 @@
 namespace App\Jobs\Jav;
 
 use App\JavMovies;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,6 +41,15 @@ class OneJav implements ShouldQueue
     public function __construct(array $itemDetail)
     {
         $this->itemDetail = $itemDetail;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('jav')];
     }
 
     /**
@@ -67,6 +78,6 @@ class OneJav implements ShouldQueue
         // Trigger job to update genres and xref
         UpdateGenres::dispatch($movie, $this->itemDetail['tags']);
         // Trigger job to update idols and xref
-        UpdateIdols::dispatch($movie, $this->itemDetail['actresses'])->onQueue('limited');
+        UpdateIdols::dispatch($movie, $this->itemDetail['actresses']);
     }
 }

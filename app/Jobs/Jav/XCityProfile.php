@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Jav;
 
 use App\JavIdols;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,6 +31,15 @@ class XCityProfile implements ShouldQueue
     public function __construct(array $item)
     {
         $this->item = $item;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('xcity')];
     }
 
     /**
@@ -48,17 +59,17 @@ class XCityProfile implements ShouldQueue
             $item = app(JavIdols::class);
         }
 
-        $item->name          = $itemDetail->name;
+        $item->name = $itemDetail->name;
         $item->reference_url = $itemDetail->url;
-        $item->cover         = $itemDetail->cover;
-        $item->favorite      = $itemDetail->favorite ?? null;
-        $item->birthday      = $itemDetail->birthday ?? null;
-        $item->blood_type    = $itemDetail->blood_type ?? null;
-        $item->city          = $itemDetail->city ?? null;
-        $item->height        = $itemDetail->height ?? null;
-        $item->breast        = $itemDetail->breast ?? null;
-        $item->waist         = $itemDetail->waist ?? null;
-        $item->hips          = $itemDetail->hips ?? null;
+        $item->cover = $itemDetail->cover;
+        $item->favorite = $itemDetail->favorite ?? null;
+        $item->birthday = $itemDetail->birthday ?? null;
+        $item->blood_type = $itemDetail->blood_type ?? null;
+        $item->city = $itemDetail->city ?? null;
+        $item->height = $itemDetail->height ?? null;
+        $item->breast = $itemDetail->breast ?? null;
+        $item->waist = $itemDetail->waist ?? null;
+        $item->hips = $itemDetail->hips ?? null;
 
         $item->save();
     }

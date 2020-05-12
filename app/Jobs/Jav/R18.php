@@ -7,11 +7,10 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-namespace App\Jobs;
+namespace App\Jobs\Jav;
 
 use App\JavMovies;
-use App\Jobs\Jav\UpdateGenres;
-use App\Jobs\Jav\UpdateIdols;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,6 +37,7 @@ class R18 implements ShouldQueue
     public function __construct(array $item)
     {
         $this->item = $item;
+        $this->onQueue(Queues::QUEUE_JAV);
     }
 
     /**
@@ -63,19 +63,19 @@ class R18 implements ShouldQueue
         }
 
         $movie->reference_url = $itemDetail->url;
-        $movie->cover         = $itemDetail->cover;
-        $movie->name          = $itemDetail->name;
-        $movie->release_date  = $itemDetail->release_date;
-        $movie->director      = $itemDetail->director;
-        $movie->studio        = $itemDetail->studio;
-        $movie->label         = $itemDetail->label;
-        $movie->channel       = $itemDetail->channel;
-        $movie->item_number   = strtoupper($itemDetail->dvd_id);
-        $movie->content_id    = $itemDetail->content_id;
-        $movie->dvd_id        = $itemDetail->dvd_id;
-        $movie->series        = $itemDetail->series;
-        $movie->gallery       = json_encode($itemDetail->gallery);
-        $movie->sample        = isset($itemDetail->sample) ? $itemDetail->sample : null;
+        $movie->cover = $itemDetail->cover;
+        $movie->name = $itemDetail->name;
+        $movie->release_date = $itemDetail->release_date;
+        $movie->director = $itemDetail->director;
+        $movie->studio = $itemDetail->studio;
+        $movie->label = $itemDetail->label;
+        $movie->channel = $itemDetail->channel;
+        $movie->item_number = strtoupper($itemDetail->dvd_id);
+        $movie->content_id = $itemDetail->content_id;
+        $movie->dvd_id = $itemDetail->dvd_id;
+        $movie->series = $itemDetail->series;
+        $movie->gallery = json_encode($itemDetail->gallery);
+        $movie->sample = isset($itemDetail->sample) ? $itemDetail->sample : null;
 
         $movie->save();
 

@@ -10,6 +10,7 @@
 namespace App\Jobs\Truyenchon;
 
 use App\Crawlers\Crawler\Truyenchon;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,6 +38,7 @@ class TruyenchonDownload implements ShouldQueue
     public function __construct(string $id)
     {
         $this->id = $id;
+        $this->onQueue(Queues::QUEUE_TRUYENTRANH);
     }
 
     /**
@@ -57,7 +59,6 @@ class TruyenchonDownload implements ShouldQueue
             if (!$item = $crawler->getItemDetail($chapter)) {
                 return;
             }
-
             TruyenchonChapterDownload::dispatch(
                 $item->images->toArray(),
                 DIRECTORY_SEPARATOR.Str::slug($model->title).DIRECTORY_SEPARATOR.$index

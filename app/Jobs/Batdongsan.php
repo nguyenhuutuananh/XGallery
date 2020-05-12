@@ -28,6 +28,7 @@ class Batdongsan implements ShouldQueue
     public function __construct(string $url)
     {
         $this->url = $url;
+        $this->onQueue(Queues::QUEUE_BATDONGSAN);
     }
 
     /**
@@ -51,7 +52,7 @@ class Batdongsan implements ShouldQueue
             return;
         }
 
-        $data  = get_object_vars($itemDetail);
+        $data = get_object_vars($itemDetail);
 
         // Can not use fill() because it will be required fillable properties
         foreach ($data as $key => $value) {

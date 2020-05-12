@@ -13,6 +13,8 @@ use App\Crawlers\Crawler\XCityProfile;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -45,6 +47,15 @@ class UpdateIdols implements ShouldQueue
     {
         $this->movie = $movie;
         $this->idols = $idols;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('jav')];
     }
 
     /**

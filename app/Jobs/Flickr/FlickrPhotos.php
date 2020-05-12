@@ -9,6 +9,8 @@
 
 namespace App\Jobs\Flickr;
 
+use App\Jobs\Middleware\FlickrRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Oauth\Services\Flickr\Flickr;
 use Illuminate\Bus\Queueable;
@@ -39,6 +41,15 @@ class FlickrPhotos implements ShouldQueue
     {
         $this->contact = $contact;
         $this->page = $page;
+        $this->onQueue(Queues::QUEUE_FLICKR);
+    }
+
+    /**
+     * @return FlickrRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new FlickrRateLimited()];
     }
 
     /**

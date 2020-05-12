@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\XCityProfile;
 use App\JavIdols;
 use App\JavMovies;
 use App\JavMoviesXref;
 use App\Jobs\Jav\UpdateGenres;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,6 +36,15 @@ class XCityVideo implements ShouldQueue
     public function __construct(array $item)
     {
         $this->item = $item;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('xcity')];
     }
 
     /**

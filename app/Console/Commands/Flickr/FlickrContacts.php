@@ -39,14 +39,18 @@ class FlickrContacts extends BaseCommand
         }
 
         $this->output->note(
-            'Got '.count($contacts->contacts->contact).' contacts in '.$contacts->contacts->pages.' pages'
+            sprintf(
+                'Got %d contacts in %d pages',
+                $contacts->contacts->total,
+                $contacts->contacts->pages
+            )
         );
 
         $this->createProgressBar($contacts->contacts->pages);
 
         for ($page = 1; $page <= $contacts->contacts->pages; $page++) {
             // Add contacts on a page
-            \App\Jobs\Flickr\FlickrContacts::dispatch($page)->onQueue('flickr');
+            \App\Jobs\Flickr\FlickrContacts::dispatch($page);
             $this->progressBar->advance();
         }
 

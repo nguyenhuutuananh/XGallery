@@ -16,7 +16,7 @@ use Exception;
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Batdongsan extends BaseCrawlerCommand
+final class Batdongsan extends BaseCrawlerCommand
 {
     /**
      * The name and signature of the console command.
@@ -56,7 +56,7 @@ class Batdongsan extends BaseCrawlerCommand
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-                \App\Jobs\Batdongsan::dispatch($item['url'])->onQueue('batdongsan');
+                \App\Jobs\Batdongsan::dispatch($item['url']);
                 $this->progressBar->setMessage($index + 1, 'step');
                 $this->progressBar->setMessage('QUEUED', 'status');
             });

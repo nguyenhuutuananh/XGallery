@@ -11,6 +11,8 @@ namespace App\Jobs\Jav;
 
 use App\JavMovies;
 use App\JavMoviesXref;
+use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Models\JavGenres;
 use Illuminate\Bus\Queueable;
@@ -40,6 +42,15 @@ class UpdateGenres implements ShouldQueue
     {
         $this->movie  = $movie;
         $this->genres = $genres;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('jav')];
     }
 
     /**

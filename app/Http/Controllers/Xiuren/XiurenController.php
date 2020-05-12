@@ -42,6 +42,6 @@ class XiurenController extends BaseController
      */
     public function download(string $id)
     {
-        XiurenDownload::dispatch($id)->onQueue('downloads');
+        XiurenDownload::dispatch($id);
     }
 }
