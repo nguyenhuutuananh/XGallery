@@ -10,6 +10,7 @@
 namespace App\Jobs\Jav;
 
 use App\JavMovies;
+use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
@@ -38,6 +39,14 @@ class R18 implements ShouldQueue
     {
         $this->item = $item;
         $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return StandardRateLimited[]
+     */
+    public function middleware()
+    {
+        return [new StandardRateLimited('r18')];
     }
 
     /**

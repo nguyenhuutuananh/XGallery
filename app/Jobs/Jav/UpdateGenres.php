@@ -50,7 +50,7 @@ class UpdateGenres implements ShouldQueue
      */
     public function middleware()
     {
-        return [new StandardRateLimited('jav')];
+        return [new StandardRateLimited('xcity')];
     }
 
     /**

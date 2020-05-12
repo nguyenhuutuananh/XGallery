@@ -55,7 +55,7 @@ class UpdateIdols implements ShouldQueue
      */
     public function middleware()
     {
-        return [new StandardRateLimited('jav')];
+        return [new StandardRateLimited('xcity')];
     }
 
     /**

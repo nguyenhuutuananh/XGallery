@@ -49,7 +49,7 @@ class OneJav implements ShouldQueue
      */
     public function middleware()
     {
-        return [new StandardRateLimited('jav')];
+        return [new StandardRateLimited('onejav')];
     }
 
     /**
