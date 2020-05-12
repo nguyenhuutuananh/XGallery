@@ -71,7 +71,7 @@ class Kernel extends ConsoleKernel
             'jav:onejav fully',
             'jav:r18 fully',
             'jav:xcityprofile',
-            'jav:xcity:video',
+            'jav:xcityvideo',
             'xiuren',
             'phodacbiet',
             'flickr:photos',
