@@ -120,6 +120,12 @@ class CrawlerEndpointsSeeder extends Seeder
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ],
+                [
+                    'crawler' => 'Kissgoddess',
+                    'url' => 'https://kissgoddess.com/gallery/',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ],
             ]
         );
     }
