@@ -38,10 +38,7 @@ abstract class AbstractCrawler implements CrawlerInterface
     public function __construct(array $config = [])
     {
         $this->config = array_merge($config, config('crawler.'.strtolower($this->getShortClassname())));
-
-        if (!isset($this->config['cache'])) {
-            $this->config['cache'] = 3600;
-        }
+        $this->config['cache'] = $this->config['cache'] ?? 3600;
     }
 
     /**
@@ -88,11 +85,8 @@ abstract class AbstractCrawler implements CrawlerInterface
      * @param  int|null  $to
      * @return Collection
      */
-    public function getIndexLinks(
-        string $indexUri = null,
-        int $from = 1,
-        ?int $to = null
-    ): Collection {
+    public function getIndexLinks(string $indexUri = null, int $from = 1, ?int $to = null): Collection
+    {
         $pages = $this->getIndexPagesCount($indexUri);
         $url = Url::fromString($indexUri);
 

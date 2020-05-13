@@ -84,31 +84,29 @@ class BaseCrawlerCommand extends BaseCommand
             return false;
         }
 
-        $pages = $this->getCrawler()->getIndexLinks(
-            $endpoint->url,
-            (int) $endpoint->page,
-            (int) $endpoint->page
-        );
+        $from = $to = (int) $endpoint->page;
+        $pages = $this->getCrawler()->getIndexLinks($endpoint->url, $from, $to);
 
-        if ($pages->isEmpty()) {
-            $this->error('Can not get index links');
-            $endpoint->failed = (int) $endpoint->failed + 1;
-            if ($endpoint->failed === 10) {
-                $endpoint->page = 1;
-                $endpoint->failed = 0;
-                $endpoint->save();
-                return false;
-            }
+        if (!$pages->isEmpty()) {
+            $endpoint->page = $to + 1;
+            $endpoint->save();
 
-            $endpoint->page = (int) $endpoint->page + 1;
+            return $pages;
+        }
+
+        $this->error('Can not get index links');
+        $endpoint->failed = (int) $endpoint->failed + 1;
+
+        if ($endpoint->failed === 10) {
+            $endpoint->page = 1;
+            $endpoint->failed = 0;
             $endpoint->save();
             return false;
         }
 
-        $endpoint->page = (int) $endpoint->page + 1;
+        $endpoint->page = $to + 1;
         $endpoint->save();
-
-        return $pages;
+        return false;
     }
 
     /**
@@ -120,10 +118,8 @@ class BaseCrawlerCommand extends BaseCommand
         /**
          * @var Model $endpoint
          */
-        if (!$endpoint = CrawlerEndpoints::where(['crawler' => $this->getShortClassname()])->orderBy(
-            'updated_at',
-            'asc'
-        )->get()->first()) {
+        if (!$endpoint = CrawlerEndpoints::where(['crawler' => $this->getShortClassname()])
+            ->orderBy('updated_at', 'asc')->get()->first()) {
             throw new Exception('Crawler endpoint not found');
         }
 
@@ -145,7 +141,7 @@ class BaseCrawlerCommand extends BaseCommand
             return $this->crawler;
         }
 
-        $this->crawler = app('\App\Crawlers\Crawler\\'.$this->getShortClassname());
+        $this->crawler = app('\\App\\Crawlers\\Crawler\\'.$this->getShortClassname());
 
         return $this->crawler;
     }
@@ -186,7 +182,7 @@ class BaseCrawlerCommand extends BaseCommand
      */
     protected function getModel(): Model
     {
-        $this->model = app('\App\\'.$this->getShortClassname());
+        $this->model = app('\App\\Models\\'.$this->getShortClassname());
 
         return $this->model;
     }

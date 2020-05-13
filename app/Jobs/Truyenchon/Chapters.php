@@ -9,6 +9,7 @@
 
 namespace App\Jobs\Truyenchon;
 
+use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Models\Truyenchon;
 use Illuminate\Bus\Queueable;
@@ -39,6 +40,7 @@ class Chapters implements ShouldQueue
     {
         $this->item = $item;
         $this->chapterUrl = $chapterUrl;
+        $this->onQueue(Queues::QUEUE_TRUYENTRANH);
     }
 
     public function handle()

@@ -20,6 +20,8 @@ use stdClass;
  */
 final class Batdongsan extends AbstractCrawler
 {
+    const CRAWLER_ENDPOINT = 'https://batdongsan.com.vn';
+
     /**
      * @param  string  $itemUri
      * @return object|null
@@ -121,7 +123,7 @@ final class Batdongsan extends AbstractCrawler
 
         $links = $crawler->filter('.search-productItem')->each(function ($node) {
             return [
-                'url' => 'https://batdongsan.com.vn'.$node->filter('h3 a')->attr('href'),
+                'url' => self::CRAWLER_ENDPOINT.$node->filter('h3 a')->attr('href'),
                 'title' => $node->filter('h3 a')->attr('title'),
                 'cover' => $node->filter('.p-main-image-crop img.product-avatar-img')->attr('src'),
             ];

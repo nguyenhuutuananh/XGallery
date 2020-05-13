@@ -17,7 +17,7 @@ class FlickrRateLimited
     private int    $every;
     private int    $block;
 
-    public function __construct(string $key = 'flickr', int $allow = 1, int $every = 1, int $block = 2)
+    public function __construct(string $key = 'flickr', int $allow = 2, int $every = 1, int $block = 2)
     {
         $this->key = $key;
         $this->allow = $allow;
