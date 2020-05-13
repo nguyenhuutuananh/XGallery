@@ -10,12 +10,12 @@
 namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\XCityProfile;
-use App\JavIdols;
-use App\JavMovies;
-use App\JavMoviesXref;
 use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
+use App\Models\JavIdols;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -92,7 +92,7 @@ class UpdateIdols implements ShouldQueue
                     }
 
                     // Save to idol with OneJAV reference_url
-                    $model->name          = $actress;
+                    $model->name = $actress;
                     $model->reference_url = $this->movie->id;
                     $model->save();
                     $this->insertXRef($model);
@@ -117,17 +117,17 @@ class UpdateIdols implements ShouldQueue
                         return;
                     }
 
-                    $model->name          = $actressDetail->name;
+                    $model->name = $actressDetail->name;
                     $model->reference_url = $actressDetail->url;
-                    $model->cover         = $actressDetail->cover;
-                    $model->favorite      = $actressDetail->favorite ?? null;
-                    $model->birthday      = $actressDetail->birthday ?? null;
-                    $model->blood_type    = $actressDetail->blood_type ?? null;
-                    $model->city          = $actressDetail->city ?? null;
-                    $model->height        = $actressDetail->height ?? null;
-                    $model->breast        = $actressDetail->breast ?? null;
-                    $model->waist         = $actressDetail->waist ?? null;
-                    $model->hips          = $actressDetail->hips ?? null;
+                    $model->cover = $actressDetail->cover;
+                    $model->favorite = $actressDetail->favorite ?? null;
+                    $model->birthday = $actressDetail->birthday ?? null;
+                    $model->blood_type = $actressDetail->blood_type ?? null;
+                    $model->city = $actressDetail->city ?? null;
+                    $model->height = $actressDetail->height ?? null;
+                    $model->breast = $actressDetail->breast ?? null;
+                    $model->waist = $actressDetail->waist ?? null;
+                    $model->hips = $actressDetail->hips ?? null;
 
                     $model->save();
                     $this->insertXRef($model);
@@ -143,7 +143,7 @@ class UpdateIdols implements ShouldQueue
     private function insertXRef(JavIdols $idolModel)
     {
         $model = app(JavMoviesXref::class);
-        $xref  = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $this->movie->id];
+        $xref = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $this->movie->id];
         if ($model->where($xref)->first()) {
             return;
         }

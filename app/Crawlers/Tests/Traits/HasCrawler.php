@@ -72,7 +72,7 @@ trait HasCrawler
     {
         foreach ($this->indexLinks as $indexLink => $detail) {
             $pageCount = $this->crawler->getIndexPagesCount($indexLink);
-            echo $indexLink . ' pages: ' . $pageCount;
+            echo $indexLink.' pages: '.$pageCount;
             $this->assertIsNumeric($pageCount);
             $this->assertGreaterThanOrEqual(
                 $detail['pageCount'],
@@ -93,7 +93,7 @@ trait HasCrawler
             if ($pageCount < $expectEndPage) {
                 $expectEndPage = $pageCount;
             }
-            echo $indexLink . ' page from 1 to ' . $expectEndPage;
+            echo $indexLink.' page from 1 to '.$expectEndPage;
             $links = $this->crawler->getIndexLinks($indexLink, 1, $expectEndPage);
             $this->assertEquals($expectEndPage, $links->count(), __('Invalid pageCount on URL '.$indexLink));
             $links = $links->first();

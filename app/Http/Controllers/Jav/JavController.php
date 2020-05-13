@@ -10,11 +10,11 @@
 namespace App\Http\Controllers\Jav;
 
 use App\Http\Controllers\BaseController;
-use App\JavIdols;
-use App\JavMovies;
-use App\JavMoviesXref;
 use App\Models\JavDownload;
 use App\Models\JavGenres;
+use App\Models\JavIdols;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

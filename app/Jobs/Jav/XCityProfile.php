@@ -2,10 +2,10 @@
 
 namespace App\Jobs\Jav;
 
-use App\JavIdols;
 use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
+use App\Models\JavIdols;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

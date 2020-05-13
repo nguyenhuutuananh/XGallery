@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Jobs\Middleware;
 
 use Illuminate\Contracts\Redis\LimiterTimeoutException;
@@ -17,7 +16,7 @@ class StandardRateLimited
     private int    $every;
     private int    $block;
 
-    public function __construct(string $key, int $allow = 4, int $every = 1, int $block = 6)
+    public function __construct(string $key, int $allow = 5, int $every = 1, int $block = 6)
     {
         $this->key = $key;
         $this->allow = $allow;

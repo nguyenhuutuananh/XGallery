@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GoogleDrive
 {
-    private Google_Client $client;
+    private Google_Client        $client;
     private Google_Service_Drive $drive;
 
     public function __construct(Google_Client $client)
@@ -54,9 +54,11 @@ class GoogleDrive
     {
         $folderMeta = new Google_Service_Drive_DriveFile(array(
             'name' => $folderName,
-            'mimeType' => 'application/vnd.google-apps.folder'));
+            'mimeType' => 'application/vnd.google-apps.folder'
+        ));
         $folder = $this->drive->files->create($folderMeta, array(
-            'fields' => 'id'));
+            'fields' => 'id'
+        ));
         return $folder->id;
     }
 
@@ -68,7 +70,7 @@ class GoogleDrive
             'parent' => $parentId
         ]);
 
-        $content = gettype($file) === 'object' ?  File::get($file) : Storage::get($file);
+        $content = gettype($file) === 'object' ? File::get($file) : Storage::get($file);
         $mimeType = gettype($file) === 'object' ? File::mimeType($file) : Storage::mimeType($file);
 
         $file = $this->drive->files->create($fileMetadata, [

@@ -9,10 +9,10 @@
 
 namespace App\Jobs\Jav;
 
-use App\JavMovies;
 use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
+use App\Models\JavMovies;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -59,7 +59,7 @@ class OneJav implements ShouldQueue
      */
     public function handle()
     {
-        $model      = app(JavMovies::class);
+        $model = app(JavMovies::class);
         $itemNumber = $this->itemDetail['title'];
 
         // To store in JavMovies we use item_number as unique
@@ -69,10 +69,10 @@ class OneJav implements ShouldQueue
             Log::stack(['jav'])->info('New video', $this->itemDetail);
         }
 
-        $movie->item_number     = $itemNumber;
-        $movie->release_date    = $this->itemDetail['date'];
+        $movie->item_number = $itemNumber;
+        $movie->release_date = $this->itemDetail['date'];
         $movie->is_downloadable = true;
-        $movie->description     = isset($this->itemDetail['description']) ? $this->itemDetail['description'] : null;
+        $movie->description = isset($this->itemDetail['description']) ? $this->itemDetail['description'] : null;
         $movie->save();
 
         // Trigger job to update genres and xref

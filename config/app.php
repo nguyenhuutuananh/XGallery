@@ -193,6 +193,7 @@ return [
         App\Providers\GoogleServiceProvider::class,
 
         Elasticquent\ElasticquentServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

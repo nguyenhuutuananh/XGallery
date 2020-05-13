@@ -41,8 +41,8 @@ class XiurenDownload implements ShouldQueue
      */
     public function handle()
     {
-        $item    = Xiuren::find($this->id);
-        $name    = basename($item->url, '.html');
+        $item = Xiuren::find($this->id);
+        $name = basename($item->url, '.html');
         $crawler = app(\App\Crawlers\Crawler\Xiuren::class);
         try {
             foreach ($item->images as $image) {

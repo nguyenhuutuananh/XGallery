@@ -62,7 +62,7 @@ class OauthClient
         /**
          * @TODO Support decode content via event
          */
-        $header  = $response->getHeader('Content-Type')[0] ?? '';
+        $header = $response->getHeader('Content-Type')[0] ?? '';
         $content = (string) $response->getBody();
 
         if (strpos($header, 'application/json') === false) {
@@ -85,7 +85,7 @@ class OauthClient
             return null;
         }
 
-        $stack      = HandlerStack::create();
+        $stack = HandlerStack::create();
         $middleware = new Oauth1([
             'consumer_key' => config('auth.flickr.token'),
             'consumer_secret' => config('auth.flickr.token_secret'),

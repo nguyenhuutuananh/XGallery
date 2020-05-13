@@ -47,7 +47,7 @@ class XCityVideo extends BaseCrawlerCommand
         if (!$items || $items->isEmpty()) {
             $endpoint->failed = (int) $endpoint->failed + 1;
             if ($endpoint->failed === 10) {
-                $endpoint->page   = 1;
+                $endpoint->page = 1;
                 $endpoint->failed = 0;
                 $endpoint->save();
                 return false;

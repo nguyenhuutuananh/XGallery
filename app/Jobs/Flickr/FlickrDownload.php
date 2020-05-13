@@ -63,7 +63,7 @@ class FlickrDownload implements ShouldQueue
     public function handle()
     {
         $client = app(Flickr::class);
-        $httpClient   = app(HttpClient::class);
+        $httpClient = app(HttpClient::class);
 
         if (!$sizes = $client->get('photos.getSizes', ['photo_id' => $this->photo->id])) {
             return;
@@ -74,7 +74,7 @@ class FlickrDownload implements ShouldQueue
             return;
         }
 
-        $process = new Process([base_path() .'/gdrive.sh']);
+        $process = new Process([base_path().'/gdrive.sh']);
         $process->run();
 
         // executes after the command finishes

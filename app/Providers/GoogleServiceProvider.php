@@ -41,7 +41,7 @@ class GoogleServiceProvider extends ServiceProvider
                 ->put(
                     'client_secret_7096753146-memucg956hbii78oi9ai84kplb578h7l.apps.googleusercontent.com.json',
                     json_encode([
-                    'web' => config('services.google')
+                        'web' => config('services.google')
                     ])
                 );
             $client->setAuthConfig(Storage::path('client_secret_7096753146-memucg956hbii78oi9ai84kplb578h7l.apps.googleusercontent.com.json'));

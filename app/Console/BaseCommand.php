@@ -31,6 +31,22 @@ class BaseCommand extends Command
     protected ProgressBar $progressBar;
 
     /**
+     * Entry point
+     */
+    public function handle()
+    {
+        $task = $this->argument('task');
+        $this->output->title('<info>Running </info>'.$task);
+
+        if (!method_exists($this, $task)) {
+            $this->output->warning('Task '.$task.' not found');
+            return false;
+        }
+
+        return call_user_func([$this, $task]);
+    }
+
+    /**
      * @param  int  $max
      * @return ProgressBar
      */
@@ -55,22 +71,6 @@ class BaseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         return $this->completed(parent::execute($input, $output));
-    }
-
-    /**
-     * Entry point
-     */
-    public function handle()
-    {
-        $task = $this->argument('task');
-        $this->output->title('<info>Running </info>'.$task);
-
-        if (!method_exists($this, $task)) {
-            $this->output->warning('Task '.$task.' not found');
-            return false;
-        }
-
-        return call_user_func([$this, $task]);
     }
 
     /**

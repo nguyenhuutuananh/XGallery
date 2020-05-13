@@ -49,9 +49,9 @@ class JavDownload implements ShouldQueue
     public function handle()
     {
         $crawler = app(Onejav::class);
-        $pages   = $crawler->search([$this->javDownload->item_number]);
+        $pages = $crawler->search([$this->javDownload->item_number]);
         $pages->each(function ($page) use ($crawler) {
-            $item       = $page->sortByDesc('size')->first();
+            $item = $page->sortByDesc('size')->first();
             $itemDetail = $crawler->getItemDetail($item['url']);
             $crawler->download($itemDetail->torrent, 'onejav');
             $this->javDownload->is_downloaded = true;

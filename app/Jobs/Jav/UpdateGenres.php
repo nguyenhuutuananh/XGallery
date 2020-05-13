@@ -9,12 +9,12 @@
 
 namespace App\Jobs\Jav;
 
-use App\JavMovies;
-use App\JavMoviesXref;
 use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Models\JavGenres;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -40,7 +40,7 @@ class UpdateGenres implements ShouldQueue
      */
     public function __construct(JavMovies $movie, array $genres)
     {
-        $this->movie  = $movie;
+        $this->movie = $movie;
         $this->genres = $genres;
         $this->onQueue(Queues::QUEUE_JAV);
     }

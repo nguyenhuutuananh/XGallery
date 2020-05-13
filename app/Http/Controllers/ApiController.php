@@ -39,7 +39,7 @@ class ApiController extends BaseController
      */
     private function getResponse($data, $isSucceed = true): array
     {
-        $this->response['data']    = $data;
+        $this->response['data'] = $data;
         $this->response['succeed'] = $isSucceed;
         return $this->response;
     }

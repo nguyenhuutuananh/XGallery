@@ -3,13 +3,12 @@
 namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\XCityProfile;
-use App\JavIdols;
-use App\JavMovies;
-use App\JavMoviesXref;
-use App\Jobs\Jav\UpdateGenres;
 use App\Jobs\Middleware\StandardRateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
+use App\Models\JavIdols;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -67,18 +66,18 @@ class XCityVideo implements ShouldQueue
             Log::stack(['jav'])->info('Saving new video '.$itemDetail->item_number);
         }
 
-        $movie->name          = $itemDetail->title;
+        $movie->name = $itemDetail->title;
         $movie->reference_url = $itemDetail->url;
-        $movie->gallery       = json_encode($itemDetail->gallery);
-        $movie->sales_date    = isset($itemDetail->sales_date) ? $itemDetail->sales_date : null;
-        $movie->label         = $itemDetail->label;
+        $movie->gallery = json_encode($itemDetail->gallery);
+        $movie->sales_date = isset($itemDetail->sales_date) ? $itemDetail->sales_date : null;
+        $movie->label = $itemDetail->label;
         // @TODO Maker
-        $movie->series       = $itemDetail->series;
-        $movie->director     = $itemDetail->director;
-        $movie->item_number  = $itemDetail->item_number;
-        $movie->time         = $itemDetail->time;
+        $movie->series = $itemDetail->series;
+        $movie->director = $itemDetail->director;
+        $movie->item_number = $itemDetail->item_number;
+        $movie->time = $itemDetail->time;
         $movie->release_date = $itemDetail->release_date ?? null;
-        $movie->description  = isset($itemDetail->description) ? $itemDetail->description : null;
+        $movie->description = isset($itemDetail->description) ? $itemDetail->description : null;
 
         $movie->save();
 
@@ -99,7 +98,7 @@ class XCityVideo implements ShouldQueue
                     continue;
                 }
                 // Create new model
-                $model->name          = $actress[1];
+                $model->name = $actress[1];
                 $model->reference_url = $movie->id;
                 $model->save();
                 $this->insertXRef($model, $movie);
@@ -117,17 +116,17 @@ class XCityVideo implements ShouldQueue
                 continue;
             }
 
-            $model->name          = $actressDetail->name;
+            $model->name = $actressDetail->name;
             $model->reference_url = $actressDetail->url;
-            $model->cover         = $actressDetail->cover;
-            $model->favorite      = $actressDetail->favorite ?? null;
-            $model->birthday      = $actressDetail->birthday ?? null;
-            $model->blood_type    = $actressDetail->blood_type ?? null;
-            $model->city          = $actressDetail->city ?? null;
-            $model->height        = $actressDetail->height ?? null;
-            $model->breast        = $actressDetail->breast ?? null;
-            $model->waist         = $actressDetail->waist ?? null;
-            $model->hips          = $actressDetail->hips ?? null;
+            $model->cover = $actressDetail->cover;
+            $model->favorite = $actressDetail->favorite ?? null;
+            $model->birthday = $actressDetail->birthday ?? null;
+            $model->blood_type = $actressDetail->blood_type ?? null;
+            $model->city = $actressDetail->city ?? null;
+            $model->height = $actressDetail->height ?? null;
+            $model->breast = $actressDetail->breast ?? null;
+            $model->waist = $actressDetail->waist ?? null;
+            $model->hips = $actressDetail->hips ?? null;
 
             $model->save();
             $this->insertXRef($model, $movie);
@@ -143,7 +142,7 @@ class XCityVideo implements ShouldQueue
     private function insertXRef(JavIdols $idolModel, JavMovies $movie)
     {
         $model = app(JavMoviesXref::class);
-        $xref  = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $movie->id];
+        $xref = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $movie->id];
         if ($model->where($xref)->first()) {
             return;
         }

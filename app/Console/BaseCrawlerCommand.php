@@ -25,7 +25,7 @@ class BaseCrawlerCommand extends BaseCommand
     use HasObject;
 
     protected CrawlerInterface $crawler;
-    protected Model $model;
+    protected Model            $model;
 
     /**
      * Process WHOLE site by specific Index URL

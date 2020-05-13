@@ -62,11 +62,11 @@ class TruyenchonController extends BaseController
         return view(
             'truyenchon.story',
             [
-                'story'=> $story,
+                'story' => $story,
                 'items' => $story->chapters[$chapter],
-                'next'=> $nextKey,
+                'next' => $nextKey,
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'Truyenchon - ' . $story->title,
+                'title' => 'Truyenchon - '.$story->title,
                 'description' => ''
             ]
         );
