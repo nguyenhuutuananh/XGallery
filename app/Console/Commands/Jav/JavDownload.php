@@ -34,8 +34,12 @@ class JavDownload extends BaseCommand
     public function handle()
     {
         $downloads = \App\Models\JavDownload::where(['is_downloaded' => null])->get();
+        $this->createProgressBar($downloads->count());
         $downloads->each(function ($download) {
             \App\Jobs\Jav\JavDownload::dispatch($download);
+            $this->progressBar->advance();
         });
+
+        return true;
     }
 }

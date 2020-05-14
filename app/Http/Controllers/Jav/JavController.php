@@ -40,12 +40,14 @@ class JavController extends BaseController
      */
     public function dashboard(Request $request, \App\Repositories\JavMovies $repository)
     {
+        $items = $repository->getItems($request->request->all());
+
         return view(
             'jav.index',
             [
                 'items' => $repository->getItems($request->request->all()),
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV movies',
+                'title' => 'JAV - ' . $items->total() . ' Movies - ' . $items->currentPage() . ' / ' . $items->lastPage(),
                 'description' => ''
             ]
         );
@@ -91,7 +93,7 @@ class JavController extends BaseController
             [
                 'items' => app(\App\Repositories\JavMovies::class)->getItems($filter),
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV genre - '.JavGenres::find($id)->first()->name,
+                'title' => 'JAV genre - '.JavGenres::find($id)->name,
                 'description' => ''
             ]
         );
@@ -113,13 +115,15 @@ class JavController extends BaseController
             ]
         );
 
+        $idol = JavIdols::find($id);
+
         return view(
             'jav.idol',
             [
                 'items' => app(\App\Repositories\JavMovies::class)->getItems($filter),
-                'idol' => JavIdols::find($id),
+                'idol' => $idol,
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV genre - '.JavGenres::find($id),
+                'title' => 'JAV - '.$idol->name,
                 'description' => ''
             ]
         );
@@ -134,7 +138,7 @@ class JavController extends BaseController
     {
         if (JavDownload::where(['item_number' => $itemNumber])->first()) {
             return response()->json([
-                'html' => Toast::warning('Download', 'Item already exists')
+                'html' => Toast::warning('Download', 'Item <strong>' . $itemNumber . '</strong> already exists')
             ]);
         }
 
@@ -143,7 +147,7 @@ class JavController extends BaseController
         $model->save();
 
         return response()->json([
-            'html' => Toast::success('Download', 'Item added to queue')
+            'html' => Toast::success('Download', 'Item <strong>' . $itemNumber . '</strong> added to queue')
         ]);
     }
 }

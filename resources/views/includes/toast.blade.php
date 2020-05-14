@@ -7,6 +7,6 @@
         </button>
     </div>
     <div class="toast-body">
-        {{$message ?? null}}
+        {!!$message ?? null!!}
     </div>
 </div>
