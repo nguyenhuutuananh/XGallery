@@ -18,14 +18,14 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class JavMovies
 {
-    private \App\JavMovies $model;
+    private \App\Models\JavMovies $model;
     private Builder        $builder;
 
     private array $filterFields = [
         'name', 'item_number', 'content_id', 'dvd_id', 'director', 'studio', 'label', 'channel', 'series', 'description'
     ];
 
-    public function __construct(\App\JavMovies $model)
+    public function __construct(\App\Models\JavMovies $model)
     {
         $this->model = $model;
         $this->builder = $model->query();
@@ -53,18 +53,15 @@ class JavMovies
             $this->builder->whereIn('id', $filter['ids']);
         }
 
-        if (isset($filter['director'])) {
-            $this->builder->where('director', 'LIKE', '%'.$filter['director'].'%');
+        if (isset($filter['filter']) && !empty($filter['filter'])) {
+            foreach ($filter['filter'] as $key => $value) {
+                if (empty($value)) {
+                    continue;
+                }
+                $this->builder->where($key, 'LIKE', '%'.$value.'%');
+            }
         }
 
-        if (isset($filter['studio'])) {
-            $this->builder->where('studio', 'LIKE', '%'.$filter['studio'].'%');
-        }
-
-        if (isset($filter['label'])) {
-            $this->builder->where('label', 'LIKE', '%'.$filter['label'].'%');
-        }
-
-        return $this->builder->paginate($filter['limit'] ?? 15);
+        return $this->builder->paginate($filter['per-page'] ?? 15);
     }
 }

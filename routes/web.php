@@ -28,6 +28,7 @@ Route::namespace('App\Http\Controllers\Jav')
     ->prefix('jav')
     ->group(function () {
         Route::get('/', [JavController::class, 'dashboard'])->name('jav.dashboard.view');
+        Route::post('/', [JavController::class, 'dashboard'])->name('jav.dashboard.view');
         Route::get('/movie/{id}', [JavController::class, 'movie'])->name('jav.movie.view');
         Route::get('/genre/{id}', [JavController::class, 'genre'])->name('jav.genre.view');
         Route::get('/idol/{id}', [JavController::class, 'idol'])->name('jav.idol.view');

@@ -8,7 +8,7 @@
                 <div class="info-box-content">
                     <span class="info-box-text">Idols</span>
                     <span class="info-box-number">
-                  {{\App\JavIdols::count()}}
+                  {{\App\Models\JavIdols::count()}}
                 </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -39,7 +39,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">JAV</span>
-                    <span class="info-box-number">{{\App\JavMovies::count()}}</span>
+                    <span class="info-box-number">{{\App\Models\JavMovies::count()}}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -52,7 +52,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Downloadable</span>
-                    <span class="info-box-number">{{\App\JavMovies::where(['is_downloadable'=>1])->count()}}</span>
+                    <span class="info-box-number">{{\App\Models\JavMovies::where(['is_downloadable'=>1])->count()}}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>

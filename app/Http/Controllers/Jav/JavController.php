@@ -10,6 +10,7 @@
 namespace App\Http\Controllers\Jav;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Helpers\Toast;
 use App\Models\JavDownload;
 use App\Models\JavGenres;
 use App\Models\JavIdols;
@@ -20,6 +21,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,14 +35,15 @@ class JavController extends BaseController
 
     /**
      * @param  Request  $request
+     * @param  \App\Repositories\JavMovies  $repository
      * @return Application|Factory|View
      */
-    public function dashboard(Request $request)
+    public function dashboard(Request $request, \App\Repositories\JavMovies $repository)
     {
         return view(
             'jav.index',
             [
-                'items' => app(\App\Repositories\JavMovies::class)->getItems($request->request->all()),
+                'items' => $repository->getItems($request->request->all()),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'JAV movies',
                 'description' => ''
@@ -123,17 +126,24 @@ class JavController extends BaseController
     }
 
     /**
-     * Add to download
      * @param  string  $itemNumber
+     * @return JsonResponse
+     * @throws \Throwable
      */
     public function download(string $itemNumber)
     {
         if (JavDownload::where(['item_number' => $itemNumber])->first()) {
-            return;
+            return response()->json([
+                'html' => Toast::warning('Download', 'Item already exists')
+            ]);
         }
 
         $model = app(JavDownload::class);
         $model->item_number = $itemNumber;
         $model->save();
+
+        return response()->json([
+            'html' => Toast::success('Download', 'Item added to queue')
+        ]);
     }
 }
