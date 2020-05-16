@@ -22,6 +22,7 @@ class BaseRepository
             $this->builder->orderBy($filter['sort-by'], $filter['sort-dir'] ?? 'asc');
         }
 
-        return $this->builder->paginate(isset($filter['per-page']) ? (int) $filter['per-page'] : 15);
+        return $this->builder->paginate(isset($filter['per-page']) ? (int) $filter['per-page'] : 15)
+            ->appends(request()->except('page'));
     }
 }
