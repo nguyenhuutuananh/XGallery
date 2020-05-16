@@ -42,6 +42,7 @@ Route::namespace('App\Http\Controllers\Xiuren')
     ->prefix('xiuren')
     ->group(function () {
         Route::get('/', [XiurenController::class, 'dashboard'])->name('xiuren.dashboard.view');
+        Route::get('/{id}', [XiurenController::class, 'item'])->name('xiuren.item.view');
         Route::post(
             '/download/{id}',
             [XiurenController::class, 'download']

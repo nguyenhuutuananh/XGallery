@@ -4,7 +4,7 @@
     <div class="card-columns">
         @foreach ($items as $item)
             <div class="card">
-                @include('includes.card.cover', ['cover' => $item->getCover()])
+                <a href="{{route('xiuren.item.view',['id' => $item->id])}}">@include('includes.card.cover', ['cover' => $item->getCover()])</a>
                 <div class="card-body">
 
                 </div>

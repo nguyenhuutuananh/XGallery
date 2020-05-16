@@ -37,6 +37,19 @@ class XiurenController extends BaseController
         );
     }
 
+    public function item(string $id)
+    {
+        return view(
+            'xiuren.item',
+            [
+                'item' => Xiuren::find($id),
+                'sidebar' => $this->getMenuItems(),
+                'title' => 'Xiuren',
+                'description' => ''
+            ]
+        );
+    }
+
     /**
      * @param  string  $id
      */
