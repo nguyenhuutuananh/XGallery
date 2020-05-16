@@ -10,6 +10,7 @@
 namespace App\Jobs;
 
 use App\Crawlers\Crawler\Nhaccuatui;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\HasJob;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -37,6 +38,14 @@ class DownloadNhacCuaTui implements ShouldQueue
     {
         $this->url = $url;
         $this->onQueue(Queues::QUEUE_DOWNLOADS);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('nhaccuatui')];
     }
 
     /**

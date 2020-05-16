@@ -10,6 +10,7 @@
 namespace App\Jobs\Flickr;
 
 use App\Jobs\Middleware\FlickrRateLimited;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Oauth\Services\Flickr\Flickr;
@@ -42,11 +43,11 @@ class FlickrContacts implements ShouldQueue
     }
 
     /**
-     * @return FlickrRateLimited[]
+     * @return RateLimited[]
      */
     public function middleware()
     {
-        return [new FlickrRateLimited()];
+        return [new RateLimited('flickr')];
     }
 
     /**

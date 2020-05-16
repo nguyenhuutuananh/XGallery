@@ -9,7 +9,7 @@
 
 namespace App\Jobs\Jav;
 
-use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use App\Models\JavGenres;
@@ -46,11 +46,11 @@ class UpdateGenres implements ShouldQueue
     }
 
     /**
-     * @return StandardRateLimited[]
+     * @return RateLimited[]
      */
     public function middleware()
     {
-        return [new StandardRateLimited('xcity')];
+        return [new RateLimited('xcity')];
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\Onejav;
-use App\Jobs\Middleware\StandardRateLimited;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
@@ -34,11 +34,11 @@ class JavDownload implements ShouldQueue
     }
 
     /**
-     * @return StandardRateLimited[]
+     * @return RateLimited[]
      */
     public function middleware()
     {
-        return [new StandardRateLimited('jav')];
+        return [new RateLimited('jav')];
     }
 
     /**

@@ -10,6 +10,7 @@
 namespace App\Jobs\Truyenchon;
 
 use App\Crawlers\Crawler\Truyenchon;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Queues;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
@@ -46,6 +47,14 @@ class TruyenchonChapterDownload implements ShouldQueue
         $this->images = $images;
         $this->path = $path;
         $this->onQueue(Queues::QUEUE_DOWNLOADS);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('truyenchon')];
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\HasJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,6 +30,14 @@ class Batdongsan implements ShouldQueue
     {
         $this->url = $url;
         $this->onQueue(Queues::QUEUE_BATDONGSAN);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('batdongsan')];
     }
 
     /**

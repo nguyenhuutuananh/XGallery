@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\HasJob;
 use App\Models\Xiuren;
 use Exception;
@@ -32,6 +33,14 @@ class XiurenDownload implements ShouldQueue
     {
         $this->id = $id;
         $this->onQueue(Queues::QUEUE_JAV_DOWNLOADS);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('xiuren')];
     }
 
     /**
