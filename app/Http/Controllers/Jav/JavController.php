@@ -79,14 +79,7 @@ class JavController extends BaseController
      */
     public function genre(int $id, Request $request)
     {
-        $filter = array_merge(
-            $request->request->all(),
-            [
-                'ids' => JavMoviesXref::where([
-                    'xref_id' => $id, 'xref_type' => 'genre'
-                ])->select('movie_id')->get()->toArray()
-            ]
-        );
+        $filter = array_merge($request->request->all(), ['genre' => $id]);
 
         return view(
             'jav.index',
@@ -106,14 +99,7 @@ class JavController extends BaseController
      */
     public function idol(int $id, Request $request)
     {
-        $filter = array_merge(
-            $request->request->all(),
-            [
-                'ids' => JavMoviesXref::where([
-                    'xref_id' => $id, 'xref_type' => 'idol'
-                ])->select('movie_id')->get()->toArray()
-            ]
-        );
+        $filter = array_merge($request->request->all(), ['idol' => $id]);
 
         $idol = JavIdols::find($id);
 
