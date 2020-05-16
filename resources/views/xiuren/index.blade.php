@@ -4,7 +4,7 @@
     <div class="card-columns">
         @foreach ($items as $item)
             <div class="card">
-                @include('macros.card.cover')
+                @include('includes.card.cover')
                 <div class="card-body">
 
                 </div>
