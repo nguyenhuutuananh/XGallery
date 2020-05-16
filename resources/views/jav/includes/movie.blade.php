@@ -57,7 +57,7 @@
     <div class="card-footer">
         <small class="text-muted"><i class="far fa-calendar-alt mr-1"></i>{{$item->release_date}}</small>
 
-        @if(\Illuminate\Support\Facades\Config::get('adult.download'))
+        @if(config('adult.download'))
             <span class="float-right">
              <button type="button"
                      class="btn @if($item->is_downloadable == 1)btn-primary @else btn-warning @endif btn-sm ajax-pool"

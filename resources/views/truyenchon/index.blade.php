@@ -4,7 +4,9 @@
     <div class="card-columns">
         @foreach ($items as $item)
             <div class="card">
-                <img class="bd-placeholder-img card-img-top" src="{{$item->getCover()}}"/>
+                <a href="{{route('truyenchon.story.view',['id'=> $item->id, 'chapter'=> 'chap-1'])}}">
+                    @include('includes.card.cover',['cover'=>$item->getCover(), 'alt'=>$item->title])
+                </a>
                 <div class="card-body">
                     <a href="">
                         <h5 class="card-title mr-1"><strong>{{$item->title}}</strong></h5>

@@ -11,25 +11,20 @@ namespace App\Repositories;
 
 use App\Models\JavMoviesXref;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class JavMovies
  * @package App\Repositories
  */
-class JavMovies
+class JavMovies extends BaseRepository
 {
-    private \App\Models\JavMovies $model;
-    private Builder        $builder;
-
     private array $filterFields = [
         'name', 'item_number', 'content_id', 'dvd_id', 'director', 'studio', 'label', 'channel', 'series', 'description'
     ];
 
     public function __construct(\App\Models\JavMovies $model)
     {
-        $this->model = $model;
-        $this->builder = $model->query();
+        parent::__construct($model);
     }
 
     /**
@@ -38,10 +33,6 @@ class JavMovies
      */
     public function getItems(array $filter = [])
     {
-        if (isset($filter['sort-by'])) {
-            $this->builder->orderBy($filter['sort-by'], $filter['sort-dir'] ?? 'asc');
-        }
-
         if (isset($filter['keyword']) && !empty($filter['keyword'])) {
             $this->builder->where(function ($query) use ($filter) {
                 foreach ($this->filterFields as $filterField) {
@@ -76,6 +67,6 @@ class JavMovies
             $this->builder->where('label', 'LIKE', '%'.$filter['label'].'%');
         }
 
-        return $this->builder->paginate($filter['per-page'] ?? 15);
+        return parent::getItems($filter);
     }
 }

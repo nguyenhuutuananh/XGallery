@@ -136,6 +136,10 @@
             elements_selector: ".lazy"
             // ... more custom settings?
         });
+
+        jQuery('.carousel').carousel({
+            'interval': false
+        });
     })
 </script>
 </body>

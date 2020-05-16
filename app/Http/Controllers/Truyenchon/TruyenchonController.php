@@ -28,18 +28,12 @@ class TruyenchonController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected string $modelClass   = Truyenchon::class;
-    protected array  $sortBy       = ['by' => 'id', 'dir' => 'desc'];
-    protected array  $filterFields = [
-        'title'
-    ];
-
     public function dashboard(Request $request)
     {
         return view(
             'truyenchon.index',
             [
-                'items' => $this->getItems($request),
+                'items' => app(\App\Repositories\Truyenchon::class)->getItems($request->request->all()),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'Truyenchon',
                 'description' => ''
@@ -56,8 +50,9 @@ class TruyenchonController extends BaseController
     {
         $story = Truyenchon::find($id);
         $keys = array_keys($story->chapters);
+        $keys = array_reverse($keys);
         $position = array_search($chapter, $keys);
-        $nextKey = $keys[$position + 1];
+        $nextKey = $keys[$position + 1] ?? 0;
 
         return view(
             'truyenchon.story',
@@ -67,23 +62,6 @@ class TruyenchonController extends BaseController
                 'next' => $nextKey,
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'Truyenchon - '.$story->title,
-                'description' => ''
-            ]
-        );
-    }
-
-    /**
-     * @param  Request  $request
-     * @return Application|Factory|View
-     */
-    public function search(Request $request)
-    {
-        return view(
-            'truyenchon.index',
-            [
-                'items' => $this->getItems($request),
-                'sidebar' => $this->getMenuItems(),
-                'title' => 'Truyenchon - Searching by keyword - '.$request->get('keyword'),
                 'description' => ''
             ]
         );
