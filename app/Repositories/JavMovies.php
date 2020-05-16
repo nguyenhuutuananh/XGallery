@@ -9,6 +9,7 @@
 
 namespace App\Repositories;
 
+use App\Models\JavMoviesXref;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -41,7 +42,7 @@ class JavMovies
             $this->builder->orderBy($filter['sort-by'], $filter['sort-dir'] ?? 'asc');
         }
 
-        if (isset($filter['keyword'])) {
+        if (isset($filter['keyword']) && !empty($filter['keyword'])) {
             $this->builder->where(function ($query) use ($filter) {
                 foreach ($this->filterFields as $filterField) {
                     $query = $query->orWhere($filterField, 'LIKE', '%'.$filter['keyword'].'%');
@@ -49,17 +50,30 @@ class JavMovies
             });
         }
 
-        if (isset($filter['ids'])) {
-            $this->builder->whereIn('id', $filter['ids']);
+        if (isset($filter['genre']) && !empty($filter['genre'])) {
+            $ids = JavMoviesXref::where(['xref_id' => $filter['genre'], 'xref_type' => 'genre'])
+                ->select('movie_id')
+                ->get()->toArray();
+            $this->builder->whereIn('id', $ids);
         }
 
-        if (isset($filter['filter']) && !empty($filter['filter'])) {
-            foreach ($filter['filter'] as $key => $value) {
-                if (empty($value)) {
-                    continue;
-                }
-                $this->builder->where($key, 'LIKE', '%'.$value.'%');
-            }
+        if (isset($filter['idol']) && !empty($filter['idol'])) {
+            $ids = JavMoviesXref::where(['xref_id' => $filter['idol'], 'xref_type' => 'idol'])
+                ->select('movie_id')
+                ->get()->toArray();
+            $this->builder->whereIn('id', $ids);
+        }
+
+        if (isset($filter['director']) && !empty($filter['studio'])) {
+            $this->builder->where('director', 'LIKE', '%'.$filter['director'].'%');
+        }
+
+        if (isset($filter['studio']) && !empty($filter['studio'])) {
+            $this->builder->where('studio', 'LIKE', '%'.$filter['studio'].'%');
+        }
+
+        if (isset($filter['label']) && !empty($filter['label'])) {
+            $this->builder->where('label', 'LIKE', '%'.$filter['label'].'%');
         }
 
         return $this->builder->paginate($filter['per-page'] ?? 15);
