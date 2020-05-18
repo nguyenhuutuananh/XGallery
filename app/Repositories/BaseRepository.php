@@ -5,6 +5,10 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class BaseRepository
+ * @package App\Repositories
+ */
 class BaseRepository
 {
     protected Model $model;
@@ -24,5 +28,14 @@ class BaseRepository
 
         return $this->builder->paginate(isset($filter['per-page']) ? (int) $filter['per-page'] : 15)
             ->appends(request()->except('page'));
+    }
+
+    /**
+     * @param $id
+     * @return Model
+     */
+    public function find($id): Model
+    {
+        return $this->model->find($id);
     }
 }

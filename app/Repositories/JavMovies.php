@@ -34,11 +34,19 @@ class JavMovies extends BaseRepository
     public function getItems(array $filter = [])
     {
         if (isset($filter['keyword']) && !empty($filter['keyword'])) {
-            $this->builder->where(function ($query) use ($filter) {
-                foreach ($this->filterFields as $filterField) {
-                    $query = $query->orWhere($filterField, 'LIKE', '%'.$filter['keyword'].'%');
-                }
-            });
+            $filter['searchBy'] = $filter['searchBy'] ?? 'keyword';
+            switch ($filter['searchBy']) {
+                case 'keyword':
+                    $this->builder->where(function ($query) use ($filter) {
+                        foreach ($this->filterFields as $filterField) {
+                            $query = $query->orWhere($filterField, 'LIKE', '%'.$filter['keyword'].'%');
+                        }
+                    });
+                    break;
+                default:
+                    $this->builder->where($filter['searchBy'], 'LIKE', '%'.$filter['keyword'].'%');
+                    break;
+            }
         }
 
         if (isset($filter['genre']) && !empty($filter['genre'])) {
@@ -53,18 +61,6 @@ class JavMovies extends BaseRepository
                 ->select('movie_id')
                 ->get()->toArray();
             $this->builder->whereIn('id', $ids);
-        }
-
-        if (isset($filter['director']) && !empty($filter['studio'])) {
-            $this->builder->where('director', 'LIKE', '%'.$filter['director'].'%');
-        }
-
-        if (isset($filter['studio']) && !empty($filter['studio'])) {
-            $this->builder->where('studio', 'LIKE', '%'.$filter['studio'].'%');
-        }
-
-        if (isset($filter['label']) && !empty($filter['label'])) {
-            $this->builder->where('label', 'LIKE', '%'.$filter['label'].'%');
         }
 
         return parent::getItems($filter);

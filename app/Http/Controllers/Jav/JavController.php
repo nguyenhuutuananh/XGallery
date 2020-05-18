@@ -15,7 +15,6 @@ use App\Models\JavDownload;
 use App\Models\JavGenres;
 use App\Models\JavIdols;
 use App\Models\JavMovies;
-use App\Models\JavMoviesXref;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -47,8 +46,7 @@ class JavController extends BaseController
             [
                 'items' => $repository->getItems($request->request->all()),
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV - ' . $items->total() . ' Movies - ' . $items->currentPage() . ' / ' . $items->lastPage(),
-                'description' => ''
+                'title' => 'JAV - '.$items->total().' Movies - '.$items->currentPage().' / '.$items->lastPage(),
             ]
         );
     }
@@ -66,8 +64,8 @@ class JavController extends BaseController
             [
                 'item' => $movie,
                 'sidebar' => $this->getMenuItems(),
-                'title' => 'JAV movie - '.$movie->name,
-                'description' => $movie->description
+                'title' => 'JAV '.$movie->item_number,
+                'description' => $movie->description,
             ]
         );
     }
@@ -124,7 +122,7 @@ class JavController extends BaseController
     {
         if (JavDownload::where(['item_number' => $itemNumber])->first()) {
             return response()->json([
-                'html' => Toast::warning('Download', 'Item <strong>' . $itemNumber . '</strong> already exists')
+                'html' => Toast::warning('Download', 'Item <strong>'.$itemNumber.'</strong> already exists')
             ]);
         }
 
@@ -133,7 +131,7 @@ class JavController extends BaseController
         $model->save();
 
         return response()->json([
-            'html' => Toast::success('Download', 'Item <strong>' . $itemNumber . '</strong> added to queue')
+            'html' => Toast::success('Download', 'Item <strong>'.$itemNumber.'</strong> added to queue')
         ]);
     }
 }

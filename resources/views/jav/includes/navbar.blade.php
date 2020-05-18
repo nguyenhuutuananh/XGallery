@@ -6,16 +6,21 @@
                 <input class="form-control input-sm mr-sm-2" type="text" name="keyword"
                        placeholder="Enter keyword" aria-label="Search"
                        value="{{request()->request->get('keyword')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="director"
-                       placeholder="Search by director" aria-label="Search"
-                       value="{{request()->request->get('director')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="studio"
-                       placeholder="Search by studio" aria-label="Search"
-                       value="{{request()->request->get('studio')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="label"
-                       placeholder="Search by label" aria-label="Search"
-                       value="{{request()->request->get('label')}}">
-
+                <label for="searchBy"></label><select class="custom-select form-control input-sm mr-sm-2" id="searchBy"
+                                                      name="searchBy">
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'keyword') selected
+                            @endif value="keyword">Keyword
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'director') selected
+                            @endif value="director">Director
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'studio') selected
+                            @endif value="studio">Studio
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'label') selected
+                            @endif value="label">Label
+                    </option>
+                </select>
                 <label for="sort-by"></label><select class="custom-select form-control input-sm mr-sm-2" id="sort-by"
                                                      name="sort-by">
                     <option @if(request()->request->get('sort-by','release_date') == 'id') selected @endif value="id">
@@ -28,6 +33,9 @@
                             @endif value="is_downloadable">Downloadable
                     </option>
                 </select>
+                <input data-provide="datepicker" class="custom-select form-control mr-sm-2" name="fromDate" />
+                <input data-provide="datepicker" class="custom-select form-control mr-sm-2" name="toDate" />
+
 
                 @include('includes.form.pagination')
 

@@ -28,3 +28,10 @@
 
     <a href="{{route('truyenchon.story.view',['id'=> $story->id, 'chapter'=> $next])}}">Next</a>
 @stop
+@section('scripts')
+    @parent
+    <script>
+        jQuery('.carousel').carousel({
+            'interval': false
+        });</script>
+@endsection

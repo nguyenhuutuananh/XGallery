@@ -24,12 +24,19 @@ class XiurenController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    private \App\Repositories\Xiuren $repository;
+
+    public function __construct(\App\Repositories\Xiuren $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function dashboard()
     {
         return view(
             'xiuren.index',
             [
-                'items' => Xiuren::paginate(15),
+                'items' => $this->repository->getItems(),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'Xiuren',
                 'description' => ''
@@ -42,7 +49,7 @@ class XiurenController extends BaseController
         return view(
             'xiuren.item',
             [
-                'item' => Xiuren::find($id),
+                'item' => $this->repository->find($id),
                 'sidebar' => $this->getMenuItems(),
                 'title' => 'Xiuren',
                 'description' => ''
