@@ -20,7 +20,6 @@ use stdClass;
  */
 final class Xiuren extends AbstractCrawler
 {
-    protected string $name = 'xiuren';
 
     /**
      * @param  string  $itemUri
@@ -30,8 +29,12 @@ final class Xiuren extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
-        $item         = new stdClass;
-        $item->url    = $itemUri;
+        if (!$crawler) {
+            return null;
+        }
+
+        $item = new stdClass;
+        $item->url = $itemUri;
         $item->images = collect($crawler->filter('#main .post .photoThum a')->each(
             function ($a) {
                 return $a->attr('href');
@@ -51,16 +54,18 @@ final class Xiuren extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
-        $links = $crawler->filter('#main .loop .content a')->each(
+        if (!$crawler) {
+            return null;
+        }
+
+        return collect($crawler->filter('#main .loop .content a')->each(
             function ($el) {
                 return [
                     'url' => $el->attr('href'),
                     'cover' => $el->filter('img')->attr('src'),
                 ];
             }
-        );
-
-        return collect($links);
+        ));
     }
 
     /**
@@ -96,6 +101,6 @@ final class Xiuren extends AbstractCrawler
      */
     protected function buildUrlWithPage(Url $url, int $page): string
     {
-        return $this->buildUrl($url->getPath().'page-'.$page .'.html');
+        return $this->buildUrl($url->getPath().'page-'.$page.'.html');
     }
 }

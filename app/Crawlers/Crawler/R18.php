@@ -21,8 +21,6 @@ use stdClass;
  */
 final class R18 extends AbstractCrawler
 {
-    protected string $name = 'r18';
-
     /**
      * @param  string  $itemUri
      * @return object|null
@@ -31,11 +29,15 @@ final class R18 extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         try {
-            $item             = new stdClass;
-            $item->url        = $itemUri;
-            $item->cover      = trim($crawler->filter('.detail-single-picture img')->attr('src'));
-            $item->name       = trim($crawler->filter('.product-details-page h1')->text(null, false));
+            $item = new stdClass;
+            $item->url = $itemUri;
+            $item->cover = trim($crawler->filter('.detail-single-picture img')->attr('src'));
+            $item->name = trim($crawler->filter('.product-details-page h1')->text(null, false));
             $item->categories = collect($crawler->filter('.product-categories-list a')->each(
                 function ($el) {
                     return trim($el->text(null, false));
@@ -46,7 +48,7 @@ final class R18 extends AbstractCrawler
 
             $fields = collect($crawler->filter('.product-onload .product-details dt')->each(
                 function ($dt) {
-                    $text  = trim($dt->text(null, false));
+                    $text = trim($dt->text(null, false));
                     $value = str_replace(['-'], [''], $dt->nextAll()->text(null, false));
 
                     return [strtolower(str_replace(' ', '_', str_replace([':'], [''], $text))) => trim($value)];
@@ -106,6 +108,10 @@ final class R18 extends AbstractCrawler
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
 
+        if (!$crawler) {
+            return null;
+        }
+
         $links = $crawler->filter('.main .cmn-list-product01 li.item-list a')->each(
             function ($el) {
                 if ($el->attr('href') === null) {
@@ -114,7 +120,7 @@ final class R18 extends AbstractCrawler
 
                 $data = [];
 
-                $url         = explode('?', $el->attr('href'));
+                $url = explode('?', $el->attr('href'));
                 $data['url'] = $url[0];
 
                 if ($el->filter('img.lazy')->count()) {
@@ -137,6 +143,10 @@ final class R18 extends AbstractCrawler
     public function getIndexPagesCount(string $indexUri = null): int
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
+
+        if (!$crawler) {
+            return 1;
+        }
 
         try {
             return (int) $crawler->filter('li.next')->previousAll()->filter('a')->text();

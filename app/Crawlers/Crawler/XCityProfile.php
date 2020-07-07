@@ -20,7 +20,6 @@ use stdClass;
  */
 final class XCityProfile extends AbstractCrawler
 {
-    protected string $name = 'xcityprofile';
 
     /**
      * @param  string  $itemUri
@@ -35,11 +34,11 @@ final class XCityProfile extends AbstractCrawler
         }
 
         try {
-            $item        = new stdClass();
-            $item->name  = $crawler->filter('.itemBox h1')->text(null, false);
-            $item->url   = $itemUri;
+            $item = new stdClass();
+            $item->name = $crawler->filter('.itemBox h1')->text(null, false);
+            $item->url = $itemUri;
             $item->cover = $crawler->filter('.photo p.tn img')->attr('src');
-            $fields      = collect($crawler->filter('#avidolDetails dl.profile dd')->each(
+            $fields = collect($crawler->filter('#avidolDetails dl.profile dd')->each(
                 function ($dd) {
                     $text = $dd->text(null, false);
                     if (strpos($text, '★Favorite') !== false) {
@@ -50,7 +49,7 @@ final class XCityProfile extends AbstractCrawler
                         if (empty($birthday)) {
                             return null;
                         }
-                        $days  = explode(' ', $birthday);
+                        $days = explode(' ', $birthday);
                         $month = $this->getMonth($days[1]);
                         if (!$month) {
                             return null;
@@ -78,13 +77,13 @@ final class XCityProfile extends AbstractCrawler
                         foreach ($sizes as $index => $size) {
                             switch ($index) {
                                 case 0:
-                                    $size   = str_replace('B', '', $size);
-                                    $size   = explode('(', $size);
+                                    $size = str_replace('B', '', $size);
+                                    $size = explode('(', $size);
                                     $breast = empty(trim($size[0])) ? null : (int) $size[0];
                                     break;
                                 case 1:
-                                    $size  = str_replace('W', '', $size);
-                                    $size  = explode('(', $size);
+                                    $size = str_replace('W', '', $size);
+                                    $size = explode('(', $size);
                                     $waist = empty(trim($size[0])) ? null : (int) $size[0];
                                     break;
                                 case 2:

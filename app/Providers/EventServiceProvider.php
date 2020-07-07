@@ -25,12 +25,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        'App\Events\OnHttpRequested' => [
-            'App\Listeners\ValidateHttpRespond',
-        ],
         SocialiteWasCalled::class => [
             // add your listeners (aka providers) here
-            'SocialiteProviders\Flickr\FlickrExtendSocialite@handle',
+            'SocialiteProviders\\Flickr\\FlickrExtendSocialite@handle',
+            'SocialiteProviders\\Google\\GoogleExtendSocialite@handle',
         ],
     ];
 
@@ -44,5 +42,15 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         //
+    }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
+     */
+    public function shouldDiscoverEvents()
+    {
+        return true;
     }
 }

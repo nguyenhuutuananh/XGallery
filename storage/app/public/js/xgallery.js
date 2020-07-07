@@ -19,8 +19,12 @@
     };
 
     xgallery.toast = {
-        show: function (html, id) {
-            jQuery('.toast-container').append(html);
+        show: function (html) {
+            let date = new Date();
+            let timestamp = date.getTime();
+            let id = 'id' + timestamp;
+            let $html = jQuery(html).attr('id', id);
+            jQuery('.toast-container').append($html);
             let toast = jQuery('#' + id);
             toast.toast({delay: 5000});
             toast.toast('show');
@@ -39,13 +43,13 @@
                 url: ajaxUrl,
                 data: data,
                 method: "POST",
-                beforeSend: function()
-                {
+                beforeSend: function () {
                     jQuery('#overlay').show();
                 }
             })
                 .done(function (data) {
                     jQuery(this).attr('disabled', true);
+                    xgallery.toast.show(data.html);
                     jQuery('#overlay').hide();
                 })
                 .fail(function () {

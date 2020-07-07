@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Xiuren;
+use App\Jobs\Middleware\RateLimited;
+use App\Jobs\Traits\HasJob;
+use App\Models\Xiuren;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,13 +20,9 @@ use Illuminate\Support\Facades\Log;
 class XiurenDownload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private string $id;
-
-    /**
-     * @var int Execute timeout
-     */
-    public int $timeout = 300;
 
     /**
      * Create a new job instance.
@@ -34,6 +32,15 @@ class XiurenDownload implements ShouldQueue
     public function __construct(string $id)
     {
         $this->id = $id;
+        $this->onQueue(Queues::QUEUE_JAV_DOWNLOADS);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('xiuren')];
     }
 
     /**
@@ -43,13 +50,13 @@ class XiurenDownload implements ShouldQueue
      */
     public function handle()
     {
-        $item    = Xiuren::find($this->id);
+        $item = Xiuren::find($this->id);
         $name = basename($item->url, '.html');
         $crawler = app(\App\Crawlers\Crawler\Xiuren::class);
         try {
             foreach ($item->images as $image) {
-                if (!$crawler->download($image, 'xiuren' . DIRECTORY_SEPARATOR . $name)) {
-                    Log::stack(['download'])->warning('Download error ' . $image);
+                if (!$crawler->download($image, 'xiuren'.DIRECTORY_SEPARATOR.$name)) {
+                    Log::stack(['download'])->warning('Download error '.$image);
                 }
             }
         } catch (Exception $exception) {

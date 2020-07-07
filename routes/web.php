@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Flickr\FlickrController;
+use App\Http\Controllers\Jav\JavController;
+use App\Http\Controllers\Truyenchon\TruyenchonController;
+use App\Http\Controllers\Xiuren\XiurenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,30 +19,61 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', ['App\Http\Controllers\DashboardController', 'index']);
-
-Route::prefix('jav')
+Route::namespace('App\Http\Controllers\Dashboard')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\JavController', 'dashboard'])->name('jav.index.view');
-        Route::get('/movie/{id}', ['App\Http\Controllers\JavController', 'movie'])->name('movie.view');
-        Route::get('/genre/{id}', ['App\Http\Controllers\JavController', 'genre'])->name('genre.view');
-        Route::get('/idol/{id}', ['App\Http\Controllers\JavController', 'idol'])->name('idol.view');
-        Route::post('/search', ['App\Http\Controllers\JavController', 'search'])->name('jav.search.view');
-        Route::post('/download/{itemNumber}', ['App\Http\Controllers\JavController', 'download'])->name('download.request');
+        Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard.dashboard.view');
     });
 
-Route::prefix('xiuren')
+Route::namespace('App\Http\Controllers\Jav')
+    ->prefix('jav')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\XiurenController', 'dashboard']);
-        Route::post('/download/{id}', ['App\Http\Controllers\XiurenController', 'download'])->name('xiuren.download.request');
+        Route::get('/', [JavController::class, 'dashboard'])->name('jav.dashboard.view');
+        Route::post('/', [JavController::class, 'dashboard'])->name('jav.dashboard.view');
+        Route::get('/movie/{id}', [JavController::class, 'movie'])->name('jav.movie.view');
+        Route::get('/genre/{id}', [JavController::class, 'genre'])->name('jav.genre.view');
+        Route::get('/idol/{id}', [JavController::class, 'idol'])->name('jav.idol.view');
+        Route::post(
+            '/download/{itemNumber}',
+            [JavController::class, 'download']
+        )->name('jav.download.request');
     });
 
-Route::prefix('truyenchon')
+Route::namespace('App\Http\Controllers\Xiuren')
+    ->prefix('xiuren')
     ->group(function () {
-        Route::get('/', ['App\Http\Controllers\TruyenchonController', 'dashboard'])->name('truyenchon.index.view');
-        Route::post('/search', ['App\Http\Controllers\TruyenchonController', 'search'])->name('truyenchon.search.view');
-        Route::post('/download/{id}', ['App\Http\Controllers\TruyenchonController', 'download'])->name('truyenchon.download.request');
+        Route::get('/', [XiurenController::class, 'dashboard'])->name('xiuren.dashboard.view');
+        Route::get('/{id}', [XiurenController::class, 'item'])->name('xiuren.item.view');
+        Route::post(
+            '/download/{id}',
+            [XiurenController::class, 'download']
+        )->name('xiuren.download.request');
     });
 
-Route::get('login/flickr', 'Auth\FlickrController@redirectToProvider');
-Route::get('login/flickr/callback', 'Auth\FlickrController@handleProviderCallback');
+Route::namespace('App\Http\Controllers\Truyenchon')
+    ->prefix('truyenchon')
+    ->group(function () {
+        Route::get('/', [TruyenchonController::class, 'dashboard'])->name('truyenchon.dashboard.view');
+        Route::get('/{id}/{chapter}', [TruyenchonController::class, 'story'])->name('truyenchon.story.view');
+        Route::post('/search', [TruyenchonController::class, 'search'])->name('truyenchon.search.view');
+        Route::post(
+            '/download/{id}',
+            [TruyenchonController::class, 'download']
+        )->name('truyenchon.download.request');
+    });
+
+Route::namespace('App\Http\Controllers\Flickr')
+    ->prefix('flickr')
+    ->group(function () {
+        Route::get('/', [FlickrController::class, 'dashboard'])->name('flickr.dashboard.view');
+        Route::post('/', [FlickrController::class, 'download'])->name('flickr.download.request');
+        Route::get('/contact/{nsid}', [FlickrController::class, 'contact'])->name('flickr.contact.view');
+    });
+
+Route::namespace('App\Http\Controllers\Auth')
+    ->prefix('oauth')
+    ->group(function () {
+        Route::get('flickr', [\App\Http\Controllers\Auth\FlickrController::class, 'login']);
+        Route::get('flickr/callback', [\App\Http\Controllers\Auth\FlickrController::class, 'callback']);
+        Route::get('google', [GoogleController::class, 'login']);
+        Route::get('google/callback', [GoogleController::class, 'callback']);
+    });

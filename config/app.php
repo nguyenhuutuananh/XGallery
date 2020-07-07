@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/xgallery-laravel'),
+    'url' => env('APP_URL', 'https://xgallery.local'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -171,19 +171,29 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
+
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
+        // SocialiteProviders
         ServiceProvider::class,
 
         /**
          * Crawler
          */
         App\Crawlers\Providers\CrawlerProvider::class,
+
+        /**
+         * Oauth
+         */
+        App\Oauth\Providers\FlickrServiceProvider::class,
+        App\Providers\GoogleServiceProvider::class,
+
+        Elasticquent\ElasticquentServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*
@@ -235,7 +245,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+
+        'Es' => Elasticquent\ElasticquentElasticsearchFacade::class,
     ],
 
 ];

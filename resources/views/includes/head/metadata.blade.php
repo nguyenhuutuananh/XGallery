@@ -6,7 +6,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="XGallery - {{$title}}"/>
 <meta name="og:title" content="XGallery - {{$title}}"/>
-<meta name="description" content="{{$description}}">
-<meta name="og:description" content="{{$description}}"/>
-<meta name="keywords" content="">
+<meta name="description" content="{{$description ?? $title}}">
+<meta name="og:description" content="{{$description ?? $title}}"/>
+<meta name="keywords" content="{{$keyword ?? null}}">
 <meta name="robots" content="index, follow"/>

@@ -30,7 +30,7 @@
                                         @if(!empty($item->icon))<i class="{{$item->icon}}"></i>@endif
                                         <span style="text-transform: uppercase">{{$item->name}}</span>
                                     @else
-                                        <a href="{{$item->link ?? '#'}}"
+                                        <a href="{{$item->link ? route($item->link.'.dashboard.view') : '#'}}"
                                            class="nav-link {{ Request::is($item->link) ? 'active' : '' }}">
                                             @if(!empty($item->icon))<i class="{{$item->icon}}"></i>@endif
                                             {{$item->name}}

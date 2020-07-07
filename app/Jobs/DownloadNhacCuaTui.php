@@ -10,6 +10,8 @@
 namespace App\Jobs;
 
 use App\Crawlers\Crawler\Nhaccuatui;
+use App\Jobs\Middleware\RateLimited;
+use App\Jobs\Traits\HasJob;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,6 +26,7 @@ use Illuminate\Queue\SerializesModels;
 class DownloadNhacCuaTui implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private string $url;
 
@@ -34,6 +37,15 @@ class DownloadNhacCuaTui implements ShouldQueue
     public function __construct(string $url)
     {
         $this->url = $url;
+        $this->onQueue(Queues::QUEUE_DOWNLOADS);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('nhaccuatui')];
     }
 
     /**

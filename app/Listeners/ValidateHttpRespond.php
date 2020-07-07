@@ -1,15 +1,8 @@
 <?php
-/**
- * Copyright (c) 2020 JOOservices Ltd
- * @author Viet Vu <jooservices@gmail.com>
- * @package XGallery
- * @license GPL
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- */
 
 namespace App\Listeners;
 
-use App\Events\OnHttpRequested;
+use App\Events\HttpResponded;
 
 class ValidateHttpRespond
 {
@@ -26,10 +19,10 @@ class ValidateHttpRespond
     /**
      * Handle the event.
      *
-     * @param  OnHttpRequested  $event
+     * @param  HttpResponded  $event
      * @return void
      */
-    public function handle(OnHttpRequested $event)
+    public function handle(HttpResponded $event)
     {
     }
 }

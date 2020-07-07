@@ -9,24 +9,22 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
 use App\Jobs\DownloadNhacCuaTui;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Nhaccuatui
  * @package App\Console\Commands
  */
-class Nhaccuatui extends BaseCommand
+class Nhaccuatui extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'nhaccuatui {task=fetch} {download=0} {--title} {--singer} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'nhaccuatui {task=search} {download=0} {--title=} {--singer=} {--pageFrom=1} {--pageTo}';
 
     /**
      * The console command description.
@@ -61,7 +59,7 @@ class Nhaccuatui extends BaseCommand
                 $this->progressBar->setMessage('', 'status');
 
                 if ($this->argument('download') == 1) {
-                    DownloadNhacCuaTui::dispatch($item['url'])->onConnection('database');
+                    DownloadNhacCuaTui::dispatch($item['url']);
                     $this->progressBar->setMessage('Added to download queues', 'status');
                 }
 
@@ -77,23 +75,11 @@ class Nhaccuatui extends BaseCommand
         return true;
     }
 
-    protected function daily(): bool
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
     {
-        // TODO: Implement daily() method.
-    }
-
-    protected function fully(): bool
-    {
-        // TODO: Implement fully() method.
-    }
-
-    protected function index()
-    {
-        // TODO: Implement index() method.
-    }
-
-    protected function item()
-    {
-        // TODO: Implement item() method.
+        return app(\App\Models\Nhaccuatui::class);
     }
 }

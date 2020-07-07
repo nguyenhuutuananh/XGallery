@@ -38,7 +38,7 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 180,
+            'retry_after' => 900, // 15 minutes
         ],
 
         'beanstalkd' => [
@@ -62,7 +62,12 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
-            'retry_after' => 90,
+            /**
+             * This option specifies how many seconds the queue connection should wait before retrying a job that is being processed.
+             * For example, if the value of retry_after is set to 90, the job will be released back onto the queue if it has been processing for 90 seconds without being deleted.
+             * Typically, you should set the retry_after value to the maximum number of seconds your jobs should reasonably take to complete processing.
+             */
+            'retry_after' => 900,
             'block_for' => null,
         ],
 

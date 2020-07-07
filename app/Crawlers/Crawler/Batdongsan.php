@@ -16,11 +16,11 @@ use stdClass;
 
 /**
  * Class Batdongsan
- * @package App\Services\Crawler
+ * @package App\Crawlers\Crawler
  */
 final class Batdongsan extends AbstractCrawler
 {
-    protected string $name = 'batdongsan';
+    const CRAWLER_ENDPOINT = 'https://batdongsan.com.vn';
 
     /**
      * @param  string  $itemUri
@@ -35,7 +35,7 @@ final class Batdongsan extends AbstractCrawler
             return null;
         }
 
-        $item     = new stdClass();
+        $item = new stdClass();
         $nameNode = $crawler->filter('.pm-title h1');
 
         if ($nameNode->count() === 0) {
@@ -44,12 +44,12 @@ final class Batdongsan extends AbstractCrawler
             return null;
         }
 
-        $item->url     = $itemUri;
-        $item->name    = trim($crawler->filter('.pm-title h1')->text(null, false));
-        $item->price   = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
-        $item->size    = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
+        $item->url = $itemUri;
+        $item->name = trim($crawler->filter('.pm-title h1')->text(null, false));
+        $item->price = trim($crawler->filter('.gia-title.mar-right-15 strong')->text(null, false));
+        $item->size = trim($crawler->filter('.gia-title')->nextAll()->filter('strong')->text(null, false));
         $item->content = trim($crawler->filter('.pm-content .pm-desc')->html());
-        $fields        = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
+        $fields = collect($crawler->filter('#product-other-detail div.row')->each(function ($node) {
             return [Str::slug(trim($node->filter('div.left')->text())) => trim($node->filter('div.right')->text())];
         }))->reject(function ($value) {
             return null == $value;
@@ -74,7 +74,7 @@ final class Batdongsan extends AbstractCrawler
         }
 
         $fields = collect($crawler->filter('#divCustomerInfo div.right-content')->each(function ($node) {
-            $key   = trim($node->filter('div.left')->text());
+            $key = trim($node->filter('div.left')->text());
             $value = trim($node->filter('div.right')->text());
 
             if ($key === 'Email') {
@@ -123,7 +123,7 @@ final class Batdongsan extends AbstractCrawler
 
         $links = $crawler->filter('.search-productItem')->each(function ($node) {
             return [
-                'url' => 'https://batdongsan.com.vn'.$node->filter('h3 a')->attr('href'),
+                'url' => self::CRAWLER_ENDPOINT.$node->filter('h3 a')->attr('href'),
                 'title' => $node->filter('h3 a')->attr('title'),
                 'cover' => $node->filter('.p-main-image-crop img.product-avatar-img')->attr('src'),
             ];

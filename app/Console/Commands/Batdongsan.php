@@ -9,23 +9,21 @@
 
 namespace App\Console\Commands;
 
-use App\Console\BaseCommand;
-use App\Console\Traits\HasCrawler;
+use App\Console\BaseCrawlerCommand;
+use Exception;
 
 /**
  * Class Batdongsan
  * @package App\Console\Commands
  */
-class Batdongsan extends BaseCommand
+final class Batdongsan extends BaseCrawlerCommand
 {
-    use HasCrawler;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'batdongsan {task=fully} {--url=} {--pageFrom=1} {--pageTo}';
+    protected $signature = 'batdongsan {task=fully}';
 
     /**
      * The console command description.
@@ -36,14 +34,11 @@ class Batdongsan extends BaseCommand
 
     /**
      * @return bool
+     * @throws Exception
      */
     protected function fully(): bool
     {
-        if (!$url = $this->getOptionUrl()) {
-            return false;
-        }
-
-        if (!$pages = $this->getCrawler()->getIndexLinks($url, $this->initData[0], $this->initData[0])) {
+        if (!$pages = $this->getIndexLinks()) {
             return false;
         }
 
@@ -52,55 +47,21 @@ class Batdongsan extends BaseCommand
 
         // Process all pages
         $pages->each(function ($page) {
+            if (!$page) {
+                return;
+            }
             $this->progressBar->setMessage($page->count(), 'steps');
             $this->progressBar->setMessage(0, 'step');
             // Process items on page
             $page->each(function ($item, $index) {
                 $this->progressBar->setMessage($item['url'], 'info');
                 $this->progressBar->setMessage('FETCHING', 'status');
-                /**
-                 * @TODO Use Job instead directly
-                 */
-                if (!$itemDetail = $this->getCrawler()->getItemDetail($item['url'])) {
-                    $this->progressBar->setMessage($index + 1, 'step');
-                    $this->progressBar->setMessage('FAILED', 'status');
-                    return;
-                }
-
-                $this->insertItem(get_object_vars($itemDetail));
+                \App\Jobs\Batdongsan::dispatch($item['url']);
                 $this->progressBar->setMessage($index + 1, 'step');
-                $this->progressBar->setMessage('COMPLETED', 'status');
+                $this->progressBar->setMessage('QUEUED', 'status');
             });
             $this->progressBar->advance();
         });
-
-        return true;
-    }
-
-    protected function daily(): bool
-    {
-        // TODO: Implement daily() method.
-    }
-
-    protected function index(): bool
-    {
-        // TODO: Implement index() method.
-    }
-
-    /**
-     * @return bool
-     */
-    protected function item(): bool
-    {
-        if (!$url = $this->getOptionUrl()) {
-            return false;
-        }
-
-        if (!$itemDetail = $this->getCrawler()->getItemDetail($url)) {
-            return false;
-        }
-
-        $this->insertItem(get_object_vars($itemDetail));
 
         return true;
     }

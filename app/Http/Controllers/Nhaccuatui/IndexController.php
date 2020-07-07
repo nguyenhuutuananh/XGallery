@@ -10,7 +10,7 @@
 namespace App\Http\Controllers\Nhaccuatui;
 
 use App\Http\Controllers\ApiController;
-use App\Nhaccuatui;
+use App\Models\Nhaccuatui;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,6 +57,6 @@ class IndexController extends ApiController
             $args['--singer'] = $singer;
         }
 
-        Artisan::queue('nhaccuatui', $args)->onConnection('database');
+        Artisan::queue('nhaccuatui', $args);
     }
 }

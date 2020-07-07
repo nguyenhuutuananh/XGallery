@@ -16,12 +16,10 @@ use stdClass;
 
 /**
  * Class Truyenchon
- * @package App\Services\Crawler
+ * @package App\Crawlers\Crawler
  */
 final class Truyenchon extends AbstractCrawler
 {
-    protected string $name = 'truyenchon';
-
     /**
      * @param  string  $itemUri
      * @return object|null
@@ -30,12 +28,25 @@ final class Truyenchon extends AbstractCrawler
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
 
-        $item         = new stdClass;
-        $item->url    = $itemUri;
+        if (!$crawler) {
+            return null;
+        }
+
+        $item = new stdClass;
+        $item->url = $itemUri;
         $item->images = collect($crawler->filter('.page-chapter img')->each(function ($img) {
             return $img->attr('data-original');
         }));
-        $item->title  = trim($crawler->filter('h1.txt-primary a')->text());
+
+        if ($crawler->filter('h1.txt-primary a')->count()) {
+            $item->title = trim($crawler->filter('h1.txt-primary a')->text());
+        } elseif ($crawler->filter('h1.txt-primary a')->count()) {
+            $item->title = trim($crawler->filter('h1.title-detail')->text());
+        }
+
+        if ($crawler->filter('.detail-content p')->count()) {
+            $item->description = $crawler->filter('.detail-content p')->text();
+        }
 
         return $item;
     }
@@ -47,7 +58,7 @@ final class Truyenchon extends AbstractCrawler
     public function getItemChapters(string $itemUri): ?Collection
     {
         $crawler = null === $itemUri ? $this->crawler : $this->crawl($itemUri);
-        $nodes   = $crawler->filter('.list-chapter ul li.row');
+        $nodes = $crawler->filter('.list-chapter ul li.row');
 
         if ($nodes->count() === 0) {
             return null;
@@ -69,6 +80,10 @@ final class Truyenchon extends AbstractCrawler
     public function getItemLinks(string $indexUri = null): ?Collection
     {
         $crawler = null === $indexUri ? $this->crawler : $this->crawl($indexUri);
+
+        if (!$crawler) {
+            return null;
+        }
 
         $links = $crawler->filter('.ModuleContent .items .item')->each(function ($el) {
             return [

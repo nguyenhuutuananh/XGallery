@@ -8,10 +8,10 @@
     <div class="card mb-3">
         <div class="row no-gutters">
             <div class="col-4">
-                @if(!empty($idol->cover))
-                    <a href=""><img class="bd-placeholder-img card-img"
-                                    width="100%" src="{{$idol->cover}}"/></a>
-                @endif
+                <a href="">
+                    <img class="bd-placeholder-img card-img"
+                         width="100%" src="{{$idol->getCover()}}" alt="{{$idol->name}}"/>
+                </a>
             </div>
             <div class="col-8">
                 <div class="card-body">

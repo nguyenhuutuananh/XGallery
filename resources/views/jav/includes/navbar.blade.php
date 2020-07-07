@@ -1,31 +1,65 @@
 <div class="row mb-2">
     <div class="col-12">
         <nav class="navbar navbar-dark bg-dark">
-            <form class="form-inline" method="post" action="{{route('jav.search.view')}}">
+            <form class="form-inline" method="get" action="{{route('jav.dashboard.view')}}">
                 @csrf
-                <input class="form-control input-sm mr-sm-2" type="text" name="keyword" placeholder="Enter your search keyword" aria-label="Search" value="{{request()->get('keyword')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="director" placeholder="Enter your search director" aria-label="Search" value="{{request()->get('director')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="studio" placeholder="Enter your search studio" aria-label="Search" value="{{request()->get('studio')}}">
-                <input class="form-control input-sm mr-sm-2" type="text" name="label" placeholder="Enter your search label" aria-label="Search" value="{{request()->get('label')}}">
+                <input class="form-control input-sm mr-sm-2" type="text" name="keyword"
+                       placeholder="Enter keyword" aria-label="Search"
+                       value="{{request()->request->get('keyword')}}">
+                <label for="searchBy"></label><select class="custom-select form-control input-sm mr-sm-2" id="searchBy"
+                                                      name="searchBy">
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'keyword') selected
+                            @endif value="keyword">Keyword
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'director') selected
+                            @endif value="director">Director
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'studio') selected
+                            @endif value="studio">Studio
+                    </option>
+                    <option @if(request()->request->get('searchBy', 'keyword') == 'label') selected
+                            @endif value="label">Label
+                    </option>
+                </select>
+                <label for="sort-by"></label><select class="custom-select form-control input-sm mr-sm-2" id="sort-by"
+                                                     name="sort-by">
+                    <option @if(request()->request->get('sort-by','release_date') == 'id') selected @endif value="id">
+                        ID
+                    </option>
+                    <option @if(request()->request->get('sort-by','release_date') == 'release_date') selected
+                            @endif value="release_date">Release date
+                    </option>
+                    <option @if(request()->request->get('sort-by','release_date') == 'is_downloadable') selected
+                            @endif value="is_downloadable">Downloadable
+                    </option>
+                </select>
+                <input data-provide="datepicker" class="custom-select form-control mr-sm-2" name="fromDate" />
+                <input data-provide="datepicker" class="custom-select form-control mr-sm-2" name="toDate" />
 
-                <select class="custom-select form-control input-sm mr-sm-2" id="sort-by" name="sort-by">
-                    <option @if(request()->get('sort-by','release_date') == 'id') selected @endif value="id">ID</option>
-                    <option @if(request()->get('sort-by','release_date') == 'release_date') selected @endif value="release_date">Release date</option>
-                    <option @if(request()->get('sort-by','release_date') == 'is_downloadable') selected @endif value="is_downloadable">Downloadable</option>
-                </select>
-                <select class="custom-select form-control input-sm mr-sm-2" id="sort-dir" name="sort-dir">
-                    <option @if(request()->get('sort-dir','desc') == 'asc') selected @endif value="asc">Asc</option>
-                    <option @if(request()->get('sort-dir','desc') == 'desc') selected @endif value="desc">Desc</option>
-                </select>
-                <select class="custom-select form-control input-sm mr-sm-2" id="perPage" name="per-page">
-                    <option @if(request()->get('per-page') == 15) selected @endif value="15">15</option>
-                    <option @if(request()->get('per-page') == 30) selected @endif value="30">30</option>
-                    <option @if(request()->get('per-page') == 60) selected @endif value="60">60</option>
-                    <option @if(request()->get('per-page') == 120) selected @endif value="120">120</option>
-                </select>
 
-                <button class="btn btn-primary btn-sm my-2 my-sm-0" type="submit">Search</button>
+                @include('includes.form.pagination')
+
+                <input type="hidden" name="genre" value="{{request()->request->get('genre')}}">
+                <input type="hidden" name="idol" value="{{request()->request->get('idol')}}">
+                <button class="btn btn-primary btn-sm my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
             </form>
         </nav>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"
+                    aria-current="page"><a href="{{route('jav.dashboard.view')}}"><i class="fas fa-home"></i></a></li>
+                @if (request()->request->get('idol'))
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{{\App\Models\JavIdols::find(request()->request->get('idol'))->name}}</li>
+                @endif
+                @if (request()->request->get('genre'))
+                    <li class="breadcrumb-item active"
+                        aria-current="page">{{\App\Models\JavGenres::find(request()->request->get('genre'))->name}}</li>
+                @endif
+            </ol>
+        </nav>
+
+
     </div>
 </div>

@@ -10,9 +10,12 @@
 namespace App\Jobs\Jav;
 
 use App\Crawlers\Crawler\XCityProfile;
-use App\JavIdols;
-use App\JavMovies;
-use App\JavMoviesXref;
+use App\Jobs\Middleware\RateLimited;
+use App\Jobs\Queues;
+use App\Jobs\Traits\HasJob;
+use App\Models\JavIdols;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,20 +24,19 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class UpdateIdols
- * @package App\Jobs\OneJav
+ * Search and update idol
+ * @package App\Jobs\Jav
  */
 class UpdateIdols implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private JavMovies $movie;
-    private array     $idols;
-
     /**
-     * @var int Execute timeout
+     * @var array Array of idol names
      */
-    public int $timeout = 300;
+    private array     $idols;
 
     /**
      * UpdateJavIdols constructor.
@@ -45,6 +47,15 @@ class UpdateIdols implements ShouldQueue
     {
         $this->movie = $movie;
         $this->idols = $idols;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('xcity')];
     }
 
     /**
@@ -70,7 +81,7 @@ class UpdateIdols implements ShouldQueue
                  * We can not determine who is she. The only way is assumed she's unique and belong this movie
                  */
                 if (empty($actresses)) {
-                    Log::stack(['jav'])->info('Can not found '.$actress.' on XCity');
+                    Log::stack(['jav'])->info('Can not found idol '.$actress.' on XCity');
                     $model = app(JavIdols::class);
                     /**
                      * Because we can't determine idol profile than only way to use reference_url as unique
@@ -81,7 +92,7 @@ class UpdateIdols implements ShouldQueue
                     }
 
                     // Save to idol with OneJAV reference_url
-                    $model->name          = $actress;
+                    $model->name = $actress;
                     $model->reference_url = $this->movie->id;
                     $model->save();
                     $this->insertXRef($model);
@@ -106,17 +117,17 @@ class UpdateIdols implements ShouldQueue
                         return;
                     }
 
-                    $model->name          = $actressDetail->name;
+                    $model->name = $actressDetail->name;
                     $model->reference_url = $actressDetail->url;
-                    $model->cover         = $actressDetail->cover;
-                    $model->favorite      = $actressDetail->favorite ?? null;
-                    $model->birthday      = $actressDetail->birthday ?? null;
-                    $model->blood_type    = $actressDetail->blood_type ?? null;
-                    $model->city          = $actressDetail->city ?? null;
-                    $model->height        = $actressDetail->height ?? null;
-                    $model->breast        = $actressDetail->breast ?? null;
-                    $model->waist         = $actressDetail->waist ?? null;
-                    $model->hips          = $actressDetail->hips ?? null;
+                    $model->cover = $actressDetail->cover;
+                    $model->favorite = $actressDetail->favorite ?? null;
+                    $model->birthday = $actressDetail->birthday ?? null;
+                    $model->blood_type = $actressDetail->blood_type ?? null;
+                    $model->city = $actressDetail->city ?? null;
+                    $model->height = $actressDetail->height ?? null;
+                    $model->breast = $actressDetail->breast ?? null;
+                    $model->waist = $actressDetail->waist ?? null;
+                    $model->hips = $actressDetail->hips ?? null;
 
                     $model->save();
                     $this->insertXRef($model);
@@ -132,7 +143,7 @@ class UpdateIdols implements ShouldQueue
     private function insertXRef(JavIdols $idolModel)
     {
         $model = app(JavMoviesXref::class);
-        $xref  = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $this->movie->id];
+        $xref = ['xref_id' => $idolModel->id, 'xref_type' => 'idol', 'movie_id' => $this->movie->id];
         if ($model->where($xref)->first()) {
             return;
         }

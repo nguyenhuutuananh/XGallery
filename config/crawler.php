@@ -40,5 +40,15 @@ return [
         'http_client' => [
             'base_uri' => 'http://www.xiuren.org/',
         ]
+    ],
+    'phodacbiet'=>[
+        'http_client' => [
+            'base_uri' => 'https://phodacbiet.net',
+        ]
+    ],
+    'kissgoddess'=>[
+        'http_client' => [
+            'base_uri' => 'https://kissgoddess.com',
+        ]
     ]
 ];

@@ -38,73 +38,64 @@ class Kernel extends ConsoleKernel
         /**
          * Schedule with daily
          */
-
-        $schedule->command('onejav daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('r18 daily')
-            ->daily()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
+        $dailyTasks = [
+            'jav:onejav daily',
+            'jav:r18 daily',
+            'flickr:contacts',
+            'queue:restart',
+            'queue:retry all'
+        ];
+        foreach ($dailyTasks as $dailyTask) {
+            $schedule->command($dailyTask)
+                ->daily()
+                ->withoutOverlapping()->runInBackground();
+        }
 
         /**
          * Schedule everyMinute
          */
-
-        $schedule->command('onejav fully')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $schedule->command('batdongsan --url=https://batdongsan.com.vn/nha-dat-ban')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
-
-        $schedule->command('truyenchon fully')
-            ->everyMinute()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        /**
-         * Schedule everyFiveMinutes
-         */
-
-        $schedule->command('r18 fully --url=https://www.r18.com/videos/vod/movies/list/pagesize=30/price=all/sort=new/type=all')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
-
-        $xcityProfiles = [
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%82',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%8B',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%95',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%9F',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%AA',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%AF',
-            'https://xxx.xcity.jp/idol/?kana=%E3%81%BE',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%84',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%89',
-            'https://xxx.xcity.jp/idol/?kana=%E3%82%8F'
+        $minuteTasks = [
+            'batdongsan',
+            'truyentranh:truyenchon'
         ];
-
-        foreach ($xcityProfiles as $xcityProfile) {
-            $schedule->command('xcity:profile fully --url="'.urldecode($xcityProfile).'"')
-                ->everyFiveMinutes()
+        foreach ($minuteTasks as $minuteTask) {
+            $schedule->command($minuteTask)
+                ->everyMinute()
                 ->withoutOverlapping()->runInBackground();
-            //->emailOutputOnFailure(config('mail.to'));
         }
 
-        $schedule->command('xcity:video')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
+        /**
+         * Schedule everyFiveMinute
+         */
+        $fiveMinutesTasks = [
+            'jav:onejav fully',
+            'jav:r18 fully',
+            'jav:xcityprofile',
+            'jav:xcityvideo',
+            'xiuren',
+            'phodacbiet',
+            'flickr:photos',
+            'flickr:photossizes'
+        ];
+        foreach ($fiveMinutesTasks as $fiveMinutesTask) {
+            $schedule->command($fiveMinutesTask)
+                ->everyFiveMinutes()
+                ->withoutOverlapping()->runInBackground();
+        }
 
-        $schedule->command('xiuren fully --url=http://www.xiuren.org/')
-            ->everyFiveMinutes()
+        $teenMinutesTasks = [
+            'kissgoddess',
+        ];
+        foreach ($teenMinutesTasks as $teenMinutesTask) {
+            $schedule->command($teenMinutesTask)
+                ->everyTenMinutes()
+                ->withoutOverlapping()->runInBackground();
+        }
+
+        // Clear cache
+        $schedule->command('cache:clear')
+            ->hourly()
             ->withoutOverlapping()->runInBackground();
-        //->emailOutputOnFailure(config('mail.to'));
     }
 
     /**

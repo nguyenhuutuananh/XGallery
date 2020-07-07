@@ -79,6 +79,18 @@ return [
             // 'root' => '',
             // 'timeout' => 30,
         ],
+
+        // ...
+        'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+            'xgallery_id' => '1B_ii6zmyqMjnb37NBnU9DJjcRfb2iECm',
+            'xgallery_flickr_id' => '18Wi-wHgjgp8JgTijv7rTgH0tAuqvPZM6',
+        ],
+        // ...
     ],
 
     /*

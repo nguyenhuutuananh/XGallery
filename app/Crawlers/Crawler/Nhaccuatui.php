@@ -20,26 +20,6 @@ use stdClass;
  */
 final class Nhaccuatui extends AbstractCrawler
 {
-    protected string $name = 'nhaccuatui';
-
-    /**
-     * @param $node
-     * @return array
-     */
-    private function extractData($node): array
-    {
-        try {
-            return [
-                'url' => $node->filter('a.name_song')->attr('href'),
-                'name' => $node->filter('a.name_song')->text(),
-                'singers' => $node->filter('a.name_singer')->each(function ($singer) {
-                    return trim($singer->text());
-                }),
-            ];
-        } catch (Exception $exception) {
-            return [];
-        }
-    }
 
     /**
      * @param  string  $itemUri
@@ -51,10 +31,10 @@ final class Nhaccuatui extends AbstractCrawler
         if (!$crawler) {
             return null;
         }
-        $text  = $crawler->text(null, false);
+        $text = $crawler->text(null, false);
         $start = strpos($text, '/flash/xml?html5=true&key1=');
-        $end   = strpos($text, '"', $start);
-        $url   = substr($text, $start, $end - $start);
+        $end = strpos($text, '"', $start);
+        $url = substr($text, $start, $end - $start);
 
         $url = $this->buildUrl($url);
 
@@ -62,7 +42,7 @@ final class Nhaccuatui extends AbstractCrawler
             return null;
         }
 
-        if (!$xml = $this->request('GET', $url)) {
+        if (!$xml = $this->getClient()->request('GET', $url)) {
             return null;
         }
 
@@ -71,16 +51,25 @@ final class Nhaccuatui extends AbstractCrawler
         }
 
         try {
-            $item           = new stdClass;
-            $item->url      = trim($url);
-            $item->title    = trim((string) $simpleXmlEl->track->title);
-            $item->creator  = trim((string) $simpleXmlEl->track->creator);
+            $item = new stdClass;
+            $item->url = trim($url);
+            $item->title = trim((string) $simpleXmlEl->track->title);
+            $item->creator = trim((string) $simpleXmlEl->track->creator);
             $item->download = trim((string) $simpleXmlEl->track->location);
 
             return $item;
         } catch (Exception $exception) {
             return null;
         }
+    }
+
+    /**
+     * @param  string|null  $indexUri
+     * @return Collection
+     */
+    public function getItemLinks(string $indexUri = null): ?Collection
+    {
+        return $this->getItems($indexUri, 'li.list_song');
     }
 
     /**
@@ -104,12 +93,22 @@ final class Nhaccuatui extends AbstractCrawler
     }
 
     /**
-     * @param  string|null  $indexUri
-     * @return Collection
+     * @param $node
+     * @return array
      */
-    public function getItemLinks(string $indexUri = null): ?Collection
+    private function extractData($node): array
     {
-        return $this->getItems($indexUri, 'li.list_song');
+        try {
+            return [
+                'url' => $node->filter('a.name_song')->attr('href'),
+                'name' => $node->filter('a.name_song')->text(),
+                'singers' => $node->filter('a.name_singer')->each(function ($singer) {
+                    return trim($singer->text());
+                }),
+            ];
+        } catch (Exception $exception) {
+            return [];
+        }
     }
 
     /**

@@ -9,9 +9,12 @@
 
 namespace App\Jobs\Jav;
 
-use App\JavGenres;
-use App\JavMovies;
-use App\JavMoviesXref;
+use App\Jobs\Middleware\RateLimited;
+use App\Jobs\Queues;
+use App\Jobs\Traits\HasJob;
+use App\Models\JavGenres;
+use App\Models\JavMovies;
+use App\Models\JavMoviesXref;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,14 +28,10 @@ use Illuminate\Queue\SerializesModels;
 class UpdateGenres implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use HasJob;
 
     private JavMovies $movie;
     private array     $genres;
-
-    /**
-     * @var int Execute timeout
-     */
-    public int $timeout = 300;
 
     /**
      * UpdateJavGenres constructor.
@@ -41,8 +40,17 @@ class UpdateGenres implements ShouldQueue
      */
     public function __construct(JavMovies $movie, array $genres)
     {
-        $this->movie  = $movie;
+        $this->movie = $movie;
         $this->genres = $genres;
+        $this->onQueue(Queues::QUEUE_JAV);
+    }
+
+    /**
+     * @return RateLimited[]
+     */
+    public function middleware()
+    {
+        return [new RateLimited('xcity')];
     }
 
     /**

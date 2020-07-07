@@ -9,6 +9,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\HasMenu;
+use App\Http\Traits\HasModel;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BaseController extends Controller
 {
+    use HasMenu;
+    use HasModel;
+
     /**
      * @param  Response  $response
      * @return Response

@@ -10,6 +10,7 @@
 namespace App\Crawlers\Crawler;
 
 use App\Crawlers\HttpClient;
+use App\Traits\HasObject;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Psr\Log\LoggerInterface;
@@ -20,14 +21,15 @@ use function GuzzleHttp\Psr7\build_query;
 
 /**
  * Class AbstractCrawler
- * @package App\Services\Crawler
- * @TODO Do not extend from HttpClient
+ * @package App\Crawlers\Crawler
  */
-abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
+abstract class AbstractCrawler implements CrawlerInterface
 {
+    use HasObject;
+
     protected Crawler        $crawler;
-    protected array $config;
-    protected string $name;
+    protected array          $config;
+    protected string         $name;
 
     /**
      * AbstractCrawler constructor.
@@ -35,15 +37,8 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
      */
     public function __construct(array $config = [])
     {
-        $this->config = config('crawler.'.$this->name);
-
-        parent::__construct(
-            array_merge(
-                $config,
-                config('httpclient'),
-                isset($this->config['http_client']) ? $this->config['http_client'] : []
-            )
-        );
+        $this->config = array_merge($config, config('crawler.'.strtolower($this->getShortClassname())));
+        $this->config['cache'] = $this->config['cache'] ?? 3600;
     }
 
     /**
@@ -52,8 +47,8 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
      */
     public function crawl(string $uri): ?Crawler
     {
-        if (!$response = $this->request(Request::METHOD_GET, $uri)) {
-            $this->getLogger()->warning('Can not crawl ' . $uri, $this->getErrors());
+        if (!$response = $this->getClient()->request(Request::METHOD_GET, $uri)) {
+            $this->getLogger()->warning('Can not crawl '.$uri);
             return null;
         }
 
@@ -62,18 +57,38 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     }
 
     /**
+     * @param  array  $options
+     * @return HttpClient
+     */
+    public function getClient(array $options = []): HttpClient
+    {
+        $options = array_merge(
+            $options,
+            config('httpclient'),
+            isset($this->config['http_client']) ? $this->config['http_client'] : []
+        );
+
+        return new HttpClient($options);
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    protected function getLogger(): LoggerInterface
+    {
+        return Log::stack(['crawl']);
+    }
+
+    /**
      * @param  string|null  $indexUri
      * @param  int  $from
      * @param  int|null  $to
      * @return Collection
      */
-    public function getIndexLinks(
-        string $indexUri = null,
-        int $from = 1,
-        ?int $to = null
-    ): Collection {
+    public function getIndexLinks(string $indexUri = null, int $from = 1, ?int $to = null): Collection
+    {
         $pages = $this->getIndexPagesCount($indexUri);
-        $url   = Url::fromString($indexUri);
+        $url = Url::fromString($indexUri);
 
         $links = collect();
 
@@ -93,18 +108,6 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     }
 
     /**
-     * @param  string  $path
-     * @param  array  $parameters
-     * @param  int  $encoding
-     * @return string
-     */
-    public function buildUrl(string $path = '', array $parameters = [], $encoding = PHP_QUERY_RFC3986): string
-    {
-        $query = empty($parameters) ? '' : '?'.build_query($parameters, $encoding);
-        return Url::fromString($this->config['http_client']['base_uri'])->withPath($path).$query;
-    }
-
-    /**
      * @param  Url  $url
      * @param  int  $page
      * @return string
@@ -119,10 +122,24 @@ abstract class AbstractCrawler extends HttpClient implements CrawlerInterface
     }
 
     /**
-     * @return LoggerInterface
+     * @param  string  $path
+     * @param  array  $parameters
+     * @param  int  $encoding
+     * @return string
      */
-    protected function getLogger(): LoggerInterface
+    public function buildUrl(string $path = '', array $parameters = [], $encoding = PHP_QUERY_RFC3986): string
     {
-        return Log::stack(['crawl']);
+        $query = empty($parameters) ? '' : '?'.build_query($parameters, $encoding);
+        return Url::fromString($this->config['http_client']['base_uri'])->withPath($path).$query;
+    }
+
+    /**
+     * @param  string  $url
+     * @param  string  $saveToFile
+     * @return bool|string
+     */
+    public function download(string $url, string $saveToFile)
+    {
+        return $this->getClient()->download($url, $saveToFile);
     }
 }

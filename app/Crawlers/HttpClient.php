@@ -10,11 +10,12 @@
 namespace App\Crawlers;
 
 use App\Crawlers\Crawler\Traits\HasCurl;
-use App\Events\OnHttpRequested;
-use Campo\UserAgent;
+use App\Crawlers\Traits\HasHeaders;
+use App\Events\HttpResponded;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
@@ -22,24 +23,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HttpClient
- * @package App\Services
+ * @package App\Crawlers
  */
 class HttpClient extends Client
 {
     use HasCurl;
+    use HasHeaders;
 
     protected ResponseInterface $response;
 
+    private ?int  $interval;
     private array $errors = [];
-
-    /**
-     * HttpClient constructor.
-     * @param  array  $config
-     */
-    public function __construct(array $config = [])
-    {
-        parent::__construct(array_merge($config, config('httpclient')));
-    }
 
     /**
      * @param  string  $method
@@ -50,34 +44,21 @@ class HttpClient extends Client
     public function request($method, $uri = '', array $options = []): ?string
     {
         $key = $this->getKey([$method, $uri]);
+        $isCached = Cache::has($key);
         Log::stack(['http'])
             ->info(
-                Cache::has($key)
+                $isCached
                     ? 'Request URI: '.urldecode($uri).' with CACHED key '.$key
                     : 'Request URI: '.urldecode($uri)
             );
 
-        if (Cache::has($key)) {
+        if ($isCached) {
             return Cache::get($key);
         }
 
         try {
-            $this->response = parent::request(
-                $method,
-                $uri,
-                array_merge(
-                    $options,
-                    [
-                        'headers' => [
-                            'Accept-Encoding' => 'gzip',
-                            'User-Agent' => UserAgent::random([
-                                'device_type' => ['Desktop'],
-                            ]),
-                        ],
-                    ],
-                )
-            );
-            event(new OnHttpRequested($this->response));
+            $this->response = parent::request($method, $uri, array_merge($options, ['headers' => $this->getHeaders()]));
+            Event::dispatch(new HttpResponded($this->response));
         } catch (Exception $exception) {
             Log::stack(['http'])->error($exception->getMessage());
             $this->errors[$uri] = $exception->getMessage();
@@ -86,7 +67,7 @@ class HttpClient extends Client
 
         switch ($this->response->getStatusCode()) {
             case Response::HTTP_OK:
-                Cache::put($key, $this->response->getBody()->getContents());
+                Cache::put($key, $this->response->getBody()->getContents(), 3600); // 1 hour
                 break;
             default:
                 Log::stack(['http'])->error($this->response->getStatusCode());
@@ -112,14 +93,15 @@ class HttpClient extends Client
      */
     public function download(string $url, string $saveTo)
     {
-        if (!Storage::exists($saveTo)) {
-            Storage::makeDirectory($saveTo);
-        }
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             return false;
         }
 
-        $fileName   = basename($url);
+        if (!Storage::exists($saveTo)) {
+            Storage::makeDirectory($saveTo);
+        }
+
+        $fileName = basename($url);
         $saveToFile = $saveTo.DIRECTORY_SEPARATOR.$fileName;
 
         if (Storage::exists($saveToFile)) {
@@ -135,7 +117,7 @@ class HttpClient extends Client
     /**
      * @return array
      */
-    protected function getErrors(): array
+    public function getErrors(): array
     {
         return $this->errors;
     }

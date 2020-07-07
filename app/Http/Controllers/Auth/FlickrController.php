@@ -10,10 +10,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Http\Response;
+use App\Models\Oauth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * Class FlickrController
+ * @package App\Http\Controllers\Auth
+ */
 class FlickrController extends BaseController
 {
     /**
@@ -21,20 +25,28 @@ class FlickrController extends BaseController
      *
      * @return RedirectResponse
      */
-    public function redirectToProvider()
+    public function login()
     {
-        return Socialite::with('flickr')->stateless()->redirect();
+        return Socialite::driver('flickr')->with(['perms' => 'read, write, delete'])->redirect();
     }
 
     /**
      * Obtain the user information from GitHub.
      *
-     * @return Response
      */
-    public function handleProviderCallback()
+    public function callback()
     {
-        $user = Socialite::with('flickr')->user();
+        if (!$user = Socialite::driver('flickr')->user()) {
+            return;
+        }
 
-        dd($user);
+        $model = app(Oauth::class);
+        $model->name = 'flickr';
+
+        foreach ($user->accessTokenResponseBody as $key => $value) {
+            $model->{$key} = $value;
+        }
+
+        $model->save();
     }
 }
